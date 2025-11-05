@@ -58,9 +58,15 @@
  * 2021.03.15, Wolfgang Hoenig: Refactored queue handling
  */
 
-#include "kalman_core.h"
+
 #include "kalman_core_params_defaults.h"
 #include "kalman_supervisor.h"
+
+#ifdef CONFIG_ESTIMATOR_KALMAN_PENDULUM
+  #include "kalman_pen.h" // added
+#else
+  #include "kalman_core.h" // was here originally
+#endif
 
 #include "FreeRTOS.h"
 #include "queue.h"
@@ -138,8 +144,11 @@ static bool robustTdoa = false;
  *
  * For more information, refer to the paper
  */
-
-NO_DMA_CCM_SAFE_ZERO_INIT static kalmanCoreData_t coreData;
+#ifdef CONFIG_ESTIMATOR_KALMAN_PENDULUM
+  NO_DMA_CCM_SAFE_ZERO_INIT static kalmanPenData_t penData;
+#else
+  NO_DMA_CCM_SAFE_ZERO_INIT static kalmanCoreData_t coreData;
+#endif
 
 /**
  * Internal variables. Note that static declaration results in default initialization (to 0)
@@ -244,8 +253,14 @@ static void kalmanTask(void* parameters) {
     if (nowMs >= nextPredictionMs) {
       axis3fSubSamplerFinalize(&accSubSampler);
       axis3fSubSamplerFinalize(&gyroSubSampler);
-
-      kalmanCorePredict(&coreData, &coreParams, &accSubSampler.subSample, &gyroSubSampler.subSample, nowMs, quadIsFlying);
+      
+      //added
+      #ifdef CONFIG_ESTIMATOR_KALMAN_PENDULUM
+        kalmanPenPredict(&penData, &penParams, &accSubSampler.subSample, &gyroSubSampler.subSample, nowMs, quadIsFlying);
+      #else
+        kalmanCorePredict(&coreData, &coreParams, &accSubSampler.subSample, &gyroSubSampler.subSample, nowMs, quadIsFlying);
+      #endif
+      
       nextPredictionMs = nowMs + PREDICTION_UPDATE_INTERVAL_MS;
 
       STATS_CNT_RATE_EVENT(&predictionCounter);
@@ -256,33 +271,63 @@ static void kalmanTask(void* parameters) {
     }
 
     // Add process noise every loop, rather than every prediction
-    kalmanCoreAddProcessNoise(&coreData, &coreParams, nowMs);
 
-    updateQueuedMeasurements(nowMs, quadIsFlying);
-
-    if (kalmanCoreFinalize(&coreData))
-    {
-      STATS_CNT_RATE_EVENT(&finalizeCounter);
-    }
-
-    if (! kalmanSupervisorIsStateWithinBounds(&coreData)) {
-      resetEstimation = true;
-
-      if (nowMs > warningBlockTimeMs) {
-        warningBlockTimeMs = nowMs + WARNING_HOLD_BACK_TIME_MS;
-        DEBUG_PRINT("State out of bounds, resetting\n");
+    //added
+    #ifdef CONFIG_ESTIMATOR_KALMAN_PENDULUM
+      kalmanPenAddProcessNoise(&penData, &penParams, nowMs);
+      updateQueuedMeasurements(nowMs, quadIsFlying);
+      if (kalmanPenFinalize(&penData))
+      {
+        STATS_CNT_RATE_EVENT(&finalizeCounter);
       }
-    }
 
-    /**
-     * Finally, the internal state is externalized.
-     * This is done every round, since the external state includes some sensor data
-     */
-    xSemaphoreTake(dataMutex, portMAX_DELAY);
-    kalmanCoreExternalizeState(&coreData, &taskEstimatorState, &accLatest);
-    xSemaphoreGive(dataMutex);
+      if (! kalmanPenSupervisorIsStateWithinBounds(&penData)) {
+        resetEstimation = true;
 
-    STATS_CNT_RATE_EVENT(&updateCounter);
+        if (nowMs > warningBlockTimeMs) {
+          warningBlockTimeMs = nowMs + WARNING_HOLD_BACK_TIME_MS;
+          DEBUG_PRINT("State out of bounds, resetting\n");
+        }
+      }
+
+      /**
+       * Finally, the internal state is externalized.
+       * This is done every round, since the external state includes some sensor data
+       */
+      xSemaphoreTake(dataMutex, portMAX_DELAY);
+      kalmanPenExternalizeState(&penData, &taskEstimatorState, &accLatest);
+      xSemaphoreGive(dataMutex);
+
+      STATS_CNT_RATE_EVENT(&updateCounter);
+    #else
+      kalmanCoreAddProcessNoise(&coreData, &coreParams, nowMs);
+      updateQueuedMeasurements(nowMs, quadIsFlying);
+      if (kalmanCoreFinalize(&coreData))
+      {
+        STATS_CNT_RATE_EVENT(&finalizeCounter);
+      }
+
+      if (! kalmanSupervisorIsStateWithinBounds(&coreData)) {
+        resetEstimation = true;
+
+        if (nowMs > warningBlockTimeMs) {
+          warningBlockTimeMs = nowMs + WARNING_HOLD_BACK_TIME_MS;
+          DEBUG_PRINT("State out of bounds, resetting\n");
+        }
+      }
+
+      /**
+       * Finally, the internal state is externalized.
+       * This is done every round, since the external state includes some sensor data
+       */
+      xSemaphoreTake(dataMutex, portMAX_DELAY);
+      kalmanCoreExternalizeState(&coreData, &taskEstimatorState, &accLatest);
+      xSemaphoreGive(dataMutex);
+
+      STATS_CNT_RATE_EVENT(&updateCounter);
+    #endif
+
+    
   }
 }
 
@@ -298,6 +343,8 @@ void estimatorKalman(state_t *state, const stabilizerStep_t stabilizerStep) {
   xSemaphoreGive(runTaskSemaphore);
 }
 
+
+// no change for us- we aren't directly measuring pendulum angle
 static void updateQueuedMeasurements(const uint32_t nowMs, const bool quadIsFlying) {
   /**
    * Sensor measurements can come in sporadically and faster than the stabilizer loop frequency,
@@ -386,7 +433,13 @@ void estimatorKalmanInit(void)
   outlierFilterLighthouseReset(&sweepOutlierFilterState, 0);
 
   uint32_t nowMs = T2M(xTaskGetTickCount());
-  kalmanCoreInit(&coreData, &coreParams, nowMs);
+
+  // added
+  #ifdef CONFIG_ESTIMATOR_KALMAN_PENDULUM
+    kalmanPenInit(&penData, &penParams, nowMs);
+  #else
+    kalmanCoreInit(&coreData, &coreParams, nowMs);
+  #endif
 }
 
 bool estimatorKalmanTest(void)
@@ -403,6 +456,8 @@ void estimatorKalmanGetEstimatedPos(point_t* pos) {
 void estimatorKalmanGetEstimatedRot(float * rotationMatrix) {
   memcpy(rotationMatrix, coreData.R, 9*sizeof(float));
 }
+
+// Add log variables for pendulum params
 
 /**
  * Variables and results from the Extended Kalman Filter
