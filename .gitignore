@@ -38,7 +38,7 @@ docs/api/params.md_raw
 docs/api/log_param_doc.json
 docs/api
 
-build/
+#build/
 # To avoid that /tools/build is ignored
 !/tools/*
 
