@@ -52,6 +52,8 @@
  * Use as a designated initializer, e.g.:
  *   kalmanCoreParams_t params = { KALMAN_CORE_DEFAULT_PARAMS_INIT };
  */
+
+#ifdef CONFIG_ESTIMATOR_KALMAN_PENDULUM
 #define KALMAN_CORE_DEFAULT_PARAMS_INIT \
   /* Initial variances, uncertain of position, but know we're stationary and roughly flat */ \
   .stdDevInitialPosition_xy = 100, \
@@ -79,4 +81,43 @@
   .initialYaw = 0.0, \
   \
   /* Roll/pitch/yaw zero reversion is on by default. Will be overridden by estimatorKalmanInit() if requested by the deck. */ \
+  .attitudeReversion = 0.001f, \
+  \
+  /* Pendulum physical parameters*/ \
+  .massString = 0.001, \
+  .massBall = 0.005, \
+  .lengthBallCG = 0.030, \
+  .inertiaPendulum = 0.001, \
+  /* Pendulum angle assumed to start hanging down from rest*/ \
+  .initialTheta = 0.0, \
+  .initialDTheta = 0.0
+#else 
+  #define KALMAN_CORE_DEFAULT_PARAMS_INIT \
+  /* Initial variances, uncertain of position, but know we're stationary and roughly flat */ \
+  .stdDevInitialPosition_xy = 100, \
+  .stdDevInitialPosition_z = 1, \
+  .stdDevInitialVelocity = 0.01, \
+  .stdDevInitialAttitude_rollpitch = 0.01, \
+  .stdDevInitialAttitude_yaw = 0.01, \
+  \
+  KALMAN_CORE_PROC_NOISE_DEFAULTS, \
+  .procNoiseVel = 0, \
+  .procNoisePos = 0, \
+  .procNoiseAtt = 0, \
+  .measNoiseBaro = 2.0f,           /* meters */ \
+  .measNoiseGyro_rollpitch = 0.1f, /* radians per second */ \
+  .measNoiseGyro_yaw = 0.1f,       /* radians per second */ \
+  \
+  .initialX = 0.0, \
+  .initialY = 0.0, \
+  .initialZ = 0.0, \
+  /* Initial yaw of the Crazyflie in radians. */ \
+  /* 0 --- facing positive X */ \
+  /* PI / 2 --- facing positive Y */ \
+  /* PI --- facing negative X */ \
+  /* 3 * PI / 2 --- facing negative Y */ \
+  .initialYaw = 0.0, \
+  \
+  /* Roll/pitch/yaw zero reversion is on by default. Will be overridden by estimatorKalmanInit() if requested by the deck. */ \
   .attitudeReversion = 0.001f
+#endif

@@ -486,7 +486,7 @@ static void predictDt(kalmanCoreData_t* this, const kalmanCoreParams_t *params, 
 
     phidd = (gyro->x - gyro_prev->x) / dt; // angular acceleration around pitch axis
 
-    tdd = (params->Lcg * (params->ms + params->mb) * (- zacc * arm_sin_f32(this->S[KC_STATE_T]) - yacc * arm_cos_f32(this->S[KC_STATE_T])) - params->Ip * phidd) / (params->Ip); // angular acceleration around pitch axis
+    tdd = (params->lengthBallCG * (params->massString + params->massBall) * (- zacc * arm_sin_f32(this->S[KC_STATE_T]) - yacc * arm_cos_f32(this->S[KC_STATE_T])) - params->inertiaPendulum * phidd) / (params->inertiaPendulum); // angular acceleration around pitch axis
     
     this->S[KC_STATE_T] += this->S[KC_STATE_TD] * dt + tdd * dt2 / 2.0f;
     this->S[KC_STATE_TD] += tdd * dt;
@@ -554,9 +554,9 @@ static void predictDt(kalmanCoreData_t* this, const kalmanCoreParams_t *params, 
   this->isUpdated = true;
 }
 
-void kalmanCorePredict(kalmanCoreData_t* this, const kalmanCoreParams_t *params, Axis3f *acc, Axis3f *gyro, const uint32_t nowMs, bool quadIsFlying) {
+void kalmanCorePredict(kalmanCoreData_t* this, const kalmanCoreParams_t *params, Axis3f *acc, Axis3f *gyro, Axis3f *gyro_prev, const uint32_t nowMs, bool quadIsFlying) {
   float dt = (nowMs - this->lastPredictionMs) / 1000.0f;
-  predictDt(this, params, acc, gyro, dt, quadIsFlying);
+  predictDt(this, params, acc, gyro, gyro_prev, dt, quadIsFlying);
   this->lastPredictionMs = nowMs;
 }
 

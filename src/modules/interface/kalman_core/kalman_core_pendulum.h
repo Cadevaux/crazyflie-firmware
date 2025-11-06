@@ -61,7 +61,7 @@
 // Indexes to access the quad's state, stored as a column vector
 typedef enum
 {
-  KC_STATE_X, KC_STATE_Y, KC_STATE_Z, KC_STATE_PX, KC_STATE_PY, KC_STATE_PZ, KC_STATE_D0, KC_STATE_D1, KC_STATE_D2, KC_STATE_DIM
+  KC_STATE_X, KC_STATE_Y, KC_STATE_Z, KC_STATE_PX, KC_STATE_PY, KC_STATE_PZ, KC_STATE_D0, KC_STATE_D1, KC_STATE_D2, KC_STATE_T, KC_STATE_TD, KC_STATE_DIM
 } kalmanCoreStateIdx_t;
 
 
@@ -134,10 +134,13 @@ typedef struct {
 
   float attitudeReversion;
 
-  float ms; // mass of string (kg)
-  float mb; // mass of ball (kg)
-  float Lcg;  // distance of ball-string CG from copter (m) 
-  float Ip; // moment of inertia of pendulum about CG (kg*m^2)
+  float massString; // mass of string (kg)
+  float massBall; // mass of ball (kg)
+  float lengthBallCG;  // distance of ball-string CG from copter (m) 
+  float inertiaPendulum; // moment of inertia of pendulum about CG (kg*m^2)
+
+  float initialTheta; // angle of pendulum
+  float initialDTheta; // angular velocity of pendulum
   
 } kalmanCoreParams_t;
 
@@ -169,7 +172,7 @@ void kalmanCoreUpdateWithBaro(kalmanCoreData_t *this, const kalmanCoreParams_t *
  *
  * The filter progresses as:
  *  - Predicting the current state forward */
-void kalmanCorePredict(kalmanCoreData_t *this, const kalmanCoreParams_t *params, Axis3f *acc, Axis3f *gyro, const uint32_t nowMs, bool quadIsFlying);
+void kalmanCorePredict(kalmanCoreData_t *this, const kalmanCoreParams_t *params, Axis3f *acc, Axis3f *gyro, Axis3f *gyro_prev, const uint32_t nowMs, bool quadIsFlying);
 
 void kalmanCoreAddProcessNoise(kalmanCoreData_t *this, const kalmanCoreParams_t *params, const uint32_t nowMs);
 
