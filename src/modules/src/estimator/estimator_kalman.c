@@ -259,10 +259,12 @@ static void kalmanTask(void* parameters) {
       gyro_subSamplePrev = gyro_subSample;
       gyro_subSample = gyroSubSampler.subSample; //avg gyro value since last step
 
-      kalmanCorePredict(&coreData, &coreParams, &accSubSampler.subSample, &gyro_subSample, &gyro_subSamplePrev, nowMs, quadIsFlying);
-      
-      //kalmanCorePredict(&coreData, &coreParams, &accSubSampler.subSample, &gyroSubSampler.subSample, nowMs, quadIsFlying);
-      
+      #ifdef CONFIG_ESTIMATOR_KALMAN_PENDULUM
+        kalmanCorePredict(&coreData, &coreParams, &accSubSampler.subSample, &gyro_subSample, &gyro_subSamplePrev, nowMs, quadIsFlying);
+      #else
+        kalmanCorePredict(&coreData, &coreParams, &accSubSampler.subSample, &gyroSubSampler.subSample, nowMs, quadIsFlying);
+      #endif
+
       nextPredictionMs = nowMs + PREDICTION_UPDATE_INTERVAL_MS;
 
       STATS_CNT_RATE_EVENT(&predictionCounter);
