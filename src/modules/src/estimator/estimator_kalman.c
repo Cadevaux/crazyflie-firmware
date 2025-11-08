@@ -58,8 +58,8 @@
  * 2021.03.15, Wolfgang Hoenig: Refactored queue handling
  */
 
-// define for debugging - comment out before build
-#define CONFIG_ESTIMATOR_KALMAN_PENDULUM
+// define for debugging - comment out before build or code push
+//#define CONFIG_ESTIMATOR_KALMAN_PENDULUM
 
 #include "kalman_core_params_defaults.h"
 #include "kalman_supervisor.h"
@@ -156,6 +156,9 @@ static bool isInit = false;
 
 static Axis3fSubSampler_t accSubSampler;
 static Axis3fSubSampler_t gyroSubSampler;
+static Axis3f gyro_subSample;     // added
+static Axis3f gyro_subSamplePrev; // added
+
 static Axis3f accLatest;
 static Axis3f gyroLatest;
 
@@ -252,8 +255,13 @@ static void kalmanTask(void* parameters) {
     if (nowMs >= nextPredictionMs) {
       axis3fSubSamplerFinalize(&accSubSampler);
       axis3fSubSamplerFinalize(&gyroSubSampler);
+
+      gyro_subSamplePrev = gyro_subSample;
+      gyro_subSample = gyroSubSampler.subSample; //avg gyro value since last step
+
+      kalmanCorePredict(&coreData, &coreParams, &accSubSampler.subSample, &gyro_subSample, &gyro_subSamplePrev, nowMs, quadIsFlying);
       
-      kalmanCorePredict(&coreData, &coreParams, &accSubSampler.subSample, &gyroSubSampler.subSample, nowMs, quadIsFlying);
+      //kalmanCorePredict(&coreData, &coreParams, &accSubSampler.subSample, &gyroSubSampler.subSample, nowMs, quadIsFlying);
       
       nextPredictionMs = nowMs + PREDICTION_UPDATE_INTERVAL_MS;
 
@@ -469,6 +477,18 @@ LOG_GROUP_START(kalman)
   * @brief State attitude error yaw
   */
   LOG_ADD(LOG_FLOAT, stateD2, &coreData.S[KC_STATE_D2])
+
+  #ifdef CONFIG_ESTIMATOR_KALMAN_PENDULUM
+  /**
+  * @brief State pendulum angle (added)
+  */
+  LOG_ADD(LOG_FLOAT, stateT, &coreData.S[KC_STATE_T])
+  /**
+  * @brief State pendulum angular velocity (added)
+  */
+  LOG_ADD(LOG_FLOAT, stateTD, &coreData.S[KC_STATE_TD])
+  #endif
+
   /**
   * @brief Covariance matrix position x
   */
@@ -505,6 +525,18 @@ LOG_GROUP_START(kalman)
   * @brief Covariance matrix attitude error yaw
   */
   LOG_ADD(LOG_FLOAT, varD2, &coreData.P[KC_STATE_D2][KC_STATE_D2])
+
+  #ifdef CONFIG_ESTIMATOR_KALMAN_PENDULUM
+  /**
+  * @brief Covariance matrix pendulum angle (added)
+  */
+  LOG_ADD(LOG_FLOAT, varT, &coreData.P[KC_STATE_T][KC_STATE_T])
+  /**
+  * @brief Covariance matrix pendulum angular velocity (added)
+  */
+  LOG_ADD(LOG_FLOAT, varTD, &coreData.P[KC_STATE_TD][KC_STATE_TD])
+  #endif
+
   /**
   * @brief Estimated Attitude quarternion w
   */

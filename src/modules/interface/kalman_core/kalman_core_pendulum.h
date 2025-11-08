@@ -111,12 +111,16 @@ typedef struct {
   float stdDevInitialVelocity;
   float stdDevInitialAttitude_rollpitch;
   float stdDevInitialAttitude_yaw;
+  float stdDevInitialPendulum_theta; //added
+  float stdDevInitialPendulum_dTheta; //added
 
   float procNoiseAcc_xy;
   float procNoiseAcc_z;
   float procNoiseVel;
   float procNoisePos;
   float procNoiseAtt;
+  float procNoisePen_theta; //added
+  float procNoisePen_dTheta; //added
   float measNoiseBaro;           // meters
   float measNoiseGyro_rollpitch; // radians per second
   float measNoiseGyro_yaw;       // radians per second

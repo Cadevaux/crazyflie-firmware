@@ -61,11 +61,15 @@
   .stdDevInitialVelocity = 0.01, \
   .stdDevInitialAttitude_rollpitch = 0.01, \
   .stdDevInitialAttitude_yaw = 0.01, \
+  .stdDevInitialPendulum_theta = 0.01, /* added guess */ \
+  .stdDevInitialPendulum_dTheta = 0.01, /* added guess */ \
   \
   KALMAN_CORE_PROC_NOISE_DEFAULTS, \
   .procNoiseVel = 0, \
   .procNoisePos = 0, \
   .procNoiseAtt = 0, \
+  .procNoisePen_theta = 0, /* added */ \
+  .procNoisePen_dTheta = 0, /* added */ \
   .measNoiseBaro = 2.0f,           /* meters */ \
   .measNoiseGyro_rollpitch = 0.1f, /* radians per second */ \
   .measNoiseGyro_yaw = 0.1f,       /* radians per second */ \

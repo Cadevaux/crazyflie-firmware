@@ -139,6 +139,8 @@ void kalmanCoreInit(kalmanCoreData_t *this, const kalmanCoreParams_t *params, co
 //  this->S[KC_STATE_D0] = 0;
 //  this->S[KC_STATE_D1] = 0;
 //  this->S[KC_STATE_D2] = 0;
+//  this->S[KC_STATE_T = 0;
+//  this->S[KC_STATE_TD] = 0;
 
   // reset the attitude quaternion
   this->initialQuaternion[0] = arm_cos_f32(params->initialYaw / 2);
@@ -170,6 +172,10 @@ void kalmanCoreInit(kalmanCoreData_t *this, const kalmanCoreParams_t *params, co
   this->P[KC_STATE_D0][KC_STATE_D0] = powf(params->stdDevInitialAttitude_rollpitch, 2);
   this->P[KC_STATE_D1][KC_STATE_D1] = powf(params->stdDevInitialAttitude_rollpitch, 2);
   this->P[KC_STATE_D2][KC_STATE_D2] = powf(params->stdDevInitialAttitude_yaw, 2);
+
+  // added
+  this->P[KC_STATE_T][KC_STATE_T] = powf(params->stdDevInitialPendulum_theta, 2);
+  this->P[KC_STATE_TD][KC_STATE_TD] = powf(params->stdDevInitialPendulum_dTheta, 2);
 
   this->Pm.numRows = KC_STATE_DIM;
   this->Pm.numCols = KC_STATE_DIM;
@@ -357,6 +363,10 @@ static void predictDt(kalmanCoreData_t* this, const kalmanCoreParams_t *params, 
   A[KC_STATE_D1][KC_STATE_D1] = 1;
   A[KC_STATE_D2][KC_STATE_D2] = 1;
 
+  // added
+  A[KC_STATE_T][KC_STATE_T] = 1;
+  A[KC_STATE_TD][KC_STATE_TD] = 1;
+
   // position from body-frame velocity
   A[KC_STATE_X][KC_STATE_PX] = this->R[0][0]*dt;
   A[KC_STATE_Y][KC_STATE_PX] = this->R[1][0]*dt;
@@ -512,6 +522,15 @@ static void predictDt(kalmanCoreData_t* this, const kalmanCoreParams_t *params, 
     this->S[KC_STATE_PX] += dt * (acc->x + gyro->z * tmpSPY - gyro->y * tmpSPZ - GRAVITY_MAGNITUDE * this->R[2][0]);
     this->S[KC_STATE_PY] += dt * (acc->y - gyro->z * tmpSPX + gyro->x * tmpSPZ - GRAVITY_MAGNITUDE * this->R[2][1]);
     this->S[KC_STATE_PZ] += dt * (acc->z + gyro->y * tmpSPX - gyro->x * tmpSPY - GRAVITY_MAGNITUDE * this->R[2][2]);
+    
+    // added here too - useful to test with us just swinging drone manually
+    phidd = (gyro->x - gyro_prev->x) / dt; // angular acceleration around pitch axis
+
+    tdd = (params->lengthBallCG * (params->massString + params->massBall) * (- zacc * arm_sin_f32(this->S[KC_STATE_T]) - yacc * arm_cos_f32(this->S[KC_STATE_T])) - params->inertiaPendulum * phidd) / (params->inertiaPendulum); // angular acceleration around pitch axis
+    
+    this->S[KC_STATE_T] += this->S[KC_STATE_TD] * dt + tdd * dt2 / 2.0f;
+    this->S[KC_STATE_TD] += tdd * dt;
+  
   }
 
   // attitude update (rotate by gyroscope), we do this in quaternions
@@ -574,6 +593,10 @@ static void addProcessNoiseDt(kalmanCoreData_t *this, const kalmanCoreParams_t *
   this->P[KC_STATE_D0][KC_STATE_D0] += powf(params->measNoiseGyro_rollpitch * dt + params->procNoiseAtt, 2);
   this->P[KC_STATE_D1][KC_STATE_D1] += powf(params->measNoiseGyro_rollpitch * dt + params->procNoiseAtt, 2);
   this->P[KC_STATE_D2][KC_STATE_D2] += powf(params->measNoiseGyro_yaw * dt + params->procNoiseAtt, 2);
+
+  // added - followed above pattern
+  this->P[KC_STATE_T][KC_STATE_T] += powf(params->procNoisePen_dTheta * dt + params->procNoisePen_theta, 2);
+  this->P[KC_STATE_TD][KC_STATE_TD] += powf(params->procNoisePen_dTheta, 2);
 
   for (int i=0; i<KC_STATE_DIM; i++) {
     for (int j=i; j<KC_STATE_DIM; j++) {
@@ -678,6 +701,11 @@ bool kalmanCoreFinalize(kalmanCoreData_t* this)
     A[KC_STATE_D2][KC_STATE_D0] =  d1 + d0*d2/2;
     A[KC_STATE_D2][KC_STATE_D1] = -d0 + d1*d2/2;
     A[KC_STATE_D2][KC_STATE_D2] = 1 - d0*d0/2 - d1*d1/2;
+
+    // added - apparently this function is some orientation correction thing
+    // that doesn't require me to have entries for pendulum states here?
+    A[KC_STATE_T][KC_STATE_T]   = 1;
+    A[KC_STATE_TD][KC_STATE_TD] = 1;
 
     mat_trans(&Am, &tmpNN1m); // A'
     mat_mult(&Am, &this->Pm, &tmpNN2m); // AP
