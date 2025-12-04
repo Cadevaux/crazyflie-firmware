@@ -505,10 +505,10 @@ LOG_GROUP_START(pendEKF)
    * ============ */
 
   /** @brief State: theta (angle) */
-  LOG_ADD_CORE(LOG_FLOAT, theta, &pendulumCoreData.S[THETA])
+  LOG_ADD(LOG_FLOAT, theta, &pendulumCoreData.S[THETA])
 
   /** @brief State: theta_dot (angular velocity) */
-  LOG_ADD_CORE(LOG_FLOAT, thetaDot, &pendulumCoreData.S[THETA_DOT])
+  LOG_ADD(LOG_FLOAT, thetaDot, &pendulumCoreData.S[THETA_DOT])
 
 
   /* =====================
@@ -516,9 +516,9 @@ LOG_GROUP_START(pendEKF)
    * ===================== */
 
   /** @brief Var(theta) */
-  LOG_ADD_CORE(LOG_FLOAT, varTheta, &pendulumCoreData.P[THETA][THETA])
+  LOG_ADD(LOG_FLOAT, varTheta, &pendulumCoreData.P[THETA][THETA])
 
   /** @brief Var(theta_dot) */
-  LOG_ADD_CORE(LOG_FLOAT, varThetaDot, &pendulumCoreData.P[THETA_DOT][THETA_DOT])
+  LOG_ADD(LOG_FLOAT, varThetaDot, &pendulumCoreData.P[THETA_DOT][THETA_DOT])
 
 LOG_GROUP_STOP(pendEKF)
