@@ -31,6 +31,16 @@
   .gamma = 0.00001, /* Q tuning */ \
   .beta = 0.05,  /* R tuning*/ \
 
+// Struct to externalize state
+typedef struct {
+    float theta;
+    float theta_dot;
+    uint32_t timestamp;
+} pendulum_state_t;
+
+// Accessor
+void pendulumEstimatorGetState(pendulum_state_t *out);
+
 typedef struct {
   float mq;
   float mb;
@@ -83,8 +93,16 @@ typedef struct {
   __attribute__((aligned(4))) float P[STATE_DIM][STATE_DIM];
   arm_matrix_instance_f32 Pm;
 
+  // Linearized C matrix used in Correct, but linearized with everything in Predict
+  __attribute__((aligned(4))) float C[MEAS_DIM][STATE_DIM];
+  arm_matrix_instance_f32 Cm;
+
   // Tracks whether an update to the state has been made, and the state therefore requires finalization
   bool isUpdated;
+
+  // Variables to hold over from prediction to update
+  float phi_hold;
+  float phi_d_hold;
 
   uint32_t lastPredictionMs;
   uint32_t lastProcessNoiseUpdateMs;

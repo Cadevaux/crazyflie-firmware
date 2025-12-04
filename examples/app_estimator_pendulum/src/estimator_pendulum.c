@@ -60,7 +60,8 @@
 static SemaphoreHandle_t runTaskSemaphoreEP;
 static SemaphoreHandle_t dataMutexEP;
 static StaticSemaphore_t dataMutexBufferEP;
-static state_t taskEstimatorStateEP;
+static pendulum_state_t pendulumEstimatorState; // Name of the local state variable. Externed in the .h file for others to read
+//static state_t taskEstimatorStateEP;  // state_t is for the entire state (pos, vel, att) and we don't wanna mess with this
 static bool isInit = false;
 static void pendulumTask(void* parameters);
 static void updateQueuedMeasurements(const uint32_t nowMs, const bool quadIsFlying);
@@ -131,12 +132,14 @@ void estimatorOutOfTreeInit() {
   float r = pendulumCoreParams.r;
   float L = pendulumCoreParams.L;
   // For helper constants: 
-  // A(1,0) = a1*cos(theta)*(Fl + Fr) 
-  helperConstants.a1 = -(3*(2*mb + ms))/(250*L*(12*mb*mq + 4*mb*ms + 4*mq*ms + pow(ms,2))); 
-  // B(1,0) = b1 + b2*sin(theta) 
-  // B(1,1) = b2*sin(theta) - b1
-  helperConstants.b1 = (L*pow(ms,2)*r + 12*L*mb*mq*r + 4*L*mb*ms*r + 4*L*mq*ms*r)/(500*Ixx*L*(12*mb*mq + 4*mb*ms + 4*mq*ms + pow(ms,2)));
-  helperConstants.b2 = (-12*Ixx*mb - 6*Ixx*ms)/(500*Ixx*L*(12*mb*mq + 4*mb*ms + 4*mq*ms + pow(ms,2)));
+  // A(1,0) = a1*cos(theta)*(Fl + Fr)
+  // In predict step: dt multiplied to A(0,1) and A(1,0)
+  helperConstants.a1 = -(6*(2*mb + ms))/(L*(12*mb*mq + 4*mb*ms + 4*mq*ms + pow(ms,2))); 
+  // B(1,0) = b1 - b2*sin(theta) 
+  // B(1,1) = -b1 - b2*sin(theta)
+  // In predict step: dt multiplied to B(1,0) and B(1,1)
+  helperConstants.b1 = (L*ms*ms*r+12.0f*L*mb*mq*r+4.0f*L*mb*ms*r+4.0f*L*mq*ms*r)/(Ixx*L*(12.0f*mb*mq+4.0f*mb*ms+4.0f*mq*ms+ms*ms));
+  helperConstants.b2 = (12.0f*Ixx*mb+6.0f*Ixx*ms)/(Ixx*L*(12.0f*mb*mq+4.0f*mb*ms+4.0f*mq*ms+ms*ms));
   // C(0,0) = c1 * [phi_d^2 + theta_d^2 + 2*phi_d*theta_d]*cos(phi + theta) + c2 * [(Fl + Fr)*cos(phi + 2.0*theta)]  
   // C(0,1) = c1 * 2*sin(phi + theta)*(phi_d + theta_d) 
   // C(1,0) = c1 * [phi_d^2 + theta_d^2 + 2*phi_d*theta_d]*sin(phi + theta) + c2 * [(Fl + Fr)*sin(phi + 2.0*theta)]  
@@ -190,10 +193,7 @@ void estimatorOutOfTreeTest() {
 void estimatorOutOfTree(state_t *state, const stabilizerStep_t stabilizerStep) {
   estimatorKalman(state, stabilizerStep);
 
-  xSemaphoreTake(dataMutexEP, portMAX_DELAY);
-  // Copy the latest state, calculated by the task
-  memcpy(state, &taskEstimatorStateEP, sizeof(state_t));
-  xSemaphoreGive(dataMutexEP);
+  // Signal pendulum task to update its state
   xSemaphoreGive(runTaskSemaphoreEP);
 }
 
@@ -231,10 +231,10 @@ static void pendulumTask(void* parameters) {
     xSemaphoreTake(runTaskSemaphoreEP, portMAX_DELAY);
     nowMs = T2M(xTaskGetTickCount()); 
 
-    uint16_t m1 = motorsGetRatio(MOTOR_M1) * UINT16_MAX / THRUST_MAX;
-    uint16_t m2 = motorsGetRatio(MOTOR_M2) * UINT16_MAX / THRUST_MAX;
-    uint16_t m3 = motorsGetRatio(MOTOR_M3) * UINT16_MAX / THRUST_MAX;
-    uint16_t m4 = motorsGetRatio(MOTOR_M4) * UINT16_MAX / THRUST_MAX;
+    uint16_t m1 = motorsGetRatio(MOTOR_M1) / UINT16_MAX * THRUST_MAX;
+    uint16_t m2 = motorsGetRatio(MOTOR_M2) / UINT16_MAX * THRUST_MAX;
+    uint16_t m3 = motorsGetRatio(MOTOR_M3) / UINT16_MAX * THRUST_MAX;
+    uint16_t m4 = motorsGetRatio(MOTOR_M4) / UINT16_MAX * THRUST_MAX;
     float Fl = m1 + m2; // N // CHECK GROUPING
     float Fr = m3 + m4; // N
 
@@ -264,13 +264,12 @@ static void pendulumTask(void* parameters) {
 
     /* CORRECT */
     pendulumCoreCorrect(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, &accLatest, Fl, Fr, nowMs, quadIsFlying);
-
-    /**
-     * Finally, the internal state is externalized.
-     * This is done every round, since the external state includes some sensor data
-     */
+    
+    // Write to our extern variable so others (e.g. controller) can read
     xSemaphoreTake(dataMutexEP, portMAX_DELAY);
-    //kalmanCoreExternalizeState(&pendulumCoreData, &taskEstimatorState, &accLatest);
+    pendulumEstimatorState.theta = pendulumCoreData.S[THETA];
+    pendulumEstimatorState.theta_dot = pendulumCoreData.S[THETA_DOT];
+    pendulumEstimatorState.timestamp = nowMs;
     xSemaphoreGive(dataMutexEP);
 
     //STATS_CNT_RATE_EVENT(&updateCounter);
@@ -327,22 +326,31 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   estimatorGetState(&incomingState, xTaskGetTickCount());
   float roll_deg  = incomingState.attitude.roll;
   float phi = roll_deg * 3.1415/180;
-  float phi_d = gyro->x; // CHECK THIS
+  float phi_d = gyro->x;
+
+  // Store for correction step
+  this->phi_hold = phi;
+  this->phi_d_hold = phi_d;
 
   A[0][0] = 1;
-  A[0][1] = 0.002; // Observer at 500 Hz
-  A[1][0] = helperConstants.a1*cos(theta)*(Fl + Fr);
+  A[0][1] = dt; // Observer at 100 Hz, not 500 Hz. Don't hardcode anyway
+  A[1][0] = dt*helperConstants.a1*cos(theta)*(Fl + Fr);
   A[1][1] = 1;
 
   B[0][0] = 0;
   B[0][1] = 0;
-  B[1][0] = helperConstants.b1 + helperConstants.b2*sin(theta);
-  B[1][1] = helperConstants.b2*sin(theta) - helperConstants.b1;
+  B[1][0] = dt*(helperConstants.b1 + helperConstants.b2*sin(theta));
+  B[1][1] = dt*(helperConstants.b2*sin(theta) - helperConstants.b1);
 
   C[0][0] = helperConstants.c1 * (pow(phi_d,2) + pow(theta_d,2) + 2*phi_d*theta_d)*cos(phi + theta) + helperConstants.c2 * ((Fl + Fr)*cos(phi + 2.0*theta));
   C[0][1] = helperConstants.c1 * 2*sin(phi + theta)*(phi_d + theta_d);
   C[1][0] = helperConstants.c1 * (pow(phi_d,2) + pow(theta_d,2) + 2*phi_d*theta_d)*sin(phi + theta) + helperConstants.c2 * ((Fl + Fr)*sin(phi + 2.0*theta));
   C[1][1] = -helperConstants.c1 * 2*cos(phi + theta)*(phi_d + theta_d);
+
+  this->C[0][0] = C[0][0];
+  this->C[0][1] = C[0][1];
+  this->C[1][0] = C[1][0];
+  this->C[1][1] = C[1][1];
 
   // ====== COVARIANCE UPDATE ======
   mat_mult(&Am, &this->Pm, &tmpNN1m); // A P
@@ -381,21 +389,8 @@ void pendulumCoreCorrect(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   NO_DMA_CCM_SAFE_ZERO_INIT static float C[MEAS_DIM][STATE_DIM];
   static __attribute__((aligned(4))) arm_matrix_instance_f32 Cm = { MEAS_DIM, STATE_DIM, (float *)C};
 
-  // Populate
-  float theta = this->S[THETA];
-  float theta_d = this->S[THETA_DOT];
-  state_t incomingState;
-  // The second argument is the current tick, used for prediction/interpolation 
-  // if necessary, but usually, passing the current tick is standard.
-  estimatorGetState(&incomingState, xTaskGetTickCount());
-  float roll_deg  = incomingState.attitude.roll;
-  float phi = roll_deg * 3.1415/180;
-  float phi_d = gyro->y; // CHECK THIS
-
-  C[0][0] = helperConstants.c1 * (pow(phi_d,2) + pow(theta_d,2) + 2*phi_d*theta_d)*cos(phi + theta) + helperConstants.c2 * ((Fl + Fr)*cos(phi + 2.0*theta));
-  C[0][1] = helperConstants.c1 * 2*sin(phi + theta)*(phi_d + theta_d);
-  C[1][0] = helperConstants.c1 * (pow(phi_d,2) + pow(theta_d,2) + 2*phi_d*theta_d)*sin(phi + theta) + helperConstants.c2 * ((Fl + Fr)*sin(phi + 2.0*theta));
-  C[1][1] = -helperConstants.c1 * 2*cos(phi + theta)*(phi_d + theta_d);
+  // Grab local C from data
+  memcpy(C, this->C, sizeof(C));
 
   // Temporary matrices for math
   
@@ -457,6 +452,10 @@ void pendulumCoreCorrect(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   mat_mult(&Lm, &tmpNN6m, &tmpNN7m); // L C P
   mat_sub(&this->Pm, &tmpNN7m, &this->Pm); // P - L C P
   
+  float theta = this->S[THETA];
+  float theta_d = this->S[THETA_DOT];
+  float phi = this->phi_hold;
+  float phi_d = this->phi_d_hold;
 
   // Calculate expected measurement         
   float numerator_yexp1 =
@@ -478,11 +477,26 @@ void pendulumCoreCorrect(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   float ymeas1 = acc->y;
   float ymeas2 = acc->z;
 
-  this->S[THETA]     += this->S[THETA] + L[0][0]*(ymeas1-yexp1) + L[0][1]*(ymeas2-yexp2);
-  this->S[THETA_DOT] += this->S[THETA_DOT] + L[1][0]*(ymeas1-yexp1) + L[1][1]*(ymeas2-yexp2);
+  this->S[THETA] += L[0][0]*(ymeas1 - yexp1) + L[0][1]*(ymeas2 - yexp2);
+  this->S[THETA_DOT] += L[1][0]*(ymeas1 - yexp1) + L[1][1]*(ymeas2 - yexp2);
 
   this->isUpdated = true;
 }
+
+void pendulumEstimatorGetState(pendulum_state_t *out)
+{
+  // mutex makes sure others can't read while I write  
+  xSemaphoreTake(dataMutexEP, portMAX_DELAY);
+  memcpy(out, &pendulumEstimatorState, sizeof(pendulum_state_t));
+  xSemaphoreGive(dataMutexEP);
+}
+/* 
+Read with the getter above like this:
+
+pendulum_state_t copy;
+pendulumEstimatorGetState(&copy);
+float theta = copy.theta;
+*/
 
 LOG_GROUP_START(pendEKF)
 
