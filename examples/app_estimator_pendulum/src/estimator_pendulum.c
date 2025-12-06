@@ -53,14 +53,14 @@
 #include "estimator_kalman.h"     // use to run existing estimator underneath
 #include "motors.h"               // motor IDs
 #include "platform_defaults_cf2.h" // thrust max
-#include "axis3fSubSampler.h"     // sample accel
+#include "sensors.h"              // sample accel and gyro
 #include "log.h"                  // logging
 
 // Task declarations (EP = estimator pendulum)
 static SemaphoreHandle_t runTaskSemaphoreEP;
 static SemaphoreHandle_t dataMutexEP;
 static StaticSemaphore_t dataMutexBufferEP;
-static pendulum_state_t pendulumEstimatorState; // Name of the local state variable. Externed in the .h file for others to read
+static pendulum_state_t pendulumEstimatorState; // Name of the local state variable. Getter enables others to read
 //static state_t taskEstimatorStateEP;  // state_t is for the entire state (pos, vel, att) and we don't wanna mess with this
 static bool isInit = false;
 static void pendulumTask(void* parameters);
@@ -70,8 +70,8 @@ STATIC_MEM_TASK_ALLOC_STACK_NO_DMA_CCM_SAFE(pendulumTask, PENDULUM_TASK_STACKSIZ
 // Same as estimator_kalman.c
 #define PREDICT_RATE RATE_100_HZ // this is slower than the IMU update rate of 1000Hz
 const uint32_t PREDICTION_UPDATE_INTERVAL_MS = 1000 / PREDICT_RATE;
-static Axis3fSubSampler_t accSubSampler;
-static Axis3fSubSampler_t gyroSubSampler;
+//static Axis3fSubSampler_t accSubSampler;
+//static Axis3fSubSampler_t gyroSubSampler;
 static Axis3f accLatest;
 static Axis3f gyroLatest;
 
@@ -231,11 +231,20 @@ static void pendulumTask(void* parameters) {
     xSemaphoreTake(runTaskSemaphoreEP, portMAX_DELAY);
     nowMs = T2M(xTaskGetTickCount()); 
 
-    uint16_t m1 = motorsGetRatio(MOTOR_M1) / UINT16_MAX * THRUST_MAX;
-    uint16_t m2 = motorsGetRatio(MOTOR_M2) / UINT16_MAX * THRUST_MAX;
-    uint16_t m3 = motorsGetRatio(MOTOR_M3) / UINT16_MAX * THRUST_MAX;
-    uint16_t m4 = motorsGetRatio(MOTOR_M4) / UINT16_MAX * THRUST_MAX;
-    float Fl = m1 + m2; // N // CHECK GROUPING
+    // 8bit PWM value (from 16bit)
+    uint8_t m1 = (uint8_t) (motorsGetRatio(MOTOR_M1)/UINT8_MAX);
+    uint8_t m2 = (uint8_t) (motorsGetRatio(MOTOR_M2)/UINT8_MAX);
+    uint8_t m3 = (uint8_t) (motorsGetRatio(MOTOR_M3)/UINT8_MAX);
+    uint8_t m4 = (uint8_t) (motorsGetRatio(MOTOR_M4)/UINT8_MAX);
+    
+    // Convert to Thrust (g, aka gram force) then N
+    // https://www.bitcraze.io/documentation/repository/crazyflie-firmware/master/functional-areas/pwm-to-thrust/
+    m1 = (0.000409*m1*m1 + 0.1405*m1 + -0.099) * 0.00980665;
+    m2 = (0.000409*m2*m2 + 0.1405*m2 + -0.099) * 0.00980665;
+    m3 = (0.000409*m3*m3 + 0.1405*m3 + -0.099) * 0.00980665;
+    m4 = (0.000409*m4*m4 + 0.1405*m4 + -0.099) * 0.00980665;
+    
+    float Fl = m1 + m2; // N 
     float Fr = m3 + m4; // N
 
     // Run the system dynamics to predict the state forward
@@ -246,21 +255,28 @@ static void pendulumTask(void* parameters) {
       // Fl = Fl*(1-alpha) + Fl_prev*alpha
 
       /* PREDICT STEP */
+      /* Do not do this- it will interfere with measurements that kalman filter uses
       measurement_t m;
       estimatorDequeue(&m);
       axis3fSubSamplerAccumulate(&gyroSubSampler, &m.data.gyroscope.gyro);
       gyroLatest = m.data.gyroscope.gyro;
+      */ 
 
+      sensorsReadGyro(gyroLatest);
+      
       pendulumCorePredict(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, Fl, Fr, nowMs, quadIsFlying);
       nextPredictionMs = nowMs + PREDICTION_UPDATE_INTERVAL_MS;
     }
     /* ADD PROCESS NOISE - in predict function */
 
     //updateQueuedMeasurements(nowMs, quadIsFlying);
+    /*
     measurement_t m;
     estimatorDequeue(&m);
     axis3fSubSamplerAccumulate(&accSubSampler, &m.data.acceleration.acc);
     accLatest = m.data.acceleration.acc;
+    */
+    sensorsReadAcc(accLatest);
 
     /* CORRECT */
     pendulumCoreCorrect(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, &accLatest, Fl, Fr, nowMs, quadIsFlying);
@@ -445,7 +461,7 @@ void pendulumCoreCorrect(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   mat_mult(&Cm, &tmpNN2m, &tmpNN3m); // C P C'
   mat_add(&Rm, &tmpNN3m, &tmpNN4m); // R + C P C'
   mat_inv(&tmpNN4m, &tmpNN5m); // (R + C P C')^-1
-  mat_mult(&tmpNN5m, &tmpNN2m, &Lm);
+  mat_mult(&tmpNN2m, &tmpNN5m, &Lm); // 
 
   // ====== COVARIANCE UPDATE ======
   mat_mult(&Cm, &this->Pm, &tmpNN6m); // C P
