@@ -56,7 +56,6 @@
 #include "log.h"                  // logging
 #include "system.h"               // systemWaitStart
 #include "cf_math.h"              // for matrix math, includes arm_math.h
-#include "ref.h"                  // for matrix addition/subtraction
 
 // Task declarations (EP = estimator pendulum)
 static SemaphoreHandle_t runTaskSemaphoreEP;
@@ -390,7 +389,7 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
 
   // Add process noise
   // P = P + Q
-  ref_mat_add_f32(&this->Pm, &Qm, &this->Pm);
+  arm_mat_add_f32(&this->Pm, &Qm, &this->Pm);
 
   // ====== PREDICTION STEP ======
   float theta_prev = this->S[THETA];
@@ -469,14 +468,14 @@ void pendulumCoreCorrect(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   mat_trans(&Cm, &tmpNN1m); // C'
   mat_mult(&this->Pm, &tmpNN1m, &tmpNN2m); // P C'
   mat_mult(&Cm, &tmpNN2m, &tmpNN3m); // C P C'
-  ref_mat_add_f32(&Rm, &tmpNN3m, &tmpNN4m); // R + C P C'
+  arm_mat_add_f32(&Rm, &tmpNN3m, &tmpNN4m); // R + C P C'
   mat_inv(&tmpNN4m, &tmpNN5m); // (R + C P C')^-1
   mat_mult(&tmpNN2m, &tmpNN5m, &Lm); // 
 
   // ====== COVARIANCE UPDATE ======
   mat_mult(&Cm, &this->Pm, &tmpNN6m); // C P
   mat_mult(&Lm, &tmpNN6m, &tmpNN7m); // L C P
-  ref_mat_sub_f32(&this->Pm, &tmpNN7m, &this->Pm); // P - L C P
+  arm_mat_sub_f32(&this->Pm, &tmpNN7m, &this->Pm); // P - L C P
   
   float theta = this->S[THETA];
   float theta_d = this->S[THETA_DOT];
