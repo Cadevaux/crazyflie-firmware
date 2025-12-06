@@ -52,7 +52,6 @@
 #include "stabilizer_types.h"     // defines roll pitch yaw attitude struct
 #include "estimator_kalman.h"     // use to run existing estimator underneath
 #include "motors.h"               // motor IDs
-#include "platform_defaults_cf2.h" // thrust max
 #include "sensors.h"              // sample accel and gyro
 #include "log.h"                  // logging
 
@@ -64,14 +63,13 @@ static pendulum_state_t pendulumEstimatorState; // Name of the local state varia
 //static state_t taskEstimatorStateEP;  // state_t is for the entire state (pos, vel, att) and we don't wanna mess with this
 static bool isInit = false;
 static void pendulumTask(void* parameters);
-static void updateQueuedMeasurements(const uint32_t nowMs, const bool quadIsFlying);
 STATIC_MEM_TASK_ALLOC_STACK_NO_DMA_CCM_SAFE(pendulumTask, PENDULUM_TASK_STACKSIZE);
 
 // Same as estimator_kalman.c
-#define PREDICT_RATE RATE_100_HZ // this is slower than the IMU update rate of 1000Hz
+#define PREDICT_RATE RATE_250_HZ // this is slower than the IMU update rate of 1000Hz
+// Predict rate was originally RATE_100_HZ. I upped this to 250 Hz after Simulink testing
+// 250 Hz was also next available option
 const uint32_t PREDICTION_UPDATE_INTERVAL_MS = 1000 / PREDICT_RATE;
-//static Axis3fSubSampler_t accSubSampler;
-//static Axis3fSubSampler_t gyroSubSampler;
 static Axis3f accLatest;
 static Axis3f gyroLatest;
 
@@ -90,7 +88,7 @@ void appMain() {
   // Add the estimator task
   estimatorPendulumTaskInit(); 
   /*
-  * estimatorKalmanTaskInit() added kalmanTask already since the function was called in
+  * estimatorKalmanTaskInit added kalmanTask already; estimatorKalmanTaskInit was called in
   * systemTask (system.c) since ESTIMATOR_KALMAN_ENABLE was selected in menuconfig.
   * ENABLE lets the calculations run in the background even if the estimator hasn't
   * been selected yet. We start to run both estimators in the init function (1) below
@@ -105,7 +103,7 @@ void appMain() {
 /* (1) Initialize estimator - stacks on existing kalman filter outputs */
 
 void estimatorOutOfTreeInit() {
-  estimatorKalmanInit();
+  estimatorKalmanInit(); // cascaded from
 
   uint32_t nowMs = T2M(xTaskGetTickCount());
   memset(&pendulumCoreData, 0, sizeof(pendulumCoreData_t));
@@ -147,28 +145,25 @@ void estimatorOutOfTreeInit() {
   helperConstants.c1 = L*(2*mb + ms)/(2*(mb + mq + ms));
   helperConstants.c2 = 3*pow(2*mb + ms,2)/((mb + mq + ms)*(12*mb*mq + 4*mb*ms + 4*mq*ms + pow(ms,2)));
 
+  // Prediction step helper constants
   helperConstants.pred1 = L*ms*ms*r - 12*L*mb*mq*r - 4*L*mb*ms*r - 4*L*mq*ms*r;
   helperConstants.pred2 = Ixx*L*(12*mb*mq + 4*mb*ms + 4*mq*ms + ms*ms);
 
+  // Correction step helper constants for nonlinear function
   helperConstants.cphi2 = 12*mb*mb + 3*ms*ms + 12*mb*ms; // C_phi2
   helperConstants.cphi = 12*mb*mb + 5*ms*ms + 24*mb*mq + 20*mb*ms + 8*mq*ms; // C_phi
-
-  /* velocity-related coefficients (multiply by L later) */
   helperConstants.vphi2 = ms*ms*ms
         + 24*mb*mb*mq
         + 6*mb*ms*ms
         + 8*mb*mb*ms
         + 4*mq*ms*ms
-        + 20*mb*mq*ms; // V_phi2
-
+        + 20*mb*mq*ms; // V_phi2, velocity-related coefficient (multiply by L later)
   helperConstants.vphitheta = 2*ms*ms*ms
               + 48*mb*mb*mq
               + 12*mb*ms*ms
               + 16*mb*mb*ms
               + 8*mq*ms*ms
-              + 40*mb*mq*ms; // V_phi_theta
-
-  /* gravity block used only in yexp(2) */
+              + 40*mb*mq*ms; // V_phi_theta, velocity-related coefficient (multiply by L later)
   helperConstants.gblock = g*( 2*ms*ms*ms
             + 24*mb*mq*mq
             + 24*mb*mb*mq
@@ -176,8 +171,7 @@ void estimatorOutOfTreeInit() {
             + 8*mb*mb*ms
             + 10*mq*ms*ms
             + 8*mq*mq*ms
-            + 40*mb*mq*ms ); // G_block
-  
+            + 40*mb*mq*ms ); // G_block used only in yexp(2)
   helperConstants.expdenom = 2.0f*(mb + mq + ms)*(12.0f*mb*mq + 4.0f*mb*ms + 4.0f*mq*ms + ms*ms);
 
 }
@@ -185,13 +179,13 @@ void estimatorOutOfTreeInit() {
 /* (2) Required test function for estimator */
 
 void estimatorOutOfTreeTest() {
-  estimatorKalmanTest();
+  estimatorKalmanTest(); // cascaded from
 }
 
 /* (3) Estimator update function */
 
 void estimatorOutOfTree(state_t *state, const stabilizerStep_t stabilizerStep) {
-  estimatorKalman(state, stabilizerStep);
+  estimatorKalman(state, stabilizerStep); // cascaded from
 
   // Signal pendulum task to update its state
   xSemaphoreGive(runTaskSemaphoreEP);
@@ -218,7 +212,7 @@ bool estimatorPendulumTaskTest() {
 
 /* The Task */
 
-// Excluded rate supervisor, estimator supervisor (check if in bounds), statistics loggers
+// Excluded rate supervisor, estimator supervisor (check if in bounds), statistics loggers for simplicity
 static void pendulumTask(void* parameters) {
   systemWaitStart();
 
@@ -232,10 +226,10 @@ static void pendulumTask(void* parameters) {
     nowMs = T2M(xTaskGetTickCount()); 
 
     // 8bit PWM value (from 16bit)
-    uint8_t m1 = (uint8_t) (motorsGetRatio(MOTOR_M1)/UINT8_MAX);
-    uint8_t m2 = (uint8_t) (motorsGetRatio(MOTOR_M2)/UINT8_MAX);
-    uint8_t m3 = (uint8_t) (motorsGetRatio(MOTOR_M3)/UINT8_MAX);
-    uint8_t m4 = (uint8_t) (motorsGetRatio(MOTOR_M4)/UINT8_MAX);
+    uint8_t m1 = (uint8_t) (motorsGetRatio(MOTOR_M1)>>8);
+    uint8_t m2 = (uint8_t) (motorsGetRatio(MOTOR_M2)>>8);
+    uint8_t m3 = (uint8_t) (motorsGetRatio(MOTOR_M3)>>8);
+    uint8_t m4 = (uint8_t) (motorsGetRatio(MOTOR_M4)>>8);
     
     // Convert to Thrust (g, aka gram force) then N
     // https://www.bitcraze.io/documentation/repository/crazyflie-firmware/master/functional-areas/pwm-to-thrust/
@@ -247,48 +241,48 @@ static void pendulumTask(void* parameters) {
     float Fl = m1 + m2; // N 
     float Fr = m3 + m4; // N
 
-    // Run the system dynamics to predict the state forward
+    // Predict state every OBSFREQ Hz
     if (nowMs >= nextPredictionMs) {
-      // Get thrust forces - moved to above
-
       // Filter forces if needed - moving average filter
       // Fl = Fl*(1-alpha) + Fl_prev*alpha
 
       /* PREDICT STEP */
-      /* Do not do this- it will interfere with measurements that kalman filter uses
+      
+      // Do not dequeue measurements- it will interfere with measurements that kalman filter uses
+      /* 
       measurement_t m;
       estimatorDequeue(&m);
       axis3fSubSamplerAccumulate(&gyroSubSampler, &m.data.gyroscope.gyro);
       gyroLatest = m.data.gyroscope.gyro;
       */ 
 
-      sensorsReadGyro(gyroLatest);
+      sensorsReadGyro(gyroLatest); // take snapshot of measurement
+      // queue is for collecting last bundle of measurements for integration purposes
       
+      /* ADD PROCESS NOISE - in predict function */
       pendulumCorePredict(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, Fl, Fr, nowMs, quadIsFlying);
+      //nextPredictionMs = nowMs + PREDICTION_UPDATE_INTERVAL_MS; // moved
+      
+      // Process noise addition and correction step were moved into the OBSFREQ Hz loop so that 
+      // entire observer runs at OBSFREQ Hz. Crazyflie splits by running prediction step at 100 Hz
+      // and adding process noise and correcting faster (I think 1000 Hz is loop frequency)
+
+      /* Get measurement */
+      sensorsReadAcc(accLatest);
+
+      /* CORRECT */
+      pendulumCoreCorrect(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, &accLatest, Fl, Fr, nowMs, quadIsFlying);
+      
+      // Write to our storage variable so others (e.g. controller) can read
+      xSemaphoreTake(dataMutexEP, portMAX_DELAY);
+      pendulumEstimatorState.theta = pendulumCoreData.S[THETA];
+      pendulumEstimatorState.theta_dot = pendulumCoreData.S[THETA_DOT];
+      pendulumEstimatorState.timestamp = nowMs;
+      xSemaphoreGive(dataMutexEP);
+
+      //STATS_CNT_RATE_EVENT(&updateCounter);
       nextPredictionMs = nowMs + PREDICTION_UPDATE_INTERVAL_MS;
     }
-    /* ADD PROCESS NOISE - in predict function */
-
-    //updateQueuedMeasurements(nowMs, quadIsFlying);
-    /*
-    measurement_t m;
-    estimatorDequeue(&m);
-    axis3fSubSamplerAccumulate(&accSubSampler, &m.data.acceleration.acc);
-    accLatest = m.data.acceleration.acc;
-    */
-    sensorsReadAcc(accLatest);
-
-    /* CORRECT */
-    pendulumCoreCorrect(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, &accLatest, Fl, Fr, nowMs, quadIsFlying);
-    
-    // Write to our extern variable so others (e.g. controller) can read
-    xSemaphoreTake(dataMutexEP, portMAX_DELAY);
-    pendulumEstimatorState.theta = pendulumCoreData.S[THETA];
-    pendulumEstimatorState.theta_dot = pendulumCoreData.S[THETA_DOT];
-    pendulumEstimatorState.timestamp = nowMs;
-    xSemaphoreGive(dataMutexEP);
-
-    //STATS_CNT_RATE_EVENT(&updateCounter);
   }
 }
 
@@ -296,7 +290,7 @@ static void pendulumTask(void* parameters) {
 
 // Main prediction step
 void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *params, const Axis3f *gyro, float Fl, float Fr, const uint32_t nowMs, bool quadIsFlying) {
-  float dt = (nowMs - this->lastPredictionMs) / 1000.0f;
+  float dt = (nowMs - this->lastPredictionMs) / 1000.0f; // seconds
   // The linearized update matrices
   NO_DMA_CCM_SAFE_ZERO_INIT static float A[STATE_DIM][STATE_DIM];
   static __attribute__((aligned(4))) arm_matrix_instance_f32 Am = { STATE_DIM, STATE_DIM, (float *)A}; // linearized dynamics for covariance update;
