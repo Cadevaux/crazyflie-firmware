@@ -131,8 +131,8 @@ void estimatorOutOfTreeInit() {
   pendulumCoreData.S[THETA_DOT] = pendulumCoreParams.initialThetaDot;
 
   // Initialize initial state variances
-  pendulumCoreData.P[THETA][THETA] = powf(pendulumCoreParams.stdDevInitialTheta, 2);
-  pendulumCoreData.P[THETA_DOT][THETA_DOT] = powf(pendulumCoreParams.stdDevInitialThetaDot, 2);
+  pendulumCoreData.P[THETA][THETA] = pendulumCoreParams.stdDevInitialTheta*pendulumCoreParams.stdDevInitialTheta;
+  pendulumCoreData.P[THETA_DOT][THETA_DOT] = pendulumCoreParams.stdDevInitialThetaDot*pendulumCoreParams.stdDevInitialThetaDot;
 
   // Set update flag and time vals
   pendulumCoreData.isUpdated = false;
@@ -150,7 +150,7 @@ void estimatorOutOfTreeInit() {
   // For helper constants: 
   // A(1,0) = a1*cosf(theta)*(Fl + Fr)
   // In predict step: dt multiplied to A(0,1) and A(1,0)
-  helperConstants.a1 = -(6*(2*mb + ms))/(L*(12*mb*mq + 4*mb*ms + 4*mq*ms + powf(ms,2))); 
+  helperConstants.a1 = -(6.0f*(2.0f*mb + ms))/(L*(12.0f*mb*mq + 4.0f*mb*ms + 4.0f*mq*ms + ms*ms)); 
   // B(1,0) = b1 - b2*sinf(theta) 
   // B(1,1) = -b1 - b2*sinf(theta)
   // In predict step: dt multiplied to B(1,0) and B(1,1)
@@ -160,36 +160,36 @@ void estimatorOutOfTreeInit() {
   // C(0,1) = c1 * 2*sinf(phi + theta)*(phi_d + theta_d) 
   // C(1,0) = c1 * [phi_d^2 + theta_d^2 + 2*phi_d*theta_d]*sinf(phi + theta) + c2 * [(Fl + Fr)*sinf(phi + 2.0*theta)]  
   // C(1,1) = -c1 * 2*cosf(phi + theta)*(phi_d + theta_d) 
-  helperConstants.c1 = L*(2*mb + ms)/(2*(mb + mq + ms));
-  helperConstants.c2 = 3*powf(2*mb + ms,2)/((mb + mq + ms)*(12*mb*mq + 4*mb*ms + 4*mq*ms + powf(ms,2)));
+  helperConstants.c1 = L*(2.0f*mb + ms)/(2.0f*(mb + mq + ms));
+  helperConstants.c2 = 3.0f*(2.0f*mb + ms)*(2.0f*mb + ms)/((mb + mq + ms)*(12.0f*mb*mq + 4.0f*mb*ms + 4.0f*mq*ms + ms*ms));
 
   // Prediction step helper constants
-  helperConstants.pred1 = L*ms*ms*r - 12*L*mb*mq*r - 4*L*mb*ms*r - 4*L*mq*ms*r;
-  helperConstants.pred2 = Ixx*L*(12*mb*mq + 4*mb*ms + 4*mq*ms + ms*ms);
+  helperConstants.pred1 = L*ms*ms*r - 12.0f*L*mb*mq*r - 4.0f*L*mb*ms*r - 4.0f*L*mq*ms*r;
+  helperConstants.pred2 = Ixx*L*(12.0f*mb*mq + 4.0f*mb*ms + 4.0f*mq*ms + ms*ms);
 
   // Correction step helper constants for nonlinear function
-  helperConstants.cphi2 = 12*mb*mb + 3*ms*ms + 12*mb*ms; // C_phi2
-  helperConstants.cphi = 12*mb*mb + 5*ms*ms + 24*mb*mq + 20*mb*ms + 8*mq*ms; // C_phi
+  helperConstants.cphi2 = 12.0f*mb*mb + 3.0f*ms*ms + 12.0f*mb*ms; // C_phi2
+  helperConstants.cphi = 12.0f*mb*mb + 5.0f*ms*ms + 24.0f*mb*mq + 20.0f*mb*ms + 8.0f*mq*ms; // C_phi
   helperConstants.vphi2 = ms*ms*ms
-        + 24*mb*mb*mq
-        + 6*mb*ms*ms
-        + 8*mb*mb*ms
-        + 4*mq*ms*ms
-        + 20*mb*mq*ms; // V_phi2, velocity-related coefficient (multiply by L later)
-  helperConstants.vphitheta = 2*ms*ms*ms
-              + 48*mb*mb*mq
-              + 12*mb*ms*ms
-              + 16*mb*mb*ms
-              + 8*mq*ms*ms
-              + 40*mb*mq*ms; // V_phi_theta, velocity-related coefficient (multiply by L later)
-  helperConstants.gblock = g*( 2*ms*ms*ms
-            + 24*mb*mq*mq
-            + 24*mb*mb*mq
-            + 10*mb*ms*ms
-            + 8*mb*mb*ms
-            + 10*mq*ms*ms
-            + 8*mq*mq*ms
-            + 40*mb*mq*ms ); // G_block used only in yexp(2)
+        + 24.0f*mb*mb*mq
+        + 6.0f*mb*ms*ms
+        + 8.0f*mb*mb*ms
+        + 4.0f*mq*ms*ms
+        + 20.0f*mb*mq*ms; // V_phi2, velocity-related coefficient (multiply by L later)
+  helperConstants.vphitheta = 2.0f*ms*ms*ms
+              + 48.0f*mb*mb*mq
+              + 12.0f*mb*ms*ms
+              + 16.0f*mb*mb*ms
+              + 8.0f*mq*ms*ms
+              + 40.0f*mb*mq*ms; // V_phi_theta, velocity-related coefficient (multiply by L later)
+  helperConstants.gblock = g*( 2.0f*ms*ms*ms
+            + 24.0f*mb*mq*mq
+            + 24.0f*mb*mb*mq
+            + 10.0f*mb*ms*ms
+            + 8.0f*mb*mb*ms
+            + 10.0f*mq*ms*ms
+            + 8.0f*mq*mq*ms
+            + 40.0f*mb*mq*ms ); // G_block used only in yexp(2)
   helperConstants.expdenom = 2.0f*(mb + mq + ms)*(12.0f*mb*mq + 4.0f*mb*ms + 4.0f*mq*ms + ms*ms);
 
 }
@@ -251,10 +251,10 @@ static void pendulumTask(void* parameters) {
     
     // Convert to Thrust (g, aka gram force) then N
     // https://www.bitcraze.io/documentation/repository/crazyflie-firmware/master/functional-areas/pwm-to-thrust/
-    m1 = (0.000409*m1*m1 + 0.1405*m1 + -0.099) * 0.00980665;
-    m2 = (0.000409*m2*m2 + 0.1405*m2 + -0.099) * 0.00980665;
-    m3 = (0.000409*m3*m3 + 0.1405*m3 + -0.099) * 0.00980665;
-    m4 = (0.000409*m4*m4 + 0.1405*m4 + -0.099) * 0.00980665;
+    m1 = (0.000409f*m1*m1 + 0.1405f*m1 + -0.099f) * 0.00980665f;
+    m2 = (0.000409f*m2*m2 + 0.1405f*m2 + -0.099f) * 0.00980665f;
+    m3 = (0.000409f*m3*m3 + 0.1405f*m3 + -0.099f) * 0.00980665f;
+    m4 = (0.000409f*m4*m4 + 0.1405f*m4 + -0.099f) * 0.00980665f;
     
     float Fl = m1 + m2; // N 
     float Fr = m3 + m4; // N
@@ -368,10 +368,10 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   B[1][0] = dt*(helperConstants.b1 + helperConstants.b2*sinf(theta));
   B[1][1] = dt*(helperConstants.b2*sinf(theta) - helperConstants.b1);
 
-  C[0][0] = helperConstants.c1 * (powf(phi_d,2) + powf(theta_d,2) + 2*phi_d*theta_d)*cosf(phi + theta) + helperConstants.c2 * ((Fl + Fr)*cosf(phi + 2.0f*theta));
-  C[0][1] = helperConstants.c1 * 2*sinf(phi + theta)*(phi_d + theta_d);
-  C[1][0] = helperConstants.c1 * (powf(phi_d,2) + powf(theta_d,2) + 2*phi_d*theta_d)*sinf(phi + theta) + helperConstants.c2 * ((Fl + Fr)*sinf(phi + 2.0f*theta));
-  C[1][1] = -helperConstants.c1 * 2*cosf(phi + theta)*(phi_d + theta_d);
+  C[0][0] = helperConstants.c1 * (phi_d*phi_d + theta_d*theta_d + 2.0f*phi_d*theta_d)*cosf(phi + theta) + helperConstants.c2 * ((Fl + Fr)*cosf(phi + 2.0f*theta));
+  C[0][1] = helperConstants.c1 * 2.0f*sinf(phi + theta)*(phi_d + theta_d);
+  C[1][0] = helperConstants.c1 * (phi_d*phi_d + theta_d*theta_d + 2.0f*phi_d*theta_d)*sinf(phi + theta) + helperConstants.c2 * ((Fl + Fr)*sinf(phi + 2.0f*theta));
+  C[1][1] = -helperConstants.c1 * 2.0f*cosf(phi + theta)*(phi_d + theta_d);
 
   this->C[0][0] = C[0][0];
   this->C[0][1] = C[0][1];
@@ -397,8 +397,8 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   this->S[THETA] += dt * this->S[THETA_DOT];
   //this->S[THETA_DOT] += dt * -(Fr*L*ms^2*r - Fl*L*ms^2*r + 12*Fl*Ixx*mb*sinf(theta_prev) + 12*Fr*Ixx*mb*sinf(theta_prev) + 6*Fl*Ixx*ms*sinf(theta_prev) + 6*Fr*Ixx*ms*sinf(theta_prev) - 12*Fl*L*mb*mq*r - 4*Fl*L*mb*ms*r + 12*Fr*L*mb*mq*r + 4*Fr*L*mb*ms*r - 4*Fl*L*mq*ms*r + 4*Fr*L*mq*ms*r)/(Ixx*L*(12*mb*mq + 4*mb*ms + 4*mq*ms + ms^2));
   this->S[THETA_DOT] += dt *
-  - (Fl - Fr) * (- 12*pendulumCoreParams.Ixx*pendulumCoreParams.mb*sinf(theta_prev) 
-  - 6*pendulumCoreParams.Ixx*pendulumCoreParams.ms*sinf(theta_prev) + helperConstants.pred1) 
+  - (Fl - Fr) * (-12.0f*pendulumCoreParams.Ixx*pendulumCoreParams.mb*sinf(theta_prev) 
+  - 6.0f*pendulumCoreParams.Ixx*pendulumCoreParams.ms*sinf(theta_prev) + helperConstants.pred1) 
   / helperConstants.pred2;
 
   this->isUpdated = true;
@@ -485,15 +485,15 @@ void pendulumCoreCorrect(pendulumCoreData_t* this, const pendulumCoreParams_t *p
 
   // Calculate expected measurement         
   float numerator_yexp1 =
-    (Fl+Fr) * helperConstants.cphi2 * sinf(phi+2*theta)
+    (Fl+Fr) * helperConstants.cphi2 * sinf(phi+2.0f*theta)
   - (Fl+Fr) * helperConstants.cphi  * sinf(phi)
-  + pendulumCoreParams.L * sinf(phi+theta) * ( helperConstants.vphi2*(powf(phi_d,2) + powf(theta_d,2)) + helperConstants.vphitheta*(phi_d*theta_d) );
+  + pendulumCoreParams.L * sinf(phi+theta) * ( helperConstants.vphi2*(phi_d*phi_d + theta_d*theta_d) + helperConstants.vphitheta*(phi_d*theta_d) );
 
   float numerator_yexp2 =
     -helperConstants.gblock
   + (Fl + Fr) * helperConstants.cphi * cosf(phi)
   - (Fl + Fr) * helperConstants.cphi2 * cosf(phi + 2.0f*theta)
-  - pendulumCoreParams.L * cosf(phi + theta) * ( helperConstants.vphi2 * (powf(phi_d,2) + powf(theta_d,2)) + helperConstants.vphitheta * (phi_d*theta_d) );
+  - pendulumCoreParams.L * cosf(phi + theta) * ( helperConstants.vphi2 * (phi_d*phi_d + theta_d*theta_d) + helperConstants.vphitheta * (phi_d*theta_d) );
 
   float yexp1 = numerator_yexp1 / helperConstants.expdenom;
   float yexp2 = numerator_yexp2 / helperConstants.expdenom;

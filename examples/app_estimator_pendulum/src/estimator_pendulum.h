@@ -14,22 +14,22 @@
 
 #define PENDULUM_DEFAULT_PARAMS_INIT \
   /* Initial params, states, and variances */ \
-  .mq = 0.0314,     /* kg */ \
-  .mb = 0.00633,    /* kg */ \
-  .ms = 0.0001,     /* kg */ \
-  .Ixx = 6.410179e-06,  /* kg m2*/ \
-  .g = 9.81,        /* m/s2 */ \
-  .r = 0.05665/2,   /* m */ \
-  .L = 0.4,         /* m */ \
+  .mq = 0.0314f,     /* kg */ \
+  .mb = 0.00633f,    /* kg */ \
+  .ms = 0.0001f,     /* kg */ \
+  .Ixx = 6.410179e-06f,  /* kg m2*/ \
+  .g = 9.81f,        /* m/s2 */ \
+  .r = 0.028325f,   /* m */ \
+  .L = 0.4f,         /* m */ \
   \
   .initialTheta = 0.0f,     /* radians */ \
   .initialThetaDot = 0.0f,  /* radians per second */ \
   \
-  .stdDevInitialTheta = 0.01,      /* radians (5 deg) */ \
-  .stdDevInitialThetaDot = 0.01,    /* radians per second */ \
+  .stdDevInitialTheta = 0.01f,      /* radians (5 deg) */ \
+  .stdDevInitialThetaDot = 0.01f,    /* radians per second */ \
   \
-  .gamma = 0.00001, /* Q tuning */ \
-  .beta = 0.05,  /* R tuning*/ \
+  .gamma = 0.00001f, /* Q tuning */ \
+  .beta = 0.05f,  /* R tuning*/ \
 
 // Struct to externalize state
 typedef struct {
