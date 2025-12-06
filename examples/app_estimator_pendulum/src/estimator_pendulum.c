@@ -54,6 +54,7 @@
 #include "motors.h"               // motor IDs
 #include "sensors.h"              // sample accel and gyro
 #include "log.h"                  // logging
+#include "system.h"               // systemWaitStart
 
 // Task declarations (EP = estimator pendulum)
 static SemaphoreHandle_t runTaskSemaphoreEP;
@@ -64,6 +65,21 @@ static pendulum_state_t pendulumEstimatorState; // Name of the local state varia
 static bool isInit = false;
 static void pendulumTask(void* parameters);
 STATIC_MEM_TASK_ALLOC_STACK_NO_DMA_CCM_SAFE(pendulumTask, PENDULUM_TASK_STACKSIZE);
+
+// Declare these up top before they're used
+static void pendulumCorePredict(pendulumCoreData_t* this,
+                                const pendulumCoreParams_t *params,
+                                const Axis3f *gyro,
+                                float Fl, float Fr,
+                                const uint32_t nowMs,
+                                bool quadIsFlying);
+static void pendulumCoreCorrect(pendulumCoreData_t* this,
+                                const pendulumCoreParams_t *params,
+                                const Axis3f *gyro,
+                                const Axis3f *acc,
+                                float Fl, float Fr,
+                                const uint32_t nowMs,
+                                bool quadIsFlying);
 
 // Same as estimator_kalman.c
 #define PREDICT_RATE RATE_250_HZ // this is slower than the IMU update rate of 1000Hz
@@ -130,20 +146,20 @@ void estimatorOutOfTreeInit() {
   float r = pendulumCoreParams.r;
   float L = pendulumCoreParams.L;
   // For helper constants: 
-  // A(1,0) = a1*cos(theta)*(Fl + Fr)
+  // A(1,0) = a1*cosf(theta)*(Fl + Fr)
   // In predict step: dt multiplied to A(0,1) and A(1,0)
-  helperConstants.a1 = -(6*(2*mb + ms))/(L*(12*mb*mq + 4*mb*ms + 4*mq*ms + pow(ms,2))); 
-  // B(1,0) = b1 - b2*sin(theta) 
-  // B(1,1) = -b1 - b2*sin(theta)
+  helperConstants.a1 = -(6*(2*mb + ms))/(L*(12*mb*mq + 4*mb*ms + 4*mq*ms + powf(ms,2))); 
+  // B(1,0) = b1 - b2*sinf(theta) 
+  // B(1,1) = -b1 - b2*sinf(theta)
   // In predict step: dt multiplied to B(1,0) and B(1,1)
   helperConstants.b1 = (L*ms*ms*r+12.0f*L*mb*mq*r+4.0f*L*mb*ms*r+4.0f*L*mq*ms*r)/(Ixx*L*(12.0f*mb*mq+4.0f*mb*ms+4.0f*mq*ms+ms*ms));
   helperConstants.b2 = (12.0f*Ixx*mb+6.0f*Ixx*ms)/(Ixx*L*(12.0f*mb*mq+4.0f*mb*ms+4.0f*mq*ms+ms*ms));
-  // C(0,0) = c1 * [phi_d^2 + theta_d^2 + 2*phi_d*theta_d]*cos(phi + theta) + c2 * [(Fl + Fr)*cos(phi + 2.0*theta)]  
-  // C(0,1) = c1 * 2*sin(phi + theta)*(phi_d + theta_d) 
-  // C(1,0) = c1 * [phi_d^2 + theta_d^2 + 2*phi_d*theta_d]*sin(phi + theta) + c2 * [(Fl + Fr)*sin(phi + 2.0*theta)]  
-  // C(1,1) = -c1 * 2*cos(phi + theta)*(phi_d + theta_d) 
+  // C(0,0) = c1 * [phi_d^2 + theta_d^2 + 2*phi_d*theta_d]*cosf(phi + theta) + c2 * [(Fl + Fr)*cosf(phi + 2.0*theta)]  
+  // C(0,1) = c1 * 2*sinf(phi + theta)*(phi_d + theta_d) 
+  // C(1,0) = c1 * [phi_d^2 + theta_d^2 + 2*phi_d*theta_d]*sinf(phi + theta) + c2 * [(Fl + Fr)*sinf(phi + 2.0*theta)]  
+  // C(1,1) = -c1 * 2*cosf(phi + theta)*(phi_d + theta_d) 
   helperConstants.c1 = L*(2*mb + ms)/(2*(mb + mq + ms));
-  helperConstants.c2 = 3*pow(2*mb + ms,2)/((mb + mq + ms)*(12*mb*mq + 4*mb*ms + 4*mq*ms + pow(ms,2)));
+  helperConstants.c2 = 3*powf(2*mb + ms,2)/((mb + mq + ms)*(12*mb*mq + 4*mb*ms + 4*mq*ms + powf(ms,2)));
 
   // Prediction step helper constants
   helperConstants.pred1 = L*ms*ms*r - 12*L*mb*mq*r - 4*L*mb*ms*r - 4*L*mq*ms*r;
@@ -179,7 +195,7 @@ void estimatorOutOfTreeInit() {
 /* (2) Required test function for estimator */
 
 void estimatorOutOfTreeTest() {
-  estimatorKalmanTest(); // cascaded from
+  return estimatorKalmanTest(); // cascaded from
 }
 
 /* (3) Estimator update function */
@@ -256,7 +272,7 @@ static void pendulumTask(void* parameters) {
       gyroLatest = m.data.gyroscope.gyro;
       */ 
 
-      sensorsReadGyro(gyroLatest); // take snapshot of measurement
+      sensorsReadGyro(&gyroLatest); // take snapshot of measurement
       // queue is for collecting last bundle of measurements for integration purposes
       
       /* ADD PROCESS NOISE - in predict function */
@@ -268,7 +284,7 @@ static void pendulumTask(void* parameters) {
       // and adding process noise and correcting faster (I think 1000 Hz is loop frequency)
 
       /* Get measurement */
-      sensorsReadAcc(accLatest);
+      sensorsReadAcc(&accLatest);
 
       /* CORRECT */
       pendulumCoreCorrect(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, &accLatest, Fl, Fr, nowMs, quadIsFlying);
@@ -298,9 +314,6 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   NO_DMA_CCM_SAFE_ZERO_INIT static float B[STATE_DIM][INPUT_DIM];
   static __attribute__((aligned(4))) arm_matrix_instance_f32 Bm = { STATE_DIM, INPUT_DIM, (float *)B};
 
-  NO_DMA_CCM_SAFE_ZERO_INIT static float C[MEAS_DIM][STATE_DIM];
-  static __attribute__((aligned(4))) arm_matrix_instance_f32 Cm = { MEAS_DIM, STATE_DIM, (float *)C};
-
   // Temp matrices for Q calculation
   NO_DMA_CCM_SAFE_ZERO_INIT static float BT[INPUT_DIM][STATE_DIM];
   static __attribute__((aligned(4))) arm_matrix_instance_f32 BTm = { INPUT_DIM, STATE_DIM, (float *)BT};
@@ -315,17 +328,17 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   NO_DMA_CCM_SAFE_ZERO_INIT static float tmpNN2d[STATE_DIM * STATE_DIM];
   static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpNN2m = { STATE_DIM, STATE_DIM, tmpNN2d};
 
-  float dt2 = dt*dt;
+  //float dt2 = dt*dt;
 
   // ====== DYNAMICS LINEARIZATION ======
   // For helper constants: 
-  // A(1,0) = a1*cos(theta)*(Fl + Fr) 
-  // B(1,0) = b1 + b2*sin(theta) 
-  // B(1,1) = b2*sin(theta) - b1
-  // C(0,0) = c1 * [phi_d^2 + theta_d^2 + 2*phi_d*theta_d]*cos(phi + theta) + c2 * [(Fl + Fr)*cos(phi + 2.0*theta)]  
-  // C(0,1) = c1 * 2*sin(phi + theta)*(phi_d + theta_d) 
-  // C(1,0) = c1 * [phi_d^2 + theta_d^2 + 2*phi_d*theta_d]*sin(phi + theta) + c2 * [(Fl + Fr)*sin(phi + 2.0*theta)]  
-  // C(1,1) = -c1 * 2*cos(phi + theta)*(phi_d + theta_d) 
+  // A(1,0) = a1*cosf(theta)*(Fl + Fr) 
+  // B(1,0) = b1 + b2*sinf(theta) 
+  // B(1,1) = b2*sinf(theta) - b1
+  // C(0,0) = c1 * [phi_d^2 + theta_d^2 + 2*phi_d*theta_d]*cosf(phi + theta) + c2 * [(Fl + Fr)*cosf(phi + 2.0*theta)]  
+  // C(0,1) = c1 * 2*sinf(phi + theta)*(phi_d + theta_d) 
+  // C(1,0) = c1 * [phi_d^2 + theta_d^2 + 2*phi_d*theta_d]*sinf(phi + theta) + c2 * [(Fl + Fr)*sinf(phi + 2.0*theta)]  
+  // C(1,1) = -c1 * 2*cosf(phi + theta)*(phi_d + theta_d) 
 
   // Populate
   float theta = this->S[THETA];
@@ -344,18 +357,18 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
 
   A[0][0] = 1;
   A[0][1] = dt; // Observer at 100 Hz, not 500 Hz. Don't hardcode anyway
-  A[1][0] = dt*helperConstants.a1*cos(theta)*(Fl + Fr);
+  A[1][0] = dt*helperConstants.a1*cosf(theta)*(Fl + Fr);
   A[1][1] = 1;
 
   B[0][0] = 0;
   B[0][1] = 0;
-  B[1][0] = dt*(helperConstants.b1 + helperConstants.b2*sin(theta));
-  B[1][1] = dt*(helperConstants.b2*sin(theta) - helperConstants.b1);
+  B[1][0] = dt*(helperConstants.b1 + helperConstants.b2*sinf(theta));
+  B[1][1] = dt*(helperConstants.b2*sinf(theta) - helperConstants.b1);
 
-  C[0][0] = helperConstants.c1 * (pow(phi_d,2) + pow(theta_d,2) + 2*phi_d*theta_d)*cos(phi + theta) + helperConstants.c2 * ((Fl + Fr)*cos(phi + 2.0*theta));
-  C[0][1] = helperConstants.c1 * 2*sin(phi + theta)*(phi_d + theta_d);
-  C[1][0] = helperConstants.c1 * (pow(phi_d,2) + pow(theta_d,2) + 2*phi_d*theta_d)*sin(phi + theta) + helperConstants.c2 * ((Fl + Fr)*sin(phi + 2.0*theta));
-  C[1][1] = -helperConstants.c1 * 2*cos(phi + theta)*(phi_d + theta_d);
+  C[0][0] = helperConstants.c1 * (powf(phi_d,2) + powf(theta_d,2) + 2*phi_d*theta_d)*cosf(phi + theta) + helperConstants.c2 * ((Fl + Fr)*cosf(phi + 2.0*theta));
+  C[0][1] = helperConstants.c1 * 2*sinf(phi + theta)*(phi_d + theta_d);
+  C[1][0] = helperConstants.c1 * (powf(phi_d,2) + powf(theta_d,2) + 2*phi_d*theta_d)*sinf(phi + theta) + helperConstants.c2 * ((Fl + Fr)*sinf(phi + 2.0*theta));
+  C[1][1] = -helperConstants.c1 * 2*cosf(phi + theta)*(phi_d + theta_d);
 
   this->C[0][0] = C[0][0];
   this->C[0][1] = C[0][1];
@@ -379,10 +392,10 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   // ====== PREDICTION STEP ======
   float theta_prev = this->S[THETA];
   this->S[THETA] += dt * this->S[THETA_DOT];
-  //this->S[THETA_DOT] += dt * -(Fr*L*ms^2*r - Fl*L*ms^2*r + 12*Fl*Ixx*mb*sin(theta_prev) + 12*Fr*Ixx*mb*sin(theta_prev) + 6*Fl*Ixx*ms*sin(theta_prev) + 6*Fr*Ixx*ms*sin(theta_prev) - 12*Fl*L*mb*mq*r - 4*Fl*L*mb*ms*r + 12*Fr*L*mb*mq*r + 4*Fr*L*mb*ms*r - 4*Fl*L*mq*ms*r + 4*Fr*L*mq*ms*r)/(Ixx*L*(12*mb*mq + 4*mb*ms + 4*mq*ms + ms^2));
+  //this->S[THETA_DOT] += dt * -(Fr*L*ms^2*r - Fl*L*ms^2*r + 12*Fl*Ixx*mb*sinf(theta_prev) + 12*Fr*Ixx*mb*sinf(theta_prev) + 6*Fl*Ixx*ms*sinf(theta_prev) + 6*Fr*Ixx*ms*sinf(theta_prev) - 12*Fl*L*mb*mq*r - 4*Fl*L*mb*ms*r + 12*Fr*L*mb*mq*r + 4*Fr*L*mb*ms*r - 4*Fl*L*mq*ms*r + 4*Fr*L*mq*ms*r)/(Ixx*L*(12*mb*mq + 4*mb*ms + 4*mq*ms + ms^2));
   this->S[THETA_DOT] += dt *
-  - (Fl - Fr) * (- 12*pendulumCoreParams.Ixx*pendulumCoreParams.mb*sin(theta_prev) 
-  - 6*pendulumCoreParams.Ixx*pendulumCoreParams.ms*sin(theta_prev) + helperConstants.pred1) 
+  - (Fl - Fr) * (- 12*pendulumCoreParams.Ixx*pendulumCoreParams.mb*sinf(theta_prev) 
+  - 6*pendulumCoreParams.Ixx*pendulumCoreParams.ms*sinf(theta_prev) + helperConstants.pred1) 
   / helperConstants.pred2;
 
   this->isUpdated = true;
@@ -444,8 +457,8 @@ void pendulumCoreCorrect(pendulumCoreData_t* this, const pendulumCoreParams_t *p
 
     % Correction (C-2)
     %yexp = C*xbar + D*u + dmeas_const % replaced this- use nonlinear model
-    yexp(1) = (12*Fl*mb^2*sin(phi + 2*theta) - 12*Fr*mb^2*sin(phi) - 5*Fl*ms^2*sin(phi) - 5*Fr*ms^2*sin(phi) - 12*Fl*mb^2*sin(phi) + 12*Fr*mb^2*sin(phi + 2*theta) + 3*Fl*ms^2*sin(phi + 2*theta) + 3*Fr*ms^2*sin(phi + 2*theta) + L*ms^3*theta_d^2*sin(phi + theta) - 24*Fl*mb*mq*sin(phi) - 20*Fl*mb*ms*sin(phi) - 24*Fr*mb*mq*sin(phi) - 20*Fr*mb*ms*sin(phi) - 8*Fl*mq*ms*sin(phi) - 8*Fr*mq*ms*sin(phi) + 12*Fl*mb*ms*sin(phi + 2*theta) + 12*Fr*mb*ms*sin(phi + 2*theta) + L*ms^3*phi_d^2*sin(phi + theta) + 2*L*ms^3*phi_d*theta_d*sin(phi + theta) + 24*L*mb^2*mq*phi_d^2*sin(phi + theta) + 6*L*mb*ms^2*phi_d^2*sin(phi + theta) + 8*L*mb^2*ms*phi_d^2*sin(phi + theta) + 4*L*mq*ms^2*phi_d^2*sin(phi + theta) + 24*L*mb^2*mq*theta_d^2*sin(phi + theta) + 6*L*mb*ms^2*theta_d^2*sin(phi + theta) + 8*L*mb^2*ms*theta_d^2*sin(phi + theta) + 4*L*mq*ms^2*theta_d^2*sin(phi + theta) + 20*L*mb*mq*ms*phi_d^2*sin(phi + theta) + 20*L*mb*mq*ms*theta_d^2*sin(phi + theta) + 48*L*mb^2*mq*phi_d*theta_d*sin(phi + theta) + 12*L*mb*ms^2*phi_d*theta_d*sin(phi + theta) + 16*L*mb^2*ms*phi_d*theta_d*sin(phi + theta) + 8*L*mq*ms^2*phi_d*theta_d*sin(phi + theta) + 40*L*mb*mq*ms*phi_d*theta_d*sin(phi + theta))/(2*(mb + mq + ms)*(12*mb*mq + 4*mb*ms + 4*mq*ms + ms^2));
-    yexp(2) = -(2*g*ms^3 + 24*g*mb*mq^2 + 24*g*mb^2*mq + 10*g*mb*ms^2 + 8*g*mb^2*ms + 10*g*mq*ms^2 + 8*g*mq^2*ms - 12*Fl*mb^2*cos(phi) - 12*Fr*mb^2*cos(phi) - 5*Fl*ms^2*cos(phi) - 5*Fr*ms^2*cos(phi) + 12*Fl*mb^2*cos(phi + 2*theta) + 12*Fr*mb^2*cos(phi + 2*theta) + 3*Fl*ms^2*cos(phi + 2*theta) + 3*Fr*ms^2*cos(phi + 2*theta) + 40*g*mb*mq*ms - 24*Fl*mb*mq*cos(phi) - 20*Fl*mb*ms*cos(phi) - 24*Fr*mb*mq*cos(phi) - 20*Fr*mb*ms*cos(phi) - 8*Fl*mq*ms*cos(phi) - 8*Fr*mq*ms*cos(phi) + 12*Fl*mb*ms*cos(phi + 2*theta) + 12*Fr*mb*ms*cos(phi + 2*theta) + L*ms^3*phi_d^2*cos(phi + theta) + L*ms^3*theta_d^2*cos(phi + theta) + 2*L*ms^3*phi_d*theta_d*cos(phi + theta) + 24*L*mb^2*mq*phi_d^2*cos(phi + theta) + 6*L*mb*ms^2*phi_d^2*cos(phi + theta) + 8*L*mb^2*ms*phi_d^2*cos(phi + theta) + 4*L*mq*ms^2*phi_d^2*cos(phi + theta) + 24*L*mb^2*mq*theta_d^2*cos(phi + theta) + 6*L*mb*ms^2*theta_d^2*cos(phi + theta) + 8*L*mb^2*ms*theta_d^2*cos(phi + theta) + 4*L*mq*ms^2*theta_d^2*cos(phi + theta) + 20*L*mb*mq*ms*phi_d^2*cos(phi + theta) + 20*L*mb*mq*ms*theta_d^2*cos(phi + theta) + 48*L*mb^2*mq*phi_d*theta_d*cos(phi + theta) + 12*L*mb*ms^2*phi_d*theta_d*cos(phi + theta) + 16*L*mb^2*ms*phi_d*theta_d*cos(phi + theta) + 8*L*mq*ms^2*phi_d*theta_d*cos(phi + theta) + 40*L*mb*mq*ms*phi_d*theta_d*cos(phi + theta))/(2*(mb + mq + ms)*(12*mb*mq + 4*mb*ms + 4*mq*ms + ms^2));
+    yexp(1) = (12*Fl*mb^2*sinf(phi + 2*theta) - 12*Fr*mb^2*sinf(phi) - 5*Fl*ms^2*sinf(phi) - 5*Fr*ms^2*sinf(phi) - 12*Fl*mb^2*sinf(phi) + 12*Fr*mb^2*sinf(phi + 2*theta) + 3*Fl*ms^2*sinf(phi + 2*theta) + 3*Fr*ms^2*sinf(phi + 2*theta) + L*ms^3*theta_d^2*sinf(phi + theta) - 24*Fl*mb*mq*sinf(phi) - 20*Fl*mb*ms*sinf(phi) - 24*Fr*mb*mq*sinf(phi) - 20*Fr*mb*ms*sinf(phi) - 8*Fl*mq*ms*sinf(phi) - 8*Fr*mq*ms*sinf(phi) + 12*Fl*mb*ms*sinf(phi + 2*theta) + 12*Fr*mb*ms*sinf(phi + 2*theta) + L*ms^3*phi_d^2*sinf(phi + theta) + 2*L*ms^3*phi_d*theta_d*sinf(phi + theta) + 24*L*mb^2*mq*phi_d^2*sinf(phi + theta) + 6*L*mb*ms^2*phi_d^2*sinf(phi + theta) + 8*L*mb^2*ms*phi_d^2*sinf(phi + theta) + 4*L*mq*ms^2*phi_d^2*sinf(phi + theta) + 24*L*mb^2*mq*theta_d^2*sinf(phi + theta) + 6*L*mb*ms^2*theta_d^2*sinf(phi + theta) + 8*L*mb^2*ms*theta_d^2*sinf(phi + theta) + 4*L*mq*ms^2*theta_d^2*sinf(phi + theta) + 20*L*mb*mq*ms*phi_d^2*sinf(phi + theta) + 20*L*mb*mq*ms*theta_d^2*sinf(phi + theta) + 48*L*mb^2*mq*phi_d*theta_d*sinf(phi + theta) + 12*L*mb*ms^2*phi_d*theta_d*sinf(phi + theta) + 16*L*mb^2*ms*phi_d*theta_d*sinf(phi + theta) + 8*L*mq*ms^2*phi_d*theta_d*sinf(phi + theta) + 40*L*mb*mq*ms*phi_d*theta_d*sinf(phi + theta))/(2*(mb + mq + ms)*(12*mb*mq + 4*mb*ms + 4*mq*ms + ms^2));
+    yexp(2) = -(2*g*ms^3 + 24*g*mb*mq^2 + 24*g*mb^2*mq + 10*g*mb*ms^2 + 8*g*mb^2*ms + 10*g*mq*ms^2 + 8*g*mq^2*ms - 12*Fl*mb^2*cosf(phi) - 12*Fr*mb^2*cosf(phi) - 5*Fl*ms^2*cosf(phi) - 5*Fr*ms^2*cosf(phi) + 12*Fl*mb^2*cosf(phi + 2*theta) + 12*Fr*mb^2*cosf(phi + 2*theta) + 3*Fl*ms^2*cosf(phi + 2*theta) + 3*Fr*ms^2*cosf(phi + 2*theta) + 40*g*mb*mq*ms - 24*Fl*mb*mq*cosf(phi) - 20*Fl*mb*ms*cosf(phi) - 24*Fr*mb*mq*cosf(phi) - 20*Fr*mb*ms*cosf(phi) - 8*Fl*mq*ms*cosf(phi) - 8*Fr*mq*ms*cosf(phi) + 12*Fl*mb*ms*cosf(phi + 2*theta) + 12*Fr*mb*ms*cosf(phi + 2*theta) + L*ms^3*phi_d^2*cosf(phi + theta) + L*ms^3*theta_d^2*cosf(phi + theta) + 2*L*ms^3*phi_d*theta_d*cosf(phi + theta) + 24*L*mb^2*mq*phi_d^2*cosf(phi + theta) + 6*L*mb*ms^2*phi_d^2*cosf(phi + theta) + 8*L*mb^2*ms*phi_d^2*cosf(phi + theta) + 4*L*mq*ms^2*phi_d^2*cosf(phi + theta) + 24*L*mb^2*mq*theta_d^2*cosf(phi + theta) + 6*L*mb*ms^2*theta_d^2*cosf(phi + theta) + 8*L*mb^2*ms*theta_d^2*cosf(phi + theta) + 4*L*mq*ms^2*theta_d^2*cosf(phi + theta) + 20*L*mb*mq*ms*phi_d^2*cosf(phi + theta) + 20*L*mb*mq*ms*theta_d^2*cosf(phi + theta) + 48*L*mb^2*mq*phi_d*theta_d*cosf(phi + theta) + 12*L*mb*ms^2*phi_d*theta_d*cosf(phi + theta) + 16*L*mb^2*ms*phi_d*theta_d*cosf(phi + theta) + 8*L*mq*ms^2*phi_d*theta_d*cosf(phi + theta) + 40*L*mb*mq*ms*phi_d*theta_d*cosf(phi + theta))/(2*(mb + mq + ms)*(12*mb*mq + 4*mb*ms + 4*mq*ms + ms^2));
     xhat = xbar + Lgain*(y_meas - yexp); 
   */
 
@@ -469,15 +482,15 @@ void pendulumCoreCorrect(pendulumCoreData_t* this, const pendulumCoreParams_t *p
 
   // Calculate expected measurement         
   float numerator_yexp1 =
-    (Fl+Fr) * helperConstants.cphi2 * sin(phi+2*theta)
-  - (Fl+Fr) * helperConstants.cphi  * sin(phi)
-  + pendulumCoreParams.L * sin(phi+theta) * ( helperConstants.vphi2*(pow(phi_d,2) + pow(theta_d,2)) + helperConstants.vphitheta*(phi_d*theta_d) );
+    (Fl+Fr) * helperConstants.cphi2 * sinf(phi+2*theta)
+  - (Fl+Fr) * helperConstants.cphi  * sinf(phi)
+  + pendulumCoreParams.L * sinf(phi+theta) * ( helperConstants.vphi2*(powf(phi_d,2) + powf(theta_d,2)) + helperConstants.vphitheta*(phi_d*theta_d) );
 
   float numerator_yexp2 =
     -helperConstants.gblock
-  + (Fl + Fr) * helperConstants.cphi * cos(phi)
-  - (Fl + Fr) * helperConstants.cphi2 * cos(phi + 2.0f*theta)
-  - pendulumCoreParams.L * cos(phi + theta) * ( helperConstants.vphi2 * (pow(phi_d,2) + pow(theta_d,2)) + helperConstants.vphitheta * (phi_d*theta_d) );
+  + (Fl + Fr) * helperConstants.cphi * cosf(phi)
+  - (Fl + Fr) * helperConstants.cphi2 * cosf(phi + 2.0f*theta)
+  - pendulumCoreParams.L * cosf(phi + theta) * ( helperConstants.vphi2 * (powf(phi_d,2) + powf(theta_d,2)) + helperConstants.vphitheta * (phi_d*theta_d) );
 
   float yexp1 = numerator_yexp1 / helperConstants.expdenom;
   float yexp2 = numerator_yexp2 / helperConstants.expdenom;
