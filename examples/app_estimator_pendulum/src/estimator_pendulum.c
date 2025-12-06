@@ -55,6 +55,8 @@
 #include "sensors.h"              // sample accel and gyro
 #include "log.h"                  // logging
 #include "system.h"               // systemWaitStart
+#include "cf_math.h"              // for matrix math, includes arm_math.h
+#include "ref.h"                  // for matrix addition/subtraction
 
 // Task declarations (EP = estimator pendulum)
 static SemaphoreHandle_t runTaskSemaphoreEP;
@@ -194,7 +196,7 @@ void estimatorOutOfTreeInit() {
 
 /* (2) Required test function for estimator */
 
-void estimatorOutOfTreeTest() {
+bool estimatorOutOfTreeTest() {
   return estimatorKalmanTest(); // cascaded from
 }
 
@@ -346,12 +348,10 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   // Populate
   float theta = this->S[THETA];
   float theta_d = this->S[THETA_DOT];
-  state_t incomingState;
-  // The second argument is the current tick, used for prediction/interpolation 
-  // if necessary, but usually, passing the current tick is standard.
-  estimatorGetState(&incomingState, xTaskGetTickCount());
-  float roll_deg  = incomingState.attitude.roll;
-  float phi = roll_deg * 3.1415/180;
+
+  float R[3][3];
+  estimatorKalmanGetEstimatedRot(R);
+  float phi = atan2f(R[2][1], R[2][2]); // roll in radians
   float phi_d = gyro->x;
 
   // Store for correction step
@@ -368,9 +368,9 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   B[1][0] = dt*(helperConstants.b1 + helperConstants.b2*sinf(theta));
   B[1][1] = dt*(helperConstants.b2*sinf(theta) - helperConstants.b1);
 
-  C[0][0] = helperConstants.c1 * (powf(phi_d,2) + powf(theta_d,2) + 2*phi_d*theta_d)*cosf(phi + theta) + helperConstants.c2 * ((Fl + Fr)*cosf(phi + 2.0*theta));
+  C[0][0] = helperConstants.c1 * (powf(phi_d,2) + powf(theta_d,2) + 2*phi_d*theta_d)*cosf(phi + theta) + helperConstants.c2 * ((Fl + Fr)*cosf(phi + 2.0f*theta));
   C[0][1] = helperConstants.c1 * 2*sinf(phi + theta)*(phi_d + theta_d);
-  C[1][0] = helperConstants.c1 * (powf(phi_d,2) + powf(theta_d,2) + 2*phi_d*theta_d)*sinf(phi + theta) + helperConstants.c2 * ((Fl + Fr)*sinf(phi + 2.0*theta));
+  C[1][0] = helperConstants.c1 * (powf(phi_d,2) + powf(theta_d,2) + 2*phi_d*theta_d)*sinf(phi + theta) + helperConstants.c2 * ((Fl + Fr)*sinf(phi + 2.0f*theta));
   C[1][1] = -helperConstants.c1 * 2*cosf(phi + theta)*(phi_d + theta_d);
 
   this->C[0][0] = C[0][0];
@@ -390,7 +390,7 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
 
   // Add process noise
   // P = P + Q
-  mat_add(&this->Pm, &Qm, &this->Pm);
+  ref_mat_add_f32(&this->Pm, &Qm, &this->Pm);
 
   // ====== PREDICTION STEP ======
   float theta_prev = this->S[THETA];
@@ -469,14 +469,14 @@ void pendulumCoreCorrect(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   mat_trans(&Cm, &tmpNN1m); // C'
   mat_mult(&this->Pm, &tmpNN1m, &tmpNN2m); // P C'
   mat_mult(&Cm, &tmpNN2m, &tmpNN3m); // C P C'
-  mat_add(&Rm, &tmpNN3m, &tmpNN4m); // R + C P C'
+  ref_mat_add_f32(&Rm, &tmpNN3m, &tmpNN4m); // R + C P C'
   mat_inv(&tmpNN4m, &tmpNN5m); // (R + C P C')^-1
   mat_mult(&tmpNN2m, &tmpNN5m, &Lm); // 
 
   // ====== COVARIANCE UPDATE ======
   mat_mult(&Cm, &this->Pm, &tmpNN6m); // C P
   mat_mult(&Lm, &tmpNN6m, &tmpNN7m); // L C P
-  mat_sub(&this->Pm, &tmpNN7m, &this->Pm); // P - L C P
+  ref_mat_sub_f32(&this->Pm, &tmpNN7m, &this->Pm); // P - L C P
   
   float theta = this->S[THETA];
   float theta_d = this->S[THETA_DOT];
