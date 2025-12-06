@@ -349,7 +349,7 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   float theta_d = this->S[THETA_DOT];
 
   float R[3][3];
-  estimatorKalmanGetEstimatedRot(R);
+  estimatorKalmanGetEstimatedRot((float*)R);
   float phi = atan2f(R[2][1], R[2][2]); // roll in radians
   float phi_d = gyro->x;
 
