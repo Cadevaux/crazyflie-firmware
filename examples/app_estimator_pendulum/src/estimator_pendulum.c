@@ -314,6 +314,9 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   NO_DMA_CCM_SAFE_ZERO_INIT static float B[STATE_DIM][INPUT_DIM];
   static __attribute__((aligned(4))) arm_matrix_instance_f32 Bm = { STATE_DIM, INPUT_DIM, (float *)B};
 
+  NO_DMA_CCM_SAFE_ZERO_INIT static float C[STATE_DIM][INPUT_DIM];
+  //static __attribute__((aligned(4))) arm_matrix_instance_f32 Cm = { STATE_DIM, INPUT_DIM, (float *)C}
+
   // Temp matrices for Q calculation
   NO_DMA_CCM_SAFE_ZERO_INIT static float BT[INPUT_DIM][STATE_DIM];
   static __attribute__((aligned(4))) arm_matrix_instance_f32 BTm = { INPUT_DIM, STATE_DIM, (float *)BT};
