@@ -90,9 +90,9 @@ const uint32_t PREDICTION_UPDATE_INTERVAL_MS_PEND = 1000 / PREDICT_RATE_PEND;
 static Axis3f accLatest;
 static Axis3f gyroLatest;
 #define ACC_ALPHA 0.2f
-static float acc_x_filtered = 0.0f;
-static float acc_y_filtered = 0.0f;
-static float acc_z_filtered = 0.0f;
+static float acc_x_filtered;
+static float acc_y_filtered;
+static float acc_z_filtered;
 #define FORCE_ALPHA 0.5f
 static float Fl_latest;
 static float Fr_latest;
@@ -148,6 +148,11 @@ void estimatorOutOfTreeInit() {
   pendulumCoreData.Cm.numRows = MEAS_DIM;
   pendulumCoreData.Cm.numCols = STATE_DIM;
   pendulumCoreData.Cm.pData = (float*)pendulumCoreData.C; // avoid hard fault
+
+  // Initialize filter vars
+  acc_x_filtered = 0.0f;
+  acc_y_filtered = 0.0f;
+  acc_z_filtered = 0.0f;
 
   // Set update flag and time vals
   pendulumCoreData.isUpdated = false;
@@ -599,5 +604,13 @@ LOG_GROUP_START(pendEKF)
 
   /** @brief Force: Right (N) */
   LOG_ADD(LOG_FLOAT, Fr, &Fr_latest)
+
+  // Drone roll
+  
+  /** @brief Phi (rad) */
+  LOG_ADD(LOG_FLOAT, phi, &pendulumCoreData.phi_hold)
+
+  /** @brief Phi_dot (rad) */
+  LOG_ADD(LOG_FLOAT, phiDot, &pendulumCoreData.phi_hold)
 
 LOG_GROUP_STOP(pendEKF)
