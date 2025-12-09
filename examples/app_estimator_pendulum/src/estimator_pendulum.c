@@ -107,7 +107,7 @@ static helperConstants_t helperConstants;
 /* Main function - Initialize tasks, use for debugging */
 
 void appMain() {
-  DEBUG_PRINT("Waiting for activation ...\n");
+  DEBUG_PRINT("ESTIMATORPENDULUM: Pendulum estimator app starting...\n");
 
   // Add the estimator task
   estimatorPendulumTaskInit(); 
@@ -120,7 +120,7 @@ void appMain() {
 
   while(1) {
     vTaskDelay(M2T(2000));
-    //DEBUG_PRINT("Hello World!\n");
+    DEBUG_PRINT("ESTIMATORPENDULUM: Pendulum estimator alive!\n");
   }
 }
 
@@ -211,7 +211,6 @@ void estimatorOutOfTreeInit() {
             + 8.0f*mq*mq*ms
             + 40.0f*mb*mq*ms ); // G_block used only in yexp(2)
   helperConstants.expdenom = 2.0f*(mb + mq + ms)*(12.0f*mb*mq + 4.0f*mb*ms + 4.0f*mq*ms + ms*ms);
-
 }
 
 /* (2) Required test function for estimator */
@@ -241,6 +240,7 @@ void estimatorPendulumTaskInit() {
   STATIC_MEM_TASK_CREATE(pendulumTask, pendulumTask, KALMAN_TASK_NAME, NULL, PENDULUM_TASK_PRI);
 
   isInit = true;
+  DEBUG_PRINT("ESTIMATORPENDULUM: estimatorPendulumTaskInit complete!\n");
 }
 
 // For completion sake
@@ -253,11 +253,14 @@ bool estimatorPendulumTaskTest() {
 // Excluded rate supervisor, estimator supervisor (check if in bounds), statistics loggers for simplicity
 static void pendulumTask(void* parameters) {
   systemWaitStart();
+  DEBUG_PRINT("ESTIMATORPENDULUM: pendulumTask started!\n");
 
   uint32_t nowMs = T2M(xTaskGetTickCount());
   uint32_t nextPredictionMs = nowMs;
 
   bool quadIsFlying = supervisorIsFlying();
+
+  static uint32_t dbg = 0;
 
   while (true) {
     xSemaphoreTake(runTaskSemaphoreEP, portMAX_DELAY);
@@ -344,6 +347,27 @@ static void pendulumTask(void* parameters) {
 
       //STATS_CNT_RATE_EVENT(&updateCounter);
       nextPredictionMs = nowMs + PREDICTION_UPDATE_INTERVAL_MS_PEND;
+
+      bool okG = true;
+      bool okA = true;
+
+      if (++dbg % 200 == 0) {
+        DEBUG_PRINT(
+          "ESTIMATORPENDULUM: ESTPEND V5 "
+          "| okG=%d okA=%d "
+          "| g=[%.6f %.6f %.6f] "
+          "| a=[%.6f %.6f %.6f] "
+          "| pwm=[%u %u %u %u] "
+          "| Fl=%.6f Fr=%.6f "
+          "| theta=%.4f\n",
+          okG, okA,
+          (float)gyroLatest.x, (float)gyroLatest.y, (float)gyroLatest.z,
+          (float)accLatest.x,  (float)accLatest.y,  (float)accLatest.z,
+          (unsigned)m1, (unsigned)m2, (unsigned)m3, (unsigned)m4,
+          (float)Fl_latest, (float)Fr_latest,
+          (float)pendulumEstimatorState.theta
+        );
+      }
     }
   }
 }
@@ -589,7 +613,7 @@ LOG_GROUP_START(pendEKF)
   // Measurement accels in global frame
   
   /** @brief Measurement: x accel global (m/s^2) */
-  LOG_ADD(LOG_FLOAT, xAccelGlobal, &accLatest.x)
+  LOG_ADD(LOG_FLOAT, xAccelGlobal , &accLatest.x)
 
   /** @brief Measurement: y accel global (m/s^2) */
   LOG_ADD(LOG_FLOAT, yAccelGlobal, &accLatest.y)
