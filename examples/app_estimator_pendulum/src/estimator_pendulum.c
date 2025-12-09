@@ -361,11 +361,11 @@ static void pendulumTask(void* parameters) {
           "| Fl=%.6f Fr=%.6f "
           "| theta=%.4f\n",
           okG, okA,
-          (float)gyroLatest.x, (float)gyroLatest.y, (float)gyroLatest.z,
-          (float)accLatest.x,  (float)accLatest.y,  (float)accLatest.z,
+          (double)gyroLatest.x, (double)gyroLatest.y, (double)gyroLatest.z,
+          (double)accLatest.x,  (double)accLatest.y,  (double)accLatest.z,
           (unsigned)m1, (unsigned)m2, (unsigned)m3, (unsigned)m4,
-          (float)Fl_latest, (float)Fr_latest,
-          (float)pendulumEstimatorState.theta
+          (double)Fl_latest, (double)Fr_latest,
+          (double)pendulumEstimatorState.theta
         );
       }
     }
