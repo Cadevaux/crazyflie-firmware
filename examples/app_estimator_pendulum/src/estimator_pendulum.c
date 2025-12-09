@@ -86,7 +86,7 @@ static void pendulumCoreCorrect(pendulumCoreData_t* this,
 #define PREDICT_RATE RATE_250_HZ // this is slower than the IMU update rate of 1000Hz
 // Predict rate was originally RATE_100_HZ. I upped this to 250 Hz after Simulink testing
 // 250 Hz was also next available option
-const uint32_t PREDICTION_UPDATE_INTERVAL_MS = 1000 / PREDICT_RATE;
+const uint32_t PREDICTION_UPDATE_INTERVAL_MS_PEND = 1000 / PREDICT_RATE;
 static Axis3f accLatest;
 static Axis3f gyroLatest;
 
@@ -132,6 +132,15 @@ void estimatorOutOfTreeInit() {
   // Initialize initial state variances
   pendulumCoreData.P[THETA][THETA] = pendulumCoreParams.stdDevInitialTheta*pendulumCoreParams.stdDevInitialTheta;
   pendulumCoreData.P[THETA_DOT][THETA_DOT] = pendulumCoreParams.stdDevInitialThetaDot*pendulumCoreParams.stdDevInitialThetaDot;
+
+  pendulumCoreData.Pm.numRows = STATE_DIM;
+  pendulumCoreData.Pm.numCols = STATE_DIM;
+  pendulumCoreData.Pm.pData = (float*)pendulumCoreData.P; // don't forget this - avoid hard fault
+
+  // Initialize Cm pointer
+  pendulumCoreData.Cm.numRows = MEAS_DIM;
+  pendulumCoreData.Cm.numCols = STATE_DIM;
+  pendulumCoreData.Cm.pData = (float*)pendulumCoreData.C; // avoid hard fault
 
   // Set update flag and time vals
   pendulumCoreData.isUpdated = false;
@@ -250,13 +259,13 @@ static void pendulumTask(void* parameters) {
     
     // Convert to Thrust (g, aka gram force) then N
     // https://www.bitcraze.io/documentation/repository/crazyflie-firmware/master/functional-areas/pwm-to-thrust/
-    m1 = (0.000409f*m1*m1 + 0.1405f*m1 + -0.099f) * 0.00980665f;
-    m2 = (0.000409f*m2*m2 + 0.1405f*m2 + -0.099f) * 0.00980665f;
-    m3 = (0.000409f*m3*m3 + 0.1405f*m3 + -0.099f) * 0.00980665f;
-    m4 = (0.000409f*m4*m4 + 0.1405f*m4 + -0.099f) * 0.00980665f;
+    float m1_N = (0.000409f*m1*m1 + 0.1405f*m1 + -0.099f) * 0.00980665f;
+    float m2_N = (0.000409f*m2*m2 + 0.1405f*m2 + -0.099f) * 0.00980665f;
+    float m3_N = (0.000409f*m3*m3 + 0.1405f*m3 + -0.099f) * 0.00980665f;
+    float m4_N = (0.000409f*m4*m4 + 0.1405f*m4 + -0.099f) * 0.00980665f;
     
-    float Fl = m1 + m2; // N 
-    float Fr = m3 + m4; // N
+    float Fl = m1_N + m2_N; // N 
+    float Fr = m3_N + m4_N; // N
 
     // Predict state every OBSFREQ Hz
     if (nowMs >= nextPredictionMs) {
@@ -298,7 +307,7 @@ static void pendulumTask(void* parameters) {
       xSemaphoreGive(dataMutexEP);
 
       //STATS_CNT_RATE_EVENT(&updateCounter);
-      nextPredictionMs = nowMs + PREDICTION_UPDATE_INTERVAL_MS;
+      nextPredictionMs = nowMs + PREDICTION_UPDATE_INTERVAL_MS_PEND;
     }
   }
 }
@@ -358,7 +367,7 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   this->phi_d_hold = phi_d;
 
   A[0][0] = 1;
-  A[0][1] = dt; // Observer at 100 Hz, not 500 Hz. Don't hardcode anyway
+  A[0][1] = dt; // Don't hardcode anyway
   A[1][0] = dt*helperConstants.a1*cosf(theta)*(Fl + Fr);
   A[1][1] = 1;
 
