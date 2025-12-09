@@ -83,12 +83,19 @@ static void pendulumCoreCorrect(pendulumCoreData_t* this,
                                 bool quadIsFlying);
 
 // Same as estimator_kalman.c
-#define PREDICT_RATE RATE_250_HZ // this is slower than the IMU update rate of 1000Hz
+#define PREDICT_RATE_PEND RATE_250_HZ // this is slower than the IMU update rate of 1000Hz
 // Predict rate was originally RATE_100_HZ. I upped this to 250 Hz after Simulink testing
 // 250 Hz was also next available option
-const uint32_t PREDICTION_UPDATE_INTERVAL_MS_PEND = 1000 / PREDICT_RATE;
+const uint32_t PREDICTION_UPDATE_INTERVAL_MS_PEND = 1000 / PREDICT_RATE_PEND;
 static Axis3f accLatest;
 static Axis3f gyroLatest;
+#define ACC_ALPHA 0.2f
+static float acc_x_filtered = 0.0f;
+static float acc_y_filtered = 0.0f;
+static float acc_z_filtered = 0.0f;
+#define FORCE_ALPHA 0.5f
+static float Fl_latest;
+static float Fr_latest;
 
 // Estimator data and parameter declarations
 NO_DMA_CCM_SAFE_ZERO_INIT static pendulumCoreData_t pendulumCoreData;
@@ -264,10 +271,10 @@ static void pendulumTask(void* parameters) {
     float m3_N = (0.000409f*m3*m3 + 0.1405f*m3 + -0.099f) * 0.00980665f;
     float m4_N = (0.000409f*m4*m4 + 0.1405f*m4 + -0.099f) * 0.00980665f;
     
-    float Fl = m1_N + m2_N; // N 
-    float Fr = m3_N + m4_N; // N
+    Fl_latest = m1_N + m2_N; // N 
+    Fr_latest = m3_N + m4_N; // N
 
-    // Predict state every OBSFREQ Hz
+    // Predict state every PREDICT_RATE_PEND Hz
     if (nowMs >= nextPredictionMs) {
       // Filter forces if needed - moving average filter
       // Fl = Fl*(1-alpha) + Fl_prev*alpha
@@ -283,21 +290,45 @@ static void pendulumTask(void* parameters) {
       */ 
 
       sensorsReadGyro(&gyroLatest); // take snapshot of measurement
-      // queue is for collecting last bundle of measurements for integration purposes
+      // queue is for collecting last bundle of measurements for integration purposes - don't need here
       
       /* ADD PROCESS NOISE - in predict function */
-      pendulumCorePredict(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, Fl, Fr, nowMs, quadIsFlying);
+      pendulumCorePredict(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, Fl_latest, Fr_latest, nowMs, quadIsFlying);
       //nextPredictionMs = nowMs + PREDICTION_UPDATE_INTERVAL_MS; // moved
       
-      // Process noise addition and correction step were moved into the OBSFREQ Hz loop so that 
-      // entire observer runs at OBSFREQ Hz. Crazyflie splits by running prediction step at 100 Hz
-      // and adding process noise and correcting faster (I think 1000 Hz is loop frequency)
+      // Process noise addition and correction step were moved into the PREDICT_RATE_PEND Hz loop so that 
+      // entire observer runs at PREDICT_RATE_PEND Hz. 
+      // For onboard kalman estimator, Crazyflie splits by running prediction step at 100 Hz
+      // and adding process noise and correcting faster (RATE_MAIN_LOOP is 1000 Hz)
 
-      /* Get measurement */
-      sensorsReadAcc(&accLatest);
+      /* GET MEASUREMENT */
+      Axis3f tempAccel;
+      sensorsReadAcc(&tempAccel);
+      // rotate to global frame - measurements need to correct in this frame
+      float R[3][3];
+      estimatorKalmanGetEstimatedRot((float*)R);
+      float ax = tempAccel.x;
+      float ay = tempAccel.y;
+      float az = tempAccel.z;
+      tempAccel.x = R[0][0]*ax + R[0][1]*ay + R[0][2]*az;
+      tempAccel.y = R[1][0]*ax + R[1][1]*ay + R[1][2]*az;
+      tempAccel.z = R[2][0]*ax + R[2][1]*ay + R[2][2]*az;
+      // filter w/ LPF (moving average)
+      acc_x_filtered = (ACC_ALPHA * tempAccel.x) + ((1.0f - ACC_ALPHA) * acc_x_filtered);
+      acc_y_filtered = (ACC_ALPHA * tempAccel.y) + ((1.0f - ACC_ALPHA) * acc_y_filtered);
+      acc_z_filtered = (ACC_ALPHA * tempAccel.z) + ((1.0f - ACC_ALPHA) * acc_z_filtered);
+      tempAccel.x = acc_x_filtered;
+      tempAccel.y = acc_y_filtered;
+      tempAccel.z = acc_z_filtered;
+      // convert from reading in g to m/s^2
+      accLatest.x = tempAccel.x * pendulumCoreParams.g;
+      accLatest.y = tempAccel.y * pendulumCoreParams.g;
+      tempAccel.z = tempAccel.z * pendulumCoreParams.g;
+      // convert from pure reading to coordinate acceleration
+      accLatest.z = tempAccel.z - pendulumCoreParams.g;
 
       /* CORRECT */
-      pendulumCoreCorrect(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, &accLatest, Fl, Fr, nowMs, quadIsFlying);
+      pendulumCoreCorrect(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, &accLatest, Fl_latest, Fr_latest, nowMs, quadIsFlying);
       
       // Write to our storage variable so others (e.g. controller) can read
       xSemaphoreTake(dataMutexEP, portMAX_DELAY);
@@ -324,7 +355,7 @@ void pendulumCorePredict(pendulumCoreData_t* this, const pendulumCoreParams_t *p
   NO_DMA_CCM_SAFE_ZERO_INIT static float B[STATE_DIM][INPUT_DIM];
   static __attribute__((aligned(4))) arm_matrix_instance_f32 Bm = { STATE_DIM, INPUT_DIM, (float *)B};
 
-  NO_DMA_CCM_SAFE_ZERO_INIT static float C[STATE_DIM][INPUT_DIM];
+  NO_DMA_CCM_SAFE_ZERO_INIT static float C[MEAS_DIM][STATE_DIM];
   //static __attribute__((aligned(4))) arm_matrix_instance_f32 Cm = { STATE_DIM, INPUT_DIM, (float *)C}
 
   // Temp matrices for Q calculation
@@ -534,9 +565,7 @@ float theta = copy.theta;
 
 LOG_GROUP_START(pendEKF)
 
-  /* ============
-   *   STATES
-   * ============ */
+  // States
 
   /** @brief State: theta (angle) */
   LOG_ADD(LOG_FLOAT, theta, &pendulumCoreData.S[THETA])
@@ -544,15 +573,31 @@ LOG_GROUP_START(pendEKF)
   /** @brief State: theta_dot (angular velocity) */
   LOG_ADD(LOG_FLOAT, thetaDot, &pendulumCoreData.S[THETA_DOT])
 
-
-  /* =====================
-   *   STATE COVARIANCES
-   * ===================== */
-
+  // State covariances
+  
   /** @brief Var(theta) */
   LOG_ADD(LOG_FLOAT, varTheta, &pendulumCoreData.P[THETA][THETA])
 
   /** @brief Var(theta_dot) */
   LOG_ADD(LOG_FLOAT, varThetaDot, &pendulumCoreData.P[THETA_DOT][THETA_DOT])
+
+  // Measurement accels in global frame
+  
+  /** @brief Measurement: x accel global (m/s^2) */
+  LOG_ADD(LOG_FLOAT, xAccelGlobal, &accLatest.x)
+
+  /** @brief Measurement: y accel global (m/s^2) */
+  LOG_ADD(LOG_FLOAT, yAccelGlobal, &accLatest.y)
+
+  /** @brief Measurement: z accel global (m/s^2) */
+  LOG_ADD(LOG_FLOAT, zAccelGlobal, &accLatest.z)
+
+  // Forces in body frame
+  
+  /** @brief Force: Left (N) */
+  LOG_ADD(LOG_FLOAT, Fl, &Fl_latest)
+
+  /** @brief Force: Right (N) */
+  LOG_ADD(LOG_FLOAT, Fr, &Fr_latest)
 
 LOG_GROUP_STOP(pendEKF)
