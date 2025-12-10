@@ -404,6 +404,18 @@ void estimatorKalmanGetEstimatedRot(float * rotationMatrix) {
   memcpy(rotationMatrix, coreData.R, 9*sizeof(float));
 }
 
+// ADDED ACCESSOR FUNCTIONS FOR OOT ESTIMATOR
+void estimatorKalmanGetAccLatest(Axis3f* accCopy) {
+  accCopy->x = accLatest.x;
+  accCopy->y = accLatest.y;
+  accCopy->z = accLatest.z;
+}
+void estimatorKalmanGetGyroLatest(Axis3f* gyroCopy) {
+  gyroCopy->x = gyroLatest.x;
+  gyroCopy->y = gyroLatest.y;
+  gyroCopy->z = gyroLatest.z;
+}
+
 /**
  * Variables and results from the Extended Kalman Filter
  */

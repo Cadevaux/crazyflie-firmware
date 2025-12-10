@@ -71,3 +71,7 @@ void estimatorKalmanGetEstimatedPos(point_t* pos);
  * Copies 9 floats representing the current state rotation matrix
  */
 void estimatorKalmanGetEstimatedRot(float * rotationMatrix);
+
+// ADDED ACCESSOR FUNCTIONS FOR OOT ESTIMATOR
+void estimatorKalmanGetAccLatest(Axis3f* accCopy);
+void estimatorKalmanGetGyroLatest(Axis3f* gyroCopy);
