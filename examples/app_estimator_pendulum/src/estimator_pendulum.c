@@ -526,7 +526,7 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
 
   // ====== CORRECT THE STATE ====== 
 
-  float ymeas1 = -acc->y; // test a negative here to see if that caused the pi shift
+  float ymeas1 = acc->y;
   float ymeas2 = acc->z;
 
   // xhat = xbar + Lgain*(y_meas - yexp); 
