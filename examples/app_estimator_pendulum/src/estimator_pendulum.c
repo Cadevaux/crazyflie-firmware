@@ -78,7 +78,7 @@ static float Fl_latest;
 static float Fr_latest;
 
 // debugging
-static int dbg = 0;
+//static int dbg = 0;
 
 // Helper: wrap angle to [-pi, pi]
 /*
