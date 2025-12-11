@@ -533,7 +533,7 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   this->S[THETA]     += L[0][0] * (ymeas1 - yexp1) + L[0][1] * (ymeas2 - yexp2);
   this->S[THETA_DOT] += L[1][0] * (ymeas1 - yexp1) + L[1][1] * (ymeas2 - yexp2);
 
-  #if 1
+  #if 0
   if (++dbg % 200 == 0) {
     DEBUG_PRINT(
       "HELPER CONSTANTS "
@@ -590,7 +590,7 @@ static void pendulumTask(void* parameters) {
 
       // ---- 2) Convert PWM to Thrust in N from gram force ----
       // https://www.bitcraze.io/documentation/repository/crazyflie-firmware/master/functional-areas/pwm-to-thrust/
-      float f1 = (0.000409f * pwm1 * pwm1 + 0.1405f * pwm1 - 0.099f) * 0.00980665f / 4; // Seemsl like per motor
+      float f1 = (0.000409f * pwm1 * pwm1 + 0.1405f * pwm1 - 0.099f) * 0.00980665f / 4; // Seems like per motor
       float f2 = (0.000409f * pwm2 * pwm2 + 0.1405f * pwm2 - 0.099f) * 0.00980665f / 4;
       float f3 = (0.000409f * pwm3 * pwm3 + 0.1405f * pwm3 - 0.099f) * 0.00980665f / 4;
       float f4 = (0.000409f * pwm4 * pwm4 + 0.1405f * pwm4 - 0.099f) * 0.00980665f / 4;
