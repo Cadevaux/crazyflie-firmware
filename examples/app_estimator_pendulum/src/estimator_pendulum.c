@@ -344,7 +344,7 @@ void pendulumCorePredict(pendulumCoreData_t* this,
   float R[3][3];
   estimatorKalmanGetEstimatedRot((float*)R);
   float phi = atan2f(R[2][1], R[2][2]); // roll [rad]
-  float phi_d = gyro->x;
+  float phi_d = gyro->x * DEG_TO_RAD; // deg/s to rad/s!!!
 
   // Store for correction step
   this->phi_hold  = phi;
@@ -590,7 +590,7 @@ static void pendulumTask(void* parameters) {
 
       // ---- 2) Convert PWM to Thrust in N from gram force ----
       // https://www.bitcraze.io/documentation/repository/crazyflie-firmware/master/functional-areas/pwm-to-thrust/
-      float f1 = (0.000409f * pwm1 * pwm1 + 0.1405f * pwm1 - 0.099f) * 0.00980665f / 4; // Seems like per motor
+      float f1 = (0.000409f * pwm1 * pwm1 + 0.1405f * pwm1 - 0.099f) * 0.00980665f / 4;
       float f2 = (0.000409f * pwm2 * pwm2 + 0.1405f * pwm2 - 0.099f) * 0.00980665f / 4;
       float f3 = (0.000409f * pwm3 * pwm3 + 0.1405f * pwm3 - 0.099f) * 0.00980665f / 4;
       float f4 = (0.000409f * pwm4 * pwm4 + 0.1405f * pwm4 - 0.099f) * 0.00980665f / 4;
@@ -642,10 +642,12 @@ static void pendulumTask(void* parameters) {
       // xSemaphoreGive(dataMutexEP);
 
       // ---- 7) Export theta in "ball down = 0" frame, wrapped to [-pi, pi] ----
+      /*
       float theta_internal = pendulumCoreData.S[THETA];
       // Shift by the initialTheta (≈ pi) so that ball-down is 0 in the exported frame
       float theta_rel = theta_internal - pendulumCoreParams.initialTheta; // formerly pi
       theta_rel = wrapPi(theta_rel);
+      */
 
       // ---- 8) Update public/log-facing copies ----
       xSemaphoreTake(dataMutexEP, portMAX_DELAY);
