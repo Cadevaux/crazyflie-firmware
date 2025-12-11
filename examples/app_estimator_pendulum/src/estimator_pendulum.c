@@ -537,13 +537,15 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   if (++dbg % 200 == 0) {
     DEBUG_PRINT(
       "HELPER CONSTANTS "
-      "theta=%.9f theta_dot=%.9f ymeas1=%.9f ymeas2=%.9f yexp1=%.9f yexp2=%.9f\n",
+      "theta=%.6f theta_dot=%.6f ymeas1=%.6f ymeas2=%.6f yexp1=%.6f yexp2=%.6f Fl=%.6f Fr=%.6f\n",
       (double)this->S[THETA],
       (double)this->S[THETA_DOT],
       (double)ymeas1,
       (double)ymeas2,
       (double)yexp1,
-      (double)yexp2
+      (double)yexp2,
+      (double)Fl,
+      (double)Fr
     );
   }
   #endif
@@ -577,19 +579,23 @@ static void pendulumTask(void* parameters) {
     if (nowMs >= nextPredictionMs) {
 
       // ---- 1) Read ALL 4 motor PWM values as 8bit (from 16bit)----
-      uint8_t pwm1 = (uint8_t) (motorsGetRatio(MOTOR_M1)>>8);
-      uint8_t pwm2 = (uint8_t) (motorsGetRatio(MOTOR_M2)>>8);
-      uint8_t pwm3 = (uint8_t) (motorsGetRatio(MOTOR_M3)>>8);
-      uint8_t pwm4 = (uint8_t) (motorsGetRatio(MOTOR_M4)>>8);
+      uint8_t pwm1_raw = (uint8_t) (motorsGetRatio(MOTOR_M1)>>8);
+      uint8_t pwm2_raw = (uint8_t) (motorsGetRatio(MOTOR_M2)>>8);
+      uint8_t pwm3_raw = (uint8_t) (motorsGetRatio(MOTOR_M3)>>8);
+      uint8_t pwm4_raw = (uint8_t) (motorsGetRatio(MOTOR_M4)>>8);
+      float pwm1 = (float)pwm1_raw; // avoid overflow errors with a uint8_t in next calculation
+      float pwm2 = (float)pwm2_raw;
+      float pwm3 = (float)pwm3_raw;
+      float pwm4 = (float)pwm4_raw;
 
       // ---- 2) Convert PWM to Thrust in N from gram force ----
       // https://www.bitcraze.io/documentation/repository/crazyflie-firmware/master/functional-areas/pwm-to-thrust/
-      float f1 = (0.000409f * pwm1 * pwm1 + 0.1405f * pwm1 - 0.099f) * 0.00980665f;
-      float f2 = (0.000409f * pwm2 * pwm2 + 0.1405f * pwm2 - 0.099f) * 0.00980665f;
-      float f3 = (0.000409f * pwm3 * pwm3 + 0.1405f * pwm3 - 0.099f) * 0.00980665f;
-      float f4 = (0.000409f * pwm4 * pwm4 + 0.1405f * pwm4 - 0.099f) * 0.00980665f;
+      float f1 = (0.000409f * pwm1 * pwm1 + 0.1405f * pwm1 - 0.099f) * 0.00980665f / 4; // Seemsl like per motor
+      float f2 = (0.000409f * pwm2 * pwm2 + 0.1405f * pwm2 - 0.099f) * 0.00980665f / 4;
+      float f3 = (0.000409f * pwm3 * pwm3 + 0.1405f * pwm3 - 0.099f) * 0.00980665f / 4;
+      float f4 = (0.000409f * pwm4 * pwm4 + 0.1405f * pwm4 - 0.099f) * 0.00980665f / 4;
 
-      Fl_latest = f1 + f2; // N
+      Fl_latest = f1 + f2; // N // SHOULD be like 0.16 N
       Fr_latest = f3 + f4; // N
 
       // ---- 3) Grab gyro from Kalman filter via custom accessor function ----
