@@ -387,6 +387,11 @@ void pendulumCorePredict(pendulumCoreData_t* this,
   mat_trans(&Bm, &BTm);                 // B'
   mat_mult(&Bm, &BTm, &Qm);             // B * B'
   mat_scale(&Qm, pendulumCoreParams.gamma, &Qm); // Scale by gamma = 0.0001
+  // Debug test: Overwrite Q 
+  Q[0][0] = 5.0f * pendulumCoreParams.gamma;
+  Q[0][1] = 0.0f;
+  Q[1][0] = 0.0f;
+  Q[1][1] = 625.0f * pendulumCoreParams.gamma;
 
   // Add process noise: P = P + Q
   arm_mat_add_f32(&this->Pm, &Qm, &this->Pm);
