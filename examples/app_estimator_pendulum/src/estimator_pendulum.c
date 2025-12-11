@@ -534,6 +534,7 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   this->S[THETA]     += L[0][0] * (ymeas1 - yexp1) + L[0][1] * (ymeas2 - yexp2);
   this->S[THETA_DOT] += L[1][0] * (ymeas1 - yexp1) + L[1][1] * (ymeas2 - yexp2);
 
+  #if 0
   if (++dbg % 200 == 0) {
     DEBUG_PRINT(
       "HELPER CONSTANTS "
@@ -546,6 +547,7 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
       (double)yexp2
     );
   }
+  #endif
 
   this->isUpdated = true;
 }
@@ -650,6 +652,7 @@ static void pendulumTask(void* parameters) {
       nextPredictionMs = nowMs + PREDICTION_UPDATE_INTERVAL_MS_PEND;
 
       // ---- Debug print ----
+      #if 0
       if (++dbg % 200 == 0) {
           DEBUG_PRINT(
             "ESTIMATORPENDULUM: ESTPEND V5 "
@@ -667,6 +670,7 @@ static void pendulumTask(void* parameters) {
             (double)pendulumEstimatorState.theta_dot
           );
         }
+      #endif
     }
   }
 }
