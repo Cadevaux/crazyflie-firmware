@@ -626,8 +626,8 @@ static void pendulumTask(void* parameters) {
       // 0.86 too high, 0.50 too low, 0.75  
 
       float bat = pmGetBatteryVoltage();
-      float batMin = pmGetBatteryVoltageMin();
-      float batMax = pmGetBatteryVoltageMax();
+      float batMin = 3.00; // see charge curve
+      float batMax = 4.10;
       exp = (bat - batMin)/(batMax - batMin);
       flex3 = exp;
 
