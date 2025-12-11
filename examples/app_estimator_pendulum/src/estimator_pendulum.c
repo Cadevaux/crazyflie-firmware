@@ -76,7 +76,7 @@ static float acc_z_filtered;
 #define FORCE_ALPHA 0.5f
 static float Fl_latest;
 static float Fr_latest;
-//static int dbg = 0;
+static int dbg = 0;
 
 // Helper: wrap angle to [-pi, pi]
 #ifndef M_PI_F
@@ -462,11 +462,11 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   NO_DMA_CCM_SAFE_ZERO_INIT static float CPCT[STATE_DIM * STATE_DIM];
   static __attribute__((aligned(4))) arm_matrix_instance_f32 CPCTm = { STATE_DIM, STATE_DIM, CPCT};
 
-  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpCorr[STATE_DIM * STATE_DIM];
-  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpCorrm = { STATE_DIM, STATE_DIM, tmpCorr};
-
   NO_DMA_CCM_SAFE_ZERO_INIT static float SmData[STATE_DIM * STATE_DIM];
   static __attribute__((aligned(4))) arm_matrix_instance_f32 Sm = { STATE_DIM, STATE_DIM, SmData};
+
+  NO_DMA_CCM_SAFE_ZERO_INIT static float SinvmData[STATE_DIM * STATE_DIM];
+  static __attribute__((aligned(4))) arm_matrix_instance_f32 Sinvm = { STATE_DIM, STATE_DIM, SinvmData};
 
   NO_DMA_CCM_SAFE_ZERO_INIT static float CP[STATE_DIM * STATE_DIM];
   static __attribute__((aligned(4))) arm_matrix_instance_f32 CPm = { STATE_DIM, STATE_DIM, CP};
@@ -489,9 +489,9 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   mat_trans(&Cm, &CTm);       // C'
   mat_mult(&this->Pm, &CTm, &PCTm);   // P C'
   mat_mult(&Cm, &PCTm, &CPCTm);         // C P C'
-  arm_mat_add_f32(&Rm, &CPCTm, &tmpCorrm);  // R + C P C'
-  mat_inv(&tmpCorrm, &Sm);               // (R + C P C')^-1
-  mat_mult(&PCTm, &Sm, &Lm);         // L = P C' (R + C P C')^-1
+  arm_mat_add_f32(&Rm, &CPCTm, &Sm);  // R + C P C'
+  mat_inv(&Sm, &Sinvm);               // (R + C P C')^-1
+  mat_mult(&PCTm, &Sinvm, &Lm);         // L = P C' (R + C P C')^-1
 
   // ====== COVARIANCE UPDATE ======
 
@@ -533,7 +533,7 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   this->S[THETA]     += L[0][0] * (ymeas1 - yexp1) + L[0][1] * (ymeas2 - yexp2);
   this->S[THETA_DOT] += L[1][0] * (ymeas1 - yexp1) + L[1][1] * (ymeas2 - yexp2);
 
-  #if 0
+  #if 1
   if (++dbg % 200 == 0) {
     DEBUG_PRINT(
       "HELPER CONSTANTS "
