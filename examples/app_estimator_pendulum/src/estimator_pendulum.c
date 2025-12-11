@@ -76,7 +76,7 @@ static float acc_z_filtered;
 #define FORCE_ALPHA 0.5f
 static float Fl_latest;
 static float Fr_latest;
-static int dbg = 0;
+//static int dbg = 0;
 
 // Helper: wrap angle to [-pi, pi]
 #ifndef M_PI_F
@@ -567,7 +567,7 @@ static void pendulumTask(void* parameters) {
   uint32_t nextPredictionMs = nowMs;
 
   // Debug variable
-  static uint32_t dbg = 0;
+  //static uint32_t dbg = 0;
 
   while (true) {
     xSemaphoreTake(runTaskSemaphoreEP, portMAX_DELAY);
@@ -612,12 +612,14 @@ static void pendulumTask(void* parameters) {
       tempAccel.y = R[1][0]*ax + R[1][1]*ay + R[1][2]*az;
       tempAccel.z = R[2][0]*ax + R[2][1]*ay + R[2][2]*az - 1; // sub g for coordinate acceleration
       // filter w/ LPF (moving average)
+      /*
       acc_x_filtered = (ACC_ALPHA * tempAccel.x) + ((1.0f - ACC_ALPHA) * acc_x_filtered);
       acc_y_filtered = (ACC_ALPHA * tempAccel.y) + ((1.0f - ACC_ALPHA) * acc_y_filtered);
       acc_z_filtered = (ACC_ALPHA * tempAccel.z) + ((1.0f - ACC_ALPHA) * acc_z_filtered);
       tempAccel.x = acc_x_filtered;
       tempAccel.y = acc_y_filtered;
       tempAccel.z = acc_z_filtered;
+      */
       // convert from reading in g to m/s^2
       accLatest.x = tempAccel.x * pendulumCoreParams.g;
       accLatest.y = tempAccel.y * pendulumCoreParams.g;
