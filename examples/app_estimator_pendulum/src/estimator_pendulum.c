@@ -76,7 +76,9 @@ static float acc_z_filtered;
 #define FORCE_ALPHA 0.5f
 static float Fl_latest;
 static float Fr_latest;
-//static int dbg = 0;
+
+// debugging
+static int dbg = 0;
 
 // Helper: wrap angle to [-pi, pi]
 /*
@@ -387,17 +389,26 @@ void pendulumCorePredict(pendulumCoreData_t* this,
   mat_trans(&Bm, &BTm);                 // B'
   mat_mult(&Bm, &BTm, &Qm);             // B * B'
   mat_scale(&Qm, pendulumCoreParams.gamma, &Qm); // Scale by gamma = 0.0001
+  if (++dbg % 200 == 0) {
+    DEBUG_PRINT(
+      "Q ENTRIES "
+      "Q1=%.6f Q2=%.6f Q3=%.6f Q4=%.6f\n",
+      (double)(Q[0][0]),
+      (double)(Q[0][1]),
+      (double)(Q[1][0]),
+      (double)(Q[1][1])
+    );
+  }
   // Debug test: Overwrite Q 
+  #if 0
   Q[0][0] = 5.0f * pendulumCoreParams.gamma;
   Q[0][1] = 0.0f;
   Q[1][0] = 0.0f;
   Q[1][1] = 625.0f * pendulumCoreParams.gamma;
+  #endif
 
   // Add process noise: P = P + Q
   arm_mat_add_f32(&this->Pm, &Qm, &this->Pm);
-
-  // Debugging variable if needed
-  //static int dbg = 0;
 
   // ====== PREDICTION STEP ======
 
