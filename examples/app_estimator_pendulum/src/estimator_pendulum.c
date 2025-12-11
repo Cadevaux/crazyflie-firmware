@@ -388,7 +388,8 @@ void pendulumCorePredict(pendulumCoreData_t* this,
   // Calculate Q = B * B' * 0.0001
   mat_trans(&Bm, &BTm);                 // B'
   mat_mult(&Bm, &BTm, &Qm);             // B * B'
-  mat_scale(&Qm, pendulumCoreParams.gamma, &Qm); // Scale by gamma = 0.0001
+  mat_scale(&Qm, pendulumCoreParams.gamma, &Qm); // Scale by gamma = 0.00001
+  #if 0
   if (++dbg % 200 == 0) {
     DEBUG_PRINT(
       "Q ENTRIES "
@@ -396,12 +397,13 @@ void pendulumCorePredict(pendulumCoreData_t* this,
       (double)(Q[0][0]),
       (double)(Q[0][1]),
       (double)(Q[1][0]),
-      (double)(Q[1][1])
+      (double)(Q[1][1]) // is 625*gamma with some spikes to 927*gamma
     );
   }
+  #endif
   // Debug test: Overwrite Q 
-  #if 0
-  Q[0][0] = 5.0f * pendulumCoreParams.gamma;
+  #if 1
+  Q[0][0] = 0.0f * pendulumCoreParams.gamma;
   Q[0][1] = 0.0f;
   Q[1][0] = 0.0f;
   Q[1][1] = 625.0f * pendulumCoreParams.gamma;
