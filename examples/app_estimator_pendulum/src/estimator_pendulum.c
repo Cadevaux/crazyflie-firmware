@@ -421,7 +421,7 @@ void pendulumCorePredict(pendulumCoreData_t* this,
   }
   #endif
   // Debug test: Overwrite Q 
-  #if 1
+  #if 0
   Q[0][0] = 0.0f * pendulumCoreParams.gamma;
   Q[0][1] = 0.0f;
   Q[1][0] = 0.0f;
@@ -557,11 +557,11 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
       (helperConstants.vphi2 * (phi_d*phi_d + theta_d*theta_d) +
        helperConstants.vphitheta * (phi_d*theta_d));
 
-  float yexp1 = numerator_yexp1 / helperConstants.expdenom; // -1.15
-  float yexp2 = numerator_yexp2 / helperConstants.expdenom;
+  float yexp1 = numerator_yexp1 / helperConstants.expdenom; // check if centered around 0
+  float yexp2 = numerator_yexp2 / helperConstants.expdenom; // check if centered around 0
 
-  // Pre: tune closer via 0.79 and phi_d filter
-  // Post: sub 1.15 from exp1, force theta_dot around 0, bandpass
+  // Pre: tune closer via 0.785 and phi_d filter, Q tune
+  // Post: sub 1.15 from exp1 (not needed), force theta_dot around 0, bandpass
 
   // ====== CORRECT THE STATE ====== 
 
@@ -638,8 +638,9 @@ static void pendulumTask(void* parameters) {
       float f4 = (0.000409f * pwm4 * pwm4 + 0.1405f * pwm4 - 0.099f) * 0.00980665f / 4;
 
       // each f SHOULD be around or less than 0.20 N
-      float exp = 1;//0.785; // experimentally determined to compensate for battery voltage
+      float exp = 0.785; // experimentally determined to compensate for battery voltage
       // 0.86 too high, 0.50 too low, 0.75 bit low, 0.80 too high, 0.78 bit under, try 0.785
+      // determined with broken drone, but helps with new one to reduce theta_dot offset
 
       /* too noisy
       float bat = pmGetBatteryVoltage();
