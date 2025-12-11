@@ -79,6 +79,7 @@ static float Fr_latest;
 static int dbg = 0;
 
 // Helper: wrap angle to [-pi, pi]
+/*
 #ifndef M_PI_F
 #define M_PI_F 3.14159265f
 #endif
@@ -91,6 +92,7 @@ static float wrapPi(float angle) {
   }
   return angle;
 }
+*/
 
 // Estimator data and parameter declarations
 NO_DMA_CCM_SAFE_ZERO_INIT static pendulumCoreData_t pendulumCoreData;
