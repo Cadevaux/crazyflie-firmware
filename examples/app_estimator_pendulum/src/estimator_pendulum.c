@@ -76,7 +76,7 @@ static float acc_z_filtered;
 #define FORCE_ALPHA 0.5f
 static float Fl_latest;
 static float Fr_latest;
-static int dbg = 0;
+//static int dbg = 0;
 
 // Helper: wrap angle to [-pi, pi]
 /*
