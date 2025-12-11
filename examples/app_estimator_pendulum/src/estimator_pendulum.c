@@ -530,16 +530,14 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   float phi_d   = this->phi_d_hold;
 
   float numerator_yexp1 =
-      (Fl + Fr) * helperConstants.cphi2 * sinf(phi + 2.0f*theta)
-    - (Fl + Fr) * helperConstants.cphi  * sinf(phi)
+      (Fl + Fr) * (helperConstants.cphi2 * sinf(phi + 2.0f*theta) - helperConstants.cphi  * sinf(phi))
     + pendulumCoreParams.L * sinf(phi + theta) *
       (helperConstants.vphi2 * (phi_d*phi_d + theta_d*theta_d) +
        helperConstants.vphitheta * (phi_d*theta_d));
 
   float numerator_yexp2 =
     - helperConstants.gblock
-    + (Fl + Fr) * helperConstants.cphi * cosf(phi)
-    - (Fl + Fr) * helperConstants.cphi2 * cosf(phi + 2.0f*theta)
+    + (Fl + Fr) * (helperConstants.cphi * cosf(phi) - helperConstants.cphi2 * cosf(phi + 2.0f*theta))
     - pendulumCoreParams.L * cosf(phi + theta) *
       (helperConstants.vphi2 * (phi_d*phi_d + theta_d*theta_d) +
        helperConstants.vphitheta * (phi_d*theta_d));
@@ -622,7 +620,8 @@ static void pendulumTask(void* parameters) {
       float f4 = (0.000409f * pwm4 * pwm4 + 0.1405f * pwm4 - 0.099f) * 0.00980665f / 4;
 
       // each f SHOULD be around or less than 0.20 N
-      float exp = 0.50; // experimentally determined to compensate for battery voltage
+      float exp = 0.75; // experimentally determined to compensate for battery voltage
+      // 0.86 too high, 0.50 too low, 
       float Fl = (f1 + f2)*exp;
       float Fr = (f3 + f4)*exp;
       Fl_latest = Fl; // N 
