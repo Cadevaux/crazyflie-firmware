@@ -81,7 +81,7 @@ static float acc_z_filtered;
 #define FORCE_ALPHA 0.5f
 
 // Phidot filter
-#define PHI_D_ALPHA 0.2f
+#define PHI_D_ALPHA 0.1f
 static float phi_d_filtered;
 
 // Debug logs 
