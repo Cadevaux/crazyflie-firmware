@@ -622,14 +622,16 @@ static void pendulumTask(void* parameters) {
       float f4 = (0.000409f * pwm4 * pwm4 + 0.1405f * pwm4 - 0.099f) * 0.00980665f / 4;
 
       // each f SHOULD be around or less than 0.20 N
-      float exp = 0.75; // experimentally determined to compensate for battery voltage
-      // 0.86 too high, 0.50 too low, 0.75  
+      float exp = 0.78; // experimentally determined to compensate for battery voltage
+      // 0.86 too high, 0.50 too low, 0.75 better?
 
+      /* too noisy
       float bat = pmGetBatteryVoltage();
-      float batMin = 3.00; // see charge curve
+      float batMin = 3.00; // see charge curve - this is 0%
       float batMax = 4.10;
       exp = (bat - batMin)/(batMax - batMin);
       flex3 = exp;
+      */
 
       float Fl = (f1 + f2)*exp;
       float Fr = (f3 + f4)*exp;
