@@ -67,6 +67,10 @@ static const uint32_t PREDICTION_UPDATE_INTERVAL_MS_PEND = 1000 / PREDICT_RATE_P
 static Axis3f accLatest;
 static Axis3f gyroLatest;
 
+// Logging
+static float Fl_latest;
+static float Fr_latest;
+
 // Accelerometer filter
 #define ACC_ALPHA 0.2f
 static float acc_x_filtered;
@@ -75,8 +79,10 @@ static float acc_z_filtered;
 
 // Force filter (unused)
 #define FORCE_ALPHA 0.5f
-static float Fl_latest;
-static float Fr_latest;
+
+// Phidot filter
+#define PHI_D_ALPHA 0.2f
+static float phi_d_filtered;
 
 // Debug logs 
 static volatile float flex1;
@@ -165,6 +171,7 @@ void estimatorOutOfTreeInit() {
   acc_x_filtered = 0.0f;
   acc_y_filtered = 0.0f;
   acc_z_filtered = 0.0f;
+  phi_d_filtered = 0.0f;
   
   // Set update flag and time vals
   pendulumCoreData.isUpdated = false;
@@ -354,7 +361,13 @@ void pendulumCorePredict(pendulumCoreData_t* this,
   float R[3][3];
   estimatorKalmanGetEstimatedRot((float*)R);
   float phi = atan2f(R[2][1], R[2][2]); // roll [rad]
-  float phi_d = gyro->x * DEG_TO_RAD; // deg/s to rad/s!!!
+  float temp_phi_d = gyro->x * DEG_TO_RAD; // deg/s to rad/s!!!
+  // filter phi_d
+  #if 1
+  phi_d_filtered = (PHI_D_ALPHA * temp_phi_d) + ((1.0f - PHI_D_ALPHA) * phi_d_filtered);
+  temp_phi_d = phi_d_filtered;
+  #endif
+  float phi_d = temp_phi_d;
 
   // Store for correction step
   this->phi_hold  = phi;
