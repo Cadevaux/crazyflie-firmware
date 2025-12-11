@@ -78,8 +78,8 @@ static float Fl_latest;
 static float Fr_latest;
 
 // Debug logs 
-static float flex1;
-static float flex2;
+static volatile float flex1;
+static volatile float flex2;
 
 // debugging
 //static int dbg = 0;
@@ -622,8 +622,10 @@ static void pendulumTask(void* parameters) {
       float f4 = (0.000409f * pwm4 * pwm4 + 0.1405f * pwm4 - 0.099f) * 0.00980665f / 4;
 
       // each f SHOULD be around or less than 0.20 N
-      Fl_latest = f1 + f2; // N 
-      Fr_latest = f3 + f4; // N
+      float Fl = f1 + f2;
+      float Fr = f1 + f2;
+      Fl_latest = Fl; // N 
+      Fr_latest = Fr; // N
 
       #if 0
       if (++dbg % 200 == 0) {
@@ -644,7 +646,7 @@ static void pendulumTask(void* parameters) {
       estimatorKalmanGetGyroLatest(&gyroLatest); // added to estimator_kalman.c
 
       // ---- 4) PREDICT STEP ----
-      pendulumCorePredict(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, Fl_latest, Fr_latest, nowMs);
+      pendulumCorePredict(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, Fl, Fr, nowMs);
       
       // ---- 5) Grab body acceleration from Kalman filter via custom accessor function ----
       Axis3f tempAccel;
@@ -674,7 +676,7 @@ static void pendulumTask(void* parameters) {
       accLatest.z = tempAccel.z * pendulumCoreParams.g;
       
       // ---- 6) CORRECT STEP ----
-      pendulumCoreCorrect(&pendulumCoreData, &pendulumCoreParams, &accLatest, Fl_latest, Fr_latest, nowMs);
+      pendulumCoreCorrect(&pendulumCoreData, &pendulumCoreParams, &accLatest, Fl, Fr, nowMs);
 
       // --- Previous debugging: Simple theta update just so it moves ----
       // xSemaphoreTake(dataMutexEP, portMAX_DELAY);
