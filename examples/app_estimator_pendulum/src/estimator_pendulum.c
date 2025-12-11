@@ -227,7 +227,7 @@ void estimatorOutOfTreeInit() {
   
   #if 1
   DEBUG_PRINT(
-    "HELPER CONSTATNTS "
+    "HELPER CONSTANTS "
     "a1=%.6f b1=%.6f b2=%.6f c1=%.6f c2=%.6f p1=%.9f p2=%.9f cp2=%.6f cp=%.6f vp2=%.6f vpt=%.6f gb=%.6f ed=%.6f\n",
     (double)helperConstants.a1,
     (double)helperConstants.b1,
@@ -654,8 +654,8 @@ static void pendulumTask(void* parameters) {
       tempAccel.x = R[0][0]*ax + R[0][1]*ay + R[0][2]*az;
       tempAccel.y = R[1][0]*ax + R[1][1]*ay + R[1][2]*az;
       tempAccel.z = R[2][0]*ax + R[2][1]*ay + R[2][2]*az - 1; // sub g for coordinate acceleration
-      // filter w/ LPF (moving average)
-      #if 1
+      // filter w/ LPF? (moving average) removed for now, acc is already filtered
+      #if 0
       acc_x_filtered = (ACC_ALPHA * tempAccel.x) + ((1.0f - ACC_ALPHA) * acc_x_filtered);
       acc_y_filtered = (ACC_ALPHA * tempAccel.y) + ((1.0f - ACC_ALPHA) * acc_y_filtered);
       acc_z_filtered = (ACC_ALPHA * tempAccel.z) + ((1.0f - ACC_ALPHA) * acc_z_filtered);
