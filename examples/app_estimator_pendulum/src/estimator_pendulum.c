@@ -553,6 +553,8 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   float ymeas2 = acc->z;
 
   // xhat = xbar + Lgain*(y_meas - yexp); 
+  flex1 = ymeas1 - yexp1;
+  flex2 = ymeas2 - yexp2;
   this->S[THETA]     += L[0][0] * (ymeas1 - yexp1) + L[0][1] * (ymeas2 - yexp2);
   this->S[THETA_DOT] += L[1][0] * (ymeas1 - yexp1) + L[1][1] * (ymeas2 - yexp2);
 
