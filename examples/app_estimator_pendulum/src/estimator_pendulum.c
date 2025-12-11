@@ -533,7 +533,7 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   this->S[THETA]     += L[0][0] * (ymeas1 - yexp1) + L[0][1] * (ymeas2 - yexp2);
   this->S[THETA_DOT] += L[1][0] * (ymeas1 - yexp1) + L[1][1] * (ymeas2 - yexp2);
 
-  #if 1
+  #if 0
   if (++dbg % 200 == 0) {
     DEBUG_PRINT(
       "HELPER CONSTANTS "
@@ -596,8 +596,22 @@ static void pendulumTask(void* parameters) {
       float f3 = (0.000409f * pwm3 * pwm3 + 0.1405f * pwm3 - 0.099f) * 0.00980665f / 4;
       float f4 = (0.000409f * pwm4 * pwm4 + 0.1405f * pwm4 - 0.099f) * 0.00980665f / 4;
 
-      Fl_latest = f1 + f2; // N // SHOULD be around or less than 0.20 N
+      // each f SHOULD be around or less than 0.20 N
+      Fl_latest = f1 + f2; // N 
       Fr_latest = f3 + f4; // N
+
+      if (++dbg % 200 == 0) {
+        DEBUG_PRINT(
+          "Forces "
+          "f1=%.6f f2=%.6f f3=%.6f f4=%.6f Fl=%.6f Fr=%.6f\n",
+          (double)f1,
+          (double)f2,
+          (double)f3,
+          (double)f4,
+          (double)Fl_latest,
+          (double)Fr_latest
+        );
+      }
 
       // ---- 3) Grab gyro from Kalman filter via custom accessor function ----
       estimatorKalmanGetGyroLatest(&gyroLatest); // added to estimator_kalman.c
