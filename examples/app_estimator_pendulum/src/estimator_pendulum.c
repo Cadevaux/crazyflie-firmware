@@ -44,6 +44,7 @@
 #include "log.h"                  // logging
 #include "system.h"               // systemWaitStart
 #include "cf_math.h"              // for matrix math, includes arm_math.h
+#include "pm.h"                   // power management, battery voltage compensation
 
 // Public-facing pendulum state (wrapped + offset-corrected)
 static pendulum_state_t pendulumEstimatorState; 
@@ -80,6 +81,7 @@ static float Fr_latest;
 // Debug logs 
 static volatile float flex1;
 static volatile float flex2;
+static volatile float flex3;
 
 // debugging
 //static int dbg = 0;
@@ -621,7 +623,14 @@ static void pendulumTask(void* parameters) {
 
       // each f SHOULD be around or less than 0.20 N
       float exp = 0.75; // experimentally determined to compensate for battery voltage
-      // 0.86 too high, 0.50 too low, 
+      // 0.86 too high, 0.50 too low, 0.75  
+
+      float bat = pmGetBatteryVoltage();
+      float batMin = pmGetBatteryVoltageMin();
+      float batMax = pmGetBatteryVoltageMax();
+      exp = (bat - batMin)/(batMax - batMin);
+      flex3 = exp;
+
       float Fl = (f1 + f2)*exp;
       float Fr = (f3 + f4)*exp;
       Fl_latest = Fl; // N 
@@ -790,6 +799,9 @@ LOG_GROUP_START(pendEKF)
 
   /** @brief flex2 */
   LOG_ADD(LOG_FLOAT, flex_2, &flex2)
+
+  /** @brief flex3 */
+  LOG_ADD(LOG_FLOAT, flex_3, &flex3)
 
 
 LOG_GROUP_STOP(pendEKF)
