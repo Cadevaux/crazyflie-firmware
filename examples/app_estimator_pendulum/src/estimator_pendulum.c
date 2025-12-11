@@ -590,8 +590,8 @@ static void pendulumTask(void* parameters) {
       float f3 = (0.000409f * pwm3 * pwm3 + 0.1405f * pwm3 - 0.099f) * 0.00980665f;
       float f4 = (0.000409f * pwm4 * pwm4 + 0.1405f * pwm4 - 0.099f) * 0.00980665f;
 
-      float Fl_latest = f1 + f2; // N
-      float Fr_latest = f3 + f4; // N
+      Fl_latest = f1 + f2; // N
+      Fr_latest = f3 + f4; // N
 
       // ---- 3) Grab gyro from Kalman filter via custom accessor function ----
       estimatorKalmanGetGyroLatest(&gyroLatest); // added to estimator_kalman.c
