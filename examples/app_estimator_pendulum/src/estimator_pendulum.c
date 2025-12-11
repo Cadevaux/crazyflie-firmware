@@ -363,7 +363,7 @@ void pendulumCorePredict(pendulumCoreData_t* this,
   float phi = atan2f(R[2][1], R[2][2]); // roll [rad]
   float temp_phi_d = gyro->x * DEG_TO_RAD; // deg/s to rad/s!!!
   // filter phi_d
-  #if 1
+  #if 0
   phi_d_filtered = (PHI_D_ALPHA * temp_phi_d) + ((1.0f - PHI_D_ALPHA) * phi_d_filtered);
   temp_phi_d = phi_d_filtered;
   #endif
@@ -557,8 +557,11 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
       (helperConstants.vphi2 * (phi_d*phi_d + theta_d*theta_d) +
        helperConstants.vphitheta * (phi_d*theta_d));
 
-  float yexp1 = numerator_yexp1 / helperConstants.expdenom;
+  float yexp1 = numerator_yexp1 / helperConstants.expdenom; // -1.15
   float yexp2 = numerator_yexp2 / helperConstants.expdenom;
+
+  // Pre: tune closer via 0.79 and phi_d filter
+  // Post: sub 1.15 from exp1, force theta_dot around 0, bandpass
 
   // ====== CORRECT THE STATE ====== 
 
