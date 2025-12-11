@@ -225,7 +225,7 @@ void estimatorOutOfTreeInit() {
   helperConstants.expdenom =
       2.0f*(mb + mq + ms)*(12.0f*mb*mq + 4.0f*mb*ms + 4.0f*mq*ms + ms*ms);
   
-  #if 0
+  #if 1
   DEBUG_PRINT(
     "HELPER CONSTATNTS "
     "a1=%.6f b1=%.6f b2=%.6f c1=%.6f c2=%.6f p1=%.9f p2=%.9f cp2=%.6f cp=%.6f vp2=%.6f vpt=%.6f gb=%.6f ed=%.6f\n",
