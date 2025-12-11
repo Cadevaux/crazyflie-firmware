@@ -328,11 +328,11 @@ void pendulumCorePredict(pendulumCoreData_t* this,
   static __attribute__((aligned(4))) arm_matrix_instance_f32 Qm = { STATE_DIM, STATE_DIM, (float *)Q};
 
   // Temp matrices for the covariance updates
-  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpNN1d[STATE_DIM * STATE_DIM];
-  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpNN1m = { STATE_DIM, STATE_DIM, tmpNN1d};
+  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpPred1[STATE_DIM * STATE_DIM];
+  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpPred1m = { STATE_DIM, STATE_DIM, tmpPred1};
 
-  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpNN2d[STATE_DIM * STATE_DIM];
-  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpNN2m = { STATE_DIM, STATE_DIM, tmpNN2d};
+  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpPred2[STATE_DIM * STATE_DIM];
+  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpPred2m = { STATE_DIM, STATE_DIM, tmpPred2};
 
   // ====== DYNAMICS LINEARIZATION ======
 
@@ -377,9 +377,9 @@ void pendulumCorePredict(pendulumCoreData_t* this,
 
   // ====== COVARIANCE UPDATE ======
 
-  mat_mult(&Am, &this->Pm, &tmpNN1m); // A P
-  mat_trans(&Am, &tmpNN2m); // A'
-  mat_mult(&tmpNN1m, &tmpNN2m, &this->Pm); // A P A'
+  mat_mult(&Am, &this->Pm, &tmpPred1m); // A P
+  mat_trans(&Am, &tmpPred2m); // A'
+  mat_mult(&tmpPred1m, &tmpPred2m, &this->Pm); // A P A'
 
   // Calculate Q = B * B' * 0.0001
   mat_trans(&Bm, &BTm);                 // B'
@@ -394,27 +394,26 @@ void pendulumCorePredict(pendulumCoreData_t* this,
 
   // ====== PREDICTION STEP ======
 
-  float theta_prev = this->S[THETA];
   this->S[THETA] += dt * this->S[THETA_DOT];
   //DEBUG_PRINT("DEBUG theta =%4.4f\n", (double)this->S[THETA]);
 
   #if 0
   this->S[THETA_DOT] += dt *
     - (Fl - Fr) *
-      (-12.0f*pendulumCoreParams.Ixx*pendulumCoreParams.mb*sinf(theta_prev)
-       - 6.0f*pendulumCoreParams.Ixx*pendulumCoreParams.ms*sinf(theta_prev)
+      (-12.0f*pendulumCoreParams.Ixx*pendulumCoreParams.mb*sinf(theta)
+       - 6.0f*pendulumCoreParams.Ixx*pendulumCoreParams.ms*sinf(theta)
        + helperConstants.pred1) /
       helperConstants.pred2;
   #endif
 
   this->S[THETA_DOT] += dt *
-  - (Fl - Fr) * (-12.0f*pendulumCoreParams.Ixx*pendulumCoreParams.mb*sinf(theta_prev)
-  - 6.0f*pendulumCoreParams.Ixx*pendulumCoreParams.ms*sinf(theta_prev) + helperConstants.pred1)
+  - (Fl - Fr) * (-12.0f*pendulumCoreParams.Ixx*pendulumCoreParams.mb*sinf(theta)
+  - 6.0f*pendulumCoreParams.Ixx*pendulumCoreParams.ms*sinf(theta) + helperConstants.pred1)
   / helperConstants.pred2 / pendulumCoreParams.Ixx;
 
   #if 0
   if (++dbg % 200 == 0) {
-    float chunk1 = (-12.0f*pendulumCoreParams.Ixx*pendulumCoreParams.mb*sinf(theta_prev) - 6.0f*pendulumCoreParams.Ixx*pendulumCoreParams.ms*sinf(theta_prev) + helperConstants.pred1);
+    float chunk1 = (-12.0f*pendulumCoreParams.Ixx*pendulumCoreParams.mb*sinf(theta) - 6.0f*pendulumCoreParams.Ixx*pendulumCoreParams.ms*sinf(theta) + helperConstants.pred1);
     float chunk2 = dt * -(Fl - Fr) * chunk1;
     float chunk3 = chunk2/helperConstants.pred2/pendulumCoreParams.Ixx;
     DEBUG_PRINT(
@@ -454,26 +453,26 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   memcpy(C, this->C, sizeof(C));
 
   // Temporary matrices for math
-  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpNN1d[STATE_DIM * STATE_DIM];
-  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpNN1m = { STATE_DIM, STATE_DIM, tmpNN1d};
+  NO_DMA_CCM_SAFE_ZERO_INIT static float CT[STATE_DIM * STATE_DIM];
+  static __attribute__((aligned(4))) arm_matrix_instance_f32 CTm = { STATE_DIM, STATE_DIM, CT};
 
-  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpNN2d[STATE_DIM * STATE_DIM];
-  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpNN2m = { STATE_DIM, STATE_DIM, tmpNN2d};
+  NO_DMA_CCM_SAFE_ZERO_INIT static float PCT[STATE_DIM * STATE_DIM];
+  static __attribute__((aligned(4))) arm_matrix_instance_f32 PCTm = { STATE_DIM, STATE_DIM, PCT};
 
-  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpNN3d[STATE_DIM * STATE_DIM];
-  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpNN3m = { STATE_DIM, STATE_DIM, tmpNN3d};
+  NO_DMA_CCM_SAFE_ZERO_INIT static float CPCT[STATE_DIM * STATE_DIM];
+  static __attribute__((aligned(4))) arm_matrix_instance_f32 CPCTm = { STATE_DIM, STATE_DIM, CPCT};
 
-  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpNN4d[STATE_DIM * STATE_DIM];
-  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpNN4m = { STATE_DIM, STATE_DIM, tmpNN4d};
+  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpCorr[STATE_DIM * STATE_DIM];
+  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpCorrm = { STATE_DIM, STATE_DIM, tmpCorr};
 
-  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpNN5d[STATE_DIM * STATE_DIM];
-  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpNN5m = { STATE_DIM, STATE_DIM, tmpNN5d};
+  NO_DMA_CCM_SAFE_ZERO_INIT static float SmData[STATE_DIM * STATE_DIM];
+  static __attribute__((aligned(4))) arm_matrix_instance_f32 Sm = { STATE_DIM, STATE_DIM, SmData};
 
-  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpNN6d[STATE_DIM * STATE_DIM];
-  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpNN6m = { STATE_DIM, STATE_DIM, tmpNN6d};
+  NO_DMA_CCM_SAFE_ZERO_INIT static float CP[STATE_DIM * STATE_DIM];
+  static __attribute__((aligned(4))) arm_matrix_instance_f32 CPm = { STATE_DIM, STATE_DIM, CP};
 
-  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpNN7d[STATE_DIM * STATE_DIM];
-  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpNN7m = { STATE_DIM, STATE_DIM, tmpNN7d};
+  NO_DMA_CCM_SAFE_ZERO_INIT static float LCP[STATE_DIM * STATE_DIM];
+  static __attribute__((aligned(4))) arm_matrix_instance_f32 LCPm = { STATE_DIM, STATE_DIM, LCP};
 
   // R covariance matrix
   NO_DMA_CCM_SAFE_ZERO_INIT static float RmData[MEAS_DIM][MEAS_DIM];
@@ -487,18 +486,18 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   // ====== GAIN UPDATE ======
 
   // Calculate the Kalman gain and perform the state update
-  mat_trans(&Cm, &tmpNN1m);       // C'
-  mat_mult(&this->Pm, &tmpNN1m, &tmpNN2m);   // P C'
-  mat_mult(&Cm, &tmpNN2m, &tmpNN3m);         // C P C'
-  arm_mat_add_f32(&Rm, &tmpNN3m, &tmpNN4m);  // R + C P C'
-  mat_inv(&tmpNN4m, &tmpNN5m);               // (R + C P C')^-1
-  mat_mult(&tmpNN2m, &tmpNN5m, &Lm);         // L = P C' (R + C P C')^-1
+  mat_trans(&Cm, &CTm);       // C'
+  mat_mult(&this->Pm, &CTm, &PCTm);   // P C'
+  mat_mult(&Cm, &PCTm, &CPCTm);         // C P C'
+  arm_mat_add_f32(&Rm, &CPCTm, &tmpCorrm);  // R + C P C'
+  mat_inv(&tmpCorrm, &Sm);               // (R + C P C')^-1
+  mat_mult(&PCTm, &Sm, &Lm);         // L = P C' (R + C P C')^-1
 
   // ====== COVARIANCE UPDATE ======
 
-  mat_mult(&Cm, &this->Pm, &tmpNN6m);        // C P
-  mat_mult(&Lm, &tmpNN6m, &tmpNN7m);         // L C P
-  arm_mat_sub_f32(&this->Pm, &tmpNN7m, &this->Pm); // P - L C P
+  mat_mult(&Cm, &this->Pm, &CPm);        // C P
+  mat_mult(&Lm, &CPm, &LCPm);         // L C P
+  arm_mat_sub_f32(&this->Pm, &LCPm, &this->Pm); // P - L C P
 
   // ====== CALCULATE EXPECTED MEASUREMENT ====== 
 
@@ -527,7 +526,7 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
 
   // ====== CORRECT THE STATE ====== 
 
-  float ymeas1 = acc->y;
+  float ymeas1 = -acc->y; // test a negative here to see if that caused the pi shift
   float ymeas2 = acc->z;
 
   // xhat = xbar + Lgain*(y_meas - yexp); 
@@ -603,6 +602,7 @@ static void pendulumTask(void* parameters) {
       Axis3f tempAccel;
       estimatorKalmanGetAccLatest(&tempAccel); // added to estimator_kalman.c
       // rotate to global frame - measurements need to correct in this frame
+      // see kalman_core.c line 734
       float R[3][3];
       estimatorKalmanGetEstimatedRot((float*)R);
       float ax = tempAccel.x;
@@ -610,7 +610,7 @@ static void pendulumTask(void* parameters) {
       float az = tempAccel.z;
       tempAccel.x = R[0][0]*ax + R[0][1]*ay + R[0][2]*az;
       tempAccel.y = R[1][0]*ax + R[1][1]*ay + R[1][2]*az;
-      tempAccel.z = R[2][0]*ax + R[2][1]*ay + R[2][2]*az;
+      tempAccel.z = R[2][0]*ax + R[2][1]*ay + R[2][2]*az - 1; // sub g for coordinate acceleration
       // filter w/ LPF (moving average)
       acc_x_filtered = (ACC_ALPHA * tempAccel.x) + ((1.0f - ACC_ALPHA) * acc_x_filtered);
       acc_y_filtered = (ACC_ALPHA * tempAccel.y) + ((1.0f - ACC_ALPHA) * acc_y_filtered);
@@ -621,9 +621,7 @@ static void pendulumTask(void* parameters) {
       // convert from reading in g to m/s^2
       accLatest.x = tempAccel.x * pendulumCoreParams.g;
       accLatest.y = tempAccel.y * pendulumCoreParams.g;
-      tempAccel.z = tempAccel.z * pendulumCoreParams.g;
-      // convert from pure reading to coordinate acceleration
-      accLatest.z = tempAccel.z - pendulumCoreParams.g;
+      accLatest.z = tempAccel.z * pendulumCoreParams.g;
       
       // ---- 6) CORRECT STEP ----
       pendulumCoreCorrect(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, &accLatest, Fl_latest, Fr_latest, nowMs);
@@ -638,12 +636,12 @@ static void pendulumTask(void* parameters) {
       // ---- 7) Export theta in "ball down = 0" frame, wrapped to [-pi, pi] ----
       float theta_internal = pendulumCoreData.S[THETA];
       // Shift by the initialTheta (≈ pi) so that ball-down is 0 in the exported frame
-      float theta_rel = theta_internal - pendulumCoreParams.initialTheta;
+      float theta_rel = theta_internal - pendulumCoreParams.initialTheta; // formerly pi
       theta_rel = wrapPi(theta_rel);
 
       // ---- 8) Update public/log-facing copies ----
       xSemaphoreTake(dataMutexEP, portMAX_DELAY);
-      pendulumEstimatorState.theta     = theta_rel;
+      pendulumEstimatorState.theta     = pendulumCoreData.S[THETA];//theta_rel;
       pendulumEstimatorState.theta_dot = pendulumCoreData.S[THETA_DOT];
       pendulumEstimatorState.timestamp = nowMs;
       xSemaphoreGive(dataMutexEP);

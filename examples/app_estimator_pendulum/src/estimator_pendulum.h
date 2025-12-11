@@ -22,7 +22,7 @@
   .r = 0.028325f,   /* m */ \
   .L = 0.4f,         /* m */ \
   \
-  .initialTheta = 3.14159265f,     /* radians */ \
+  .initialTheta = 0.0f,     /* radians */ \
   .initialThetaDot = 0.0f,  /* radians per second */ \
   \
   .stdDevInitialTheta = 0.01f,      /* radians (5 deg) */ \
