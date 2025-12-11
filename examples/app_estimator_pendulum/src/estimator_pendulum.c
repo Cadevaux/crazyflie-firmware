@@ -616,15 +616,15 @@ static void pendulumTask(void* parameters) {
       // ---- 2) Convert PWM to Thrust in N from gram force ----
       // https://www.bitcraze.io/documentation/repository/crazyflie-firmware/master/functional-areas/pwm-to-thrust/
       // their test setup is for total thrust - we need to divide by 4
-      float exp = 1.15; // experimentally determined to compensate for battery voltage
-      float f1 = (0.000409f * pwm1 * pwm1 + 0.1405f * pwm1 - 0.099f) * 0.00980665f / 4 / exp;
-      float f2 = (0.000409f * pwm2 * pwm2 + 0.1405f * pwm2 - 0.099f) * 0.00980665f / 4 / exp;
-      float f3 = (0.000409f * pwm3 * pwm3 + 0.1405f * pwm3 - 0.099f) * 0.00980665f / 4 / exp;
-      float f4 = (0.000409f * pwm4 * pwm4 + 0.1405f * pwm4 - 0.099f) * 0.00980665f / 4 / exp;
+      float f1 = (0.000409f * pwm1 * pwm1 + 0.1405f * pwm1 - 0.099f) * 0.00980665f / 4;
+      float f2 = (0.000409f * pwm2 * pwm2 + 0.1405f * pwm2 - 0.099f) * 0.00980665f / 4;
+      float f3 = (0.000409f * pwm3 * pwm3 + 0.1405f * pwm3 - 0.099f) * 0.00980665f / 4;
+      float f4 = (0.000409f * pwm4 * pwm4 + 0.1405f * pwm4 - 0.099f) * 0.00980665f / 4;
 
       // each f SHOULD be around or less than 0.20 N
-      float Fl = f1 + f2;
-      float Fr = f3 + f4;
+      float exp = 0.50; // experimentally determined to compensate for battery voltage
+      float Fl = (f1 + f2)*exp;
+      float Fr = (f3 + f4)*exp;
       Fl_latest = Fl; // N 
       Fr_latest = Fr; // N
 
