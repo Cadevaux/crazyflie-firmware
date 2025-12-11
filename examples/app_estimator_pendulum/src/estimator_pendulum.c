@@ -602,6 +602,7 @@ static void pendulumTask(void* parameters) {
       Fl_latest = f1 + f2; // N 
       Fr_latest = f3 + f4; // N
 
+      #if 0
       if (++dbg % 200 == 0) {
         DEBUG_PRINT(
           "Forces "
@@ -614,6 +615,7 @@ static void pendulumTask(void* parameters) {
           (double)Fr_latest
         );
       }
+      #endif
 
       // ---- 3) Grab gyro from Kalman filter via custom accessor function ----
       estimatorKalmanGetGyroLatest(&gyroLatest); // added to estimator_kalman.c
@@ -635,14 +637,14 @@ static void pendulumTask(void* parameters) {
       tempAccel.y = R[1][0]*ax + R[1][1]*ay + R[1][2]*az;
       tempAccel.z = R[2][0]*ax + R[2][1]*ay + R[2][2]*az - 1; // sub g for coordinate acceleration
       // filter w/ LPF (moving average)
-      /*
+      #if 1
       acc_x_filtered = (ACC_ALPHA * tempAccel.x) + ((1.0f - ACC_ALPHA) * acc_x_filtered);
       acc_y_filtered = (ACC_ALPHA * tempAccel.y) + ((1.0f - ACC_ALPHA) * acc_y_filtered);
       acc_z_filtered = (ACC_ALPHA * tempAccel.z) + ((1.0f - ACC_ALPHA) * acc_z_filtered);
       tempAccel.x = acc_x_filtered;
       tempAccel.y = acc_y_filtered;
       tempAccel.z = acc_z_filtered;
-      */
+      #endif
       // convert from reading in g to m/s^2
       accLatest.x = tempAccel.x * pendulumCoreParams.g;
       accLatest.y = tempAccel.y * pendulumCoreParams.g;
