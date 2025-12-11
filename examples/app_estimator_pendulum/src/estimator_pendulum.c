@@ -77,6 +77,10 @@ static float acc_z_filtered;
 static float Fl_latest;
 static float Fr_latest;
 
+// Debug logs 
+static float flex1;
+static float flex2;
+
 // debugging
 //static int dbg = 0;
 
@@ -457,7 +461,6 @@ void pendulumCorePredict(pendulumCoreData_t* this,
 
 void pendulumCoreCorrect(pendulumCoreData_t* this,
                          const pendulumCoreParams_t *params,
-                         const Axis3f *gyro,
                          const Axis3f *acc,
                          float Fl, float Fr,
                          const uint32_t nowMs) {
@@ -669,7 +672,7 @@ static void pendulumTask(void* parameters) {
       accLatest.z = tempAccel.z * pendulumCoreParams.g;
       
       // ---- 6) CORRECT STEP ----
-      pendulumCoreCorrect(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, &accLatest, Fl_latest, Fr_latest, nowMs);
+      pendulumCoreCorrect(&pendulumCoreData, &pendulumCoreParams, &accLatest, Fl_latest, Fr_latest, nowMs);
 
       // --- Previous debugging: Simple theta update just so it moves ----
       // xSemaphoreTake(dataMutexEP, portMAX_DELAY);
@@ -774,6 +777,15 @@ LOG_GROUP_START(pendEKF)
   LOG_ADD(LOG_FLOAT, phi, &pendulumCoreData.phi_hold)
 
   /** @brief Phi_dot (rad) */
-  LOG_ADD(LOG_FLOAT, phiDot, &pendulumCoreData.phi_hold)
+  LOG_ADD(LOG_FLOAT, phiDot, &pendulumCoreData.phi_d_hold)
+
+  // Flex debug
+  
+  /** @brief flex1 */
+  LOG_ADD(LOG_FLOAT, flex_1, &flex1)
+
+  /** @brief flex2 */
+  LOG_ADD(LOG_FLOAT, flex_2, &flex2)
+
 
 LOG_GROUP_STOP(pendEKF)
