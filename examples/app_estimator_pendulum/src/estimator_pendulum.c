@@ -455,6 +455,7 @@ void pendulumCorePredict(pendulumCoreData_t* this,
   // ====== PREDICTION STEP ======
 
   this->S[THETA] += dt * this->S[THETA_DOT];
+  this->S[THETA] = wrapPi(this->S[THETA]); // add wrap in predict
   //DEBUG_PRINT("DEBUG theta =%4.4f\n", (double)this->S[THETA]);
 
   #if 0
@@ -627,7 +628,7 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   theta_dot_out_prev2 = theta_dot_out_prev1;
   theta_dot_out_prev1 = theta_dot_filt;
 
-  this->S[THETA] = theta_filt; //wrapPi(theta_temp);
+  this->S[THETA] = wrapPi(theta_temp);
   this->S[THETA_DOT] = theta_dot_filt;
 
   #if 0
