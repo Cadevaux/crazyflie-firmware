@@ -80,9 +80,27 @@ static float acc_z_filtered;
 // Force filter (unused)
 #define FORCE_ALPHA 0.5f
 
-// Phidot filter
+// Phidot filter (unused)
 #define PHI_D_ALPHA 0.1f
 static float phi_d_filtered;
+
+// Bandpass filter coeffs for theta
+const float B0 = 0.0124f;
+const float B1 = 0.0f;
+const float B2 = -0.0124f;
+const float A1 = -1.9750f;
+const float A2 = 0.9752f;
+static float in_prev1 = 0; // in[n-1]
+static float in_prev2 = 0; // in[n-2]
+static float out_prev1 = 0; // out[n-1]
+static float out_prev2 = 0; // out[n-2]
+
+// Block filter coeffs for expected accels
+static float exp1_in_prev = 0;
+static float exp1_out_prev = 0;
+static float exp2_in_prev = 0;
+static float exp2_out_prev = 0;
+const float alpha_block = 0.9876;
 
 // Debug logs 
 static volatile float flex1;
@@ -93,7 +111,6 @@ static volatile float flex3;
 //static int dbg = 0;
 
 // Helper: wrap angle to [-pi, pi]
-/*
 #ifndef M_PI_F
 #define M_PI_F 3.14159265f
 #endif
@@ -106,7 +123,7 @@ static float wrapPi(float angle) {
   }
   return angle;
 }
-*/
+
 
 // Estimator data and parameter declarations
 NO_DMA_CCM_SAFE_ZERO_INIT static pendulumCoreData_t pendulumCoreData;
@@ -557,11 +574,20 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
       (helperConstants.vphi2 * (phi_d*phi_d + theta_d*theta_d) +
        helperConstants.vphitheta * (phi_d*theta_d));
 
-  float yexp1 = numerator_yexp1 / helperConstants.expdenom; // check if centered around 0
-  float yexp2 = numerator_yexp2 / helperConstants.expdenom; // check if centered around 0
+  //float yexp1 = numerator_yexp1 / helperConstants.expdenom; // check if centered around 0
+  //float yexp2 = numerator_yexp2 / helperConstants.expdenom; // check if centered around 0
 
-  // Pre: tune closer via 0.785 and phi_d filter, Q tune
-  // Post: sub 1.15 from exp1 (not needed), force theta_dot around 0, bandpass
+  float yexp1_temp = numerator_yexp1 / helperConstants.expdenom; // check if centered around 0
+  float yexp2_temp = numerator_yexp2 / helperConstants.expdenom; // check if centered around 0
+
+  // DC block filter on yexp
+  float yexp1 = alpha_block * (exp1_out_prev + yexp1_temp - exp1_in_prev);
+  float yexp2 = alpha_block * (exp2_out_prev + yexp2_temp - exp2_in_prev);
+
+  exp1_in_prev = yexp1_temp;
+  exp1_out_prev = yexp1;
+  exp2_in_prev = yexp2_temp;
+  exp2_out_prev = yexp2;
 
   // ====== CORRECT THE STATE ====== 
 
@@ -571,8 +597,24 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   // xhat = xbar + Lgain*(y_meas - yexp); 
   flex1 = ymeas1 - yexp1;
   flex2 = ymeas2 - yexp2;
-  this->S[THETA]     += L[0][0] * (ymeas1 - yexp1) + L[0][1] * (ymeas2 - yexp2);
-  this->S[THETA_DOT] += L[1][0] * (ymeas1 - yexp1) + L[1][1] * (ymeas2 - yexp2);
+  //this->S[THETA]     += L[0][0] * (ymeas1 - yexp1) + L[0][1] * (ymeas2 - yexp2);
+  //this->S[THETA_DOT] += L[1][0] * (ymeas1 - yexp1) + L[1][1] * (ymeas2 - yexp2);
+  float theta_temp = this->S[THETA] + L[0][0] * (ymeas1 - yexp1) + L[0][1] * (ymeas2 - yexp2);
+  float theta_dot_temp = this->S[THETA_DOT] + L[1][0] * (ymeas1 - yexp1) + L[1][1] * (ymeas2 - yexp2);
+
+  // Continuous bandpass filter on theta_dot
+  float theta_dot_filt = (B0 * theta_dot_temp) 
+  + (B1 * in_prev1) 
+  + (B2 * in_prev2) 
+  - (A1 * out_prev1) 
+  - (A2 * out_prev2);
+  in_prev2 = in_prev1;
+  in_prev1 = theta_dot_temp;
+  out_prev2 = out_prev1;
+  out_prev1 = theta_dot_filt;
+
+  this->S[THETA] = wrapPi(theta_temp);
+  this->S[THETA_DOT] = theta_dot_filt;
 
   #if 0
   if (++dbg % 200 == 0) {
