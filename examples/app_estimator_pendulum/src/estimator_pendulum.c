@@ -421,7 +421,7 @@ void pendulumCorePredict(pendulumCoreData_t* this,
   }
   #endif
   // Debug test: Overwrite Q 
-  #if 0
+  #if 1
   Q[0][0] = 0.0f * pendulumCoreParams.gamma;
   Q[0][1] = 0.0f;
   Q[1][0] = 0.0f;
