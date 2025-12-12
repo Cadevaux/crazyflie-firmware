@@ -84,16 +84,20 @@ static float acc_z_filtered;
 #define PHI_D_ALPHA 0.1f
 static float phi_d_filtered;
 
-// Bandpass filter coeffs for theta
+// Bandpass filter coeffs for theta and theta_dot
 const float B0 = 0.0124f;
 const float B1 = 0.0f;
 const float B2 = -0.0124f;
 const float A1 = -1.9750f;
 const float A2 = 0.9752f;
-static float in_prev1 = 0; // in[n-1]
-static float in_prev2 = 0; // in[n-2]
-static float out_prev1 = 0; // out[n-1]
-static float out_prev2 = 0; // out[n-2]
+static float theta_in_prev1 = 0; // in[n-1]
+static float theta_in_prev2 = 0; // in[n-2]
+static float theta_out_prev1 = 0; // out[n-1]
+static float theta_out_prev2 = 0; // out[n-2]
+static float theta_dot_in_prev1 = 0; // in[n-1]
+static float theta_dot_in_prev2 = 0; // in[n-2]
+static float theta_dot_out_prev1 = 0; // out[n-1]
+static float theta_dot_out_prev2 = 0; // out[n-2]
 
 // Block filter coeffs for expected accels
 static float exp1_in_prev = 0;
@@ -602,18 +606,28 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   float theta_temp = this->S[THETA] + L[0][0] * (ymeas1 - yexp1) + L[0][1] * (ymeas2 - yexp2);
   float theta_dot_temp = this->S[THETA_DOT] + L[1][0] * (ymeas1 - yexp1) + L[1][1] * (ymeas2 - yexp2);
 
-  // Continuous bandpass filter on theta_dot
-  float theta_dot_filt = (B0 * theta_dot_temp) 
-  + (B1 * in_prev1) 
-  + (B2 * in_prev2) 
-  - (A1 * out_prev1) 
-  - (A2 * out_prev2);
-  in_prev2 = in_prev1;
-  in_prev1 = theta_dot_temp;
-  out_prev2 = out_prev1;
-  out_prev1 = theta_dot_filt;
+  // Continuous bandpass filter on theta and theta_dot
+  float theta_filt = (B0 * theta_temp) 
+  + (B1 * theta_in_prev1) 
+  + (B2 * theta_in_prev2) 
+  - (A1 * theta_out_prev1) 
+  - (A2 * theta_out_prev2);
+  theta_in_prev2 = theta_in_prev1;
+  theta_in_prev1 = theta_temp;
+  theta_out_prev2 = theta_out_prev1;
+  theta_out_prev1 = theta_filt;
 
-  this->S[THETA] = theta_temp; //wrapPi(theta_temp);
+  float theta_dot_filt = (B0 * theta_dot_temp) 
+  + (B1 * theta_dot_in_prev1) 
+  + (B2 * theta_dot_in_prev2) 
+  - (A1 * theta_dot_out_prev1) 
+  - (A2 * theta_dot_out_prev2);
+  theta_dot_in_prev2 = theta_dot_in_prev1;
+  theta_dot_in_prev1 = theta_dot_temp;
+  theta_dot_out_prev2 = theta_dot_out_prev1;
+  theta_dot_out_prev1 = theta_dot_filt;
+
+  this->S[THETA] = theta_filt; //wrapPi(theta_temp);
   this->S[THETA_DOT] = theta_dot_filt;
 
   #if 0
