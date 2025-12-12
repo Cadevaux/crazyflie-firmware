@@ -613,7 +613,7 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   out_prev2 = out_prev1;
   out_prev1 = theta_dot_filt;
 
-  this->S[THETA] = wrapPi(theta_temp);
+  this->S[THETA] = theta_temp; //wrapPi(theta_temp);
   this->S[THETA_DOT] = theta_dot_filt;
 
   #if 0
