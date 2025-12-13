@@ -15,14 +15,14 @@
 #define PENDULUM_DEFAULT_PARAMS_INIT \
   /* Initial params, states, and variances */ \
   .mq = 0.0314f,     /* kg */ \
-  .mb = 0.00633f,    /* kg */ \
+  .mb = 0.00148f,    /* kg */ \
   .ms = 0.0001f,     /* kg */ \
   .Ixx = 6.410179e-06f,  /* kg m2*/ \
   .g = 9.81f,        /* m/s2 */ \
   .r = 0.028325f,   /* m */ \
-  .L = 0.4f,         /* m */ \
+  .L = 0.33f,         /* m */ \
   \
-  .initialTheta = 3.14159265f,     /* radians */ \
+  .initialTheta = 0.0f,     /* radians */ \
   .initialThetaDot = 0.0f,  /* radians per second */ \
   \
   .stdDevInitialTheta = 0.01f,      /* radians (5 deg) */ \

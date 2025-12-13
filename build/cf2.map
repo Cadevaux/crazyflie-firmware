@@ -4726,9 +4726,6 @@ Discarded input sections
  .group         0x00000000        0xc examples/app_estimator_pendulum/built-in.o
  .group         0x00000000        0xc examples/app_estimator_pendulum/built-in.o
  .group         0x00000000        0xc examples/app_estimator_pendulum/built-in.o
- .group         0x00000000        0xc examples/app_estimator_pendulum/built-in.o
- .group         0x00000000        0xc examples/app_estimator_pendulum/built-in.o
- .group         0x00000000        0xc examples/app_estimator_pendulum/built-in.o
  .text          0x00000000        0x0 examples/app_estimator_pendulum/built-in.o
  .text.appMain  0x00000000       0x1c examples/app_estimator_pendulum/built-in.o
  .text.estimatorPendulumTaskTest
@@ -4823,9 +4820,6 @@ Discarded input sections
  .debug_macro   0x00000000       0x35 examples/app_estimator_pendulum/built-in.o
  .debug_macro   0x00000000      0x221 examples/app_estimator_pendulum/built-in.o
  .debug_macro   0x00000000       0x94 examples/app_estimator_pendulum/built-in.o
- .debug_macro   0x00000000       0x10 examples/app_estimator_pendulum/built-in.o
- .debug_macro   0x00000000       0x22 examples/app_estimator_pendulum/built-in.o
- .debug_macro   0x00000000      0x796 examples/app_estimator_pendulum/built-in.o
  .text          0x00000000        0x0 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-s_fmin.o)
  .data          0x00000000        0x0 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-s_fmin.o)
  .bss           0x00000000        0x0 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-s_fmin.o)
@@ -5553,7 +5547,7 @@ LOAD /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  *(.flashtext)
                 0x08004188                        . = ALIGN (0x4)
 
-.text           0x080041c0    0x429f8
+.text           0x080041c0    0x42958
                 0x080041c0                        . = ALIGN (0x4)
                 0x080041c0                        _stext = .
  *(.text)
@@ -10665,1275 +10659,1275 @@ LOAD /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
                 0x08035e44       0x88 examples/app_estimator_pendulum/built-in.o
                 0x08035e44                estimatorPendulumTaskInit
  .text.estimatorOutOfTreeInit
-                0x08035ecc      0x2e8 examples/app_estimator_pendulum/built-in.o
+                0x08035ecc      0x384 examples/app_estimator_pendulum/built-in.o
                 0x08035ecc                estimatorOutOfTreeInit
  .text.pendulumCorePredict
-                0x080361b4      0x258 examples/app_estimator_pendulum/built-in.o
-                0x080361b4                pendulumCorePredict
+                0x08036250      0x2d0 examples/app_estimator_pendulum/built-in.o
+                0x08036250                pendulumCorePredict
  .text.pendulumCoreCorrect
-                0x0803640c      0x288 examples/app_estimator_pendulum/built-in.o
-                0x0803640c                pendulumCoreCorrect
+                0x08036520      0x24c examples/app_estimator_pendulum/built-in.o
+                0x08036520                pendulumCoreCorrect
  .text.pendulumTask
-                0x08036694      0x38c examples/app_estimator_pendulum/built-in.o
+                0x0803676c      0x26c examples/app_estimator_pendulum/built-in.o
  .text.__fpclassifyd
-                0x08036a20       0x5c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-s_fpclassify.o)
-                0x08036a20                __fpclassifyd
- .text.acosf    0x08036a7c       0x58 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_acos.o)
-                0x08036a7c                acosf
- .text.asinf    0x08036ad4       0x58 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_asin.o)
-                0x08036ad4                asinf
- .text.atan2f   0x08036b2c        0x4 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_atan2.o)
-                0x08036b2c                atan2f
- .text.expf     0x08036b30       0x78 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_exp.o)
-                0x08036b30                expf
- .text.fmodf    0x08036ba8       0x48 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_fmod.o)
-                0x08036ba8                fmodf
- .text.log10f   0x08036bf0       0x60 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_log10.o)
-                0x08036bf0                log10f
- .text.powf     0x08036c50       0xbc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_pow.o)
-                0x08036c50                powf
- .text.finitef  0x08036d0c       0x14 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_finite.o)
-                0x08036d0c                finitef
- .text.cbrtf    0x08036d20       0xc8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_cbrt.o)
-                0x08036d20                cbrtf
- .text.atanf    0x08036de8      0x1a4 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_atan.o)
-                0x08036de8                atanf
- .text.cosf     0x08036f8c       0x70 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_cos.o)
-                0x08036f8c                cosf
- .text.fabsf    0x08036ffc       0x10 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fabs.o)
-                0x08036ffc                fabsf
- .text.nanf     0x0803700c        0xc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_nan.o)
-                0x0803700c                nanf
- .text.sinf     0x08037018       0x74 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_sin.o)
-                0x08037018                sinf
- .text.tanf     0x0803708c       0x54 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_tan.o)
-                0x0803708c                tanf
+                0x080369d8       0x5c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-s_fpclassify.o)
+                0x080369d8                __fpclassifyd
+ .text.acosf    0x08036a34       0x58 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_acos.o)
+                0x08036a34                acosf
+ .text.asinf    0x08036a8c       0x58 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_asin.o)
+                0x08036a8c                asinf
+ .text.atan2f   0x08036ae4        0x4 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_atan2.o)
+                0x08036ae4                atan2f
+ .text.expf     0x08036ae8       0x78 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_exp.o)
+                0x08036ae8                expf
+ .text.fmodf    0x08036b60       0x48 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_fmod.o)
+                0x08036b60                fmodf
+ .text.log10f   0x08036ba8       0x60 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_log10.o)
+                0x08036ba8                log10f
+ .text.powf     0x08036c08       0xbc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_pow.o)
+                0x08036c08                powf
+ .text.finitef  0x08036cc4       0x14 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_finite.o)
+                0x08036cc4                finitef
+ .text.cbrtf    0x08036cd8       0xc8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_cbrt.o)
+                0x08036cd8                cbrtf
+ .text.atanf    0x08036da0      0x1a4 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_atan.o)
+                0x08036da0                atanf
+ .text.cosf     0x08036f44       0x70 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_cos.o)
+                0x08036f44                cosf
+ .text.fabsf    0x08036fb4       0x10 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fabs.o)
+                0x08036fb4                fabsf
+ .text.nanf     0x08036fc4        0xc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_nan.o)
+                0x08036fc4                nanf
+ .text.sinf     0x08036fd0       0x74 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_sin.o)
+                0x08036fd0                sinf
+ .text.tanf     0x08037044       0x54 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_tan.o)
+                0x08037044                tanf
  .text.__kernel_cosf
-                0x080370e0      0x104 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_cos.o)
-                0x080370e0                __kernel_cosf
+                0x08037098      0x104 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_cos.o)
+                0x08037098                __kernel_cosf
  .text.__kernel_sinf
-                0x080371e4       0x90 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_sin.o)
-                0x080371e4                __kernel_sinf
+                0x0803719c       0x90 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_sin.o)
+                0x0803719c                __kernel_sinf
  .text.__kernel_tanf
-                0x08037274      0x1bc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_tan.o)
-                0x08037274                __kernel_tanf
+                0x0803722c      0x1bc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_tan.o)
+                0x0803722c                __kernel_tanf
  .text.__ieee754_acosf
-                0x08037430      0x248 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_acos.o)
-                0x08037430                __ieee754_acosf
+                0x080373e8      0x248 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_acos.o)
+                0x080373e8                __ieee754_acosf
  .text.__ieee754_asinf
-                0x08037678      0x1f4 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_asin.o)
-                0x08037678                __ieee754_asinf
+                0x08037630      0x1f4 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_asin.o)
+                0x08037630                __ieee754_asinf
  .text.__ieee754_atan2f
-                0x0803786c      0x14c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_atan2.o)
-                0x0803786c                __ieee754_atan2f
+                0x08037824      0x14c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_atan2.o)
+                0x08037824                __ieee754_atan2f
  .text.__ieee754_expf
-                0x080379b8      0x1e8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_exp.o)
-                0x080379b8                __ieee754_expf
+                0x08037970      0x1e8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_exp.o)
+                0x08037970                __ieee754_expf
  .text.__ieee754_sqrtf
-                0x08037ba0        0x8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_sqrt.o)
-                0x08037ba0                __ieee754_sqrtf
+                0x08037b58        0x8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_sqrt.o)
+                0x08037b58                __ieee754_sqrtf
  .text.__ieee754_fmodf
-                0x08037ba8      0x184 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_fmod.o)
-                0x08037ba8                __ieee754_fmodf
- .text.fmax     0x08037d2c       0x58 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-s_fmax.o)
-                0x08037d2c                fmax
- .text.fmaxf    0x08037d84       0x50 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fmax.o)
-                0x08037d84                fmaxf
- .text.fminf    0x08037dd4       0x50 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fmin.o)
-                0x08037dd4                fminf
+                0x08037b60      0x184 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_fmod.o)
+                0x08037b60                __ieee754_fmodf
+ .text.fmax     0x08037ce4       0x58 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-s_fmax.o)
+                0x08037ce4                fmax
+ .text.fmaxf    0x08037d3c       0x50 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fmax.o)
+                0x08037d3c                fmaxf
+ .text.fminf    0x08037d8c       0x50 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fmin.o)
+                0x08037d8c                fminf
  .text.__fpclassifyf
-                0x08037e24       0x38 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fpclassify.o)
-                0x08037e24                __fpclassifyf
+                0x08037ddc       0x38 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fpclassify.o)
+                0x08037ddc                __fpclassifyf
  .text.__ieee754_log10f
-                0x08037e5c       0xc4 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_log10.o)
-                0x08037e5c                __ieee754_log10f
+                0x08037e14       0xc4 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_log10.o)
+                0x08037e14                __ieee754_log10f
  .text.__ieee754_powf
-                0x08037f20      0x6b8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_pow.o)
-                0x08037f20                __ieee754_powf
- .text.floorf   0x080385d8       0x94 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_floor.o)
-                0x080385d8                floorf
+                0x08037ed8      0x6b8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_pow.o)
+                0x08037ed8                __ieee754_powf
+ .text.floorf   0x08038590       0x94 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_floor.o)
+                0x08038590                floorf
  .text.__ieee754_rem_pio2f
-                0x0803866c      0x26c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_rem_pio2.o)
-                0x0803866c                __ieee754_rem_pio2f
+                0x08038624      0x26c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_rem_pio2.o)
+                0x08038624                __ieee754_rem_pio2f
  .text.with_errnof
-                0x080388d8       0x1c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-math_errf.o)
- .text.xflowf   0x080388f4       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-math_errf.o)
+                0x08038890       0x1c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-math_errf.o)
+ .text.xflowf   0x080388ac       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-math_errf.o)
  .text.__math_uflowf
-                0x08038914        0xc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-math_errf.o)
-                0x08038914                __math_uflowf
+                0x080388cc        0xc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-math_errf.o)
+                0x080388cc                __math_uflowf
  .text.__math_oflowf
-                0x08038920        0xc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-math_errf.o)
-                0x08038920                __math_oflowf
- .text.scalbnf  0x0803892c       0xdc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_scalbn.o)
-                0x0803892c                scalbnf
+                0x080388d8        0xc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-math_errf.o)
+                0x080388d8                __math_oflowf
+ .text.scalbnf  0x080388e4       0xdc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_scalbn.o)
+                0x080388e4                scalbnf
  .text.__kernel_rem_pio2f
-                0x08038a08      0x68c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_rem_pio2.o)
-                0x08038a08                __kernel_rem_pio2f
+                0x080389c0      0x68c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_rem_pio2.o)
+                0x080389c0                __kernel_rem_pio2f
  .text.__ieee754_logf
-                0x08039094      0x1f4 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_log.o)
-                0x08039094                __ieee754_logf
- .text.rand     0x08039288       0x40 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-rand.o)
-                0x08039288                rand
+                0x0803904c      0x1f4 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_log.o)
+                0x0803904c                __ieee754_logf
+ .text.rand     0x08039240       0x40 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-rand.o)
+                0x08039240                rand
  .text._strtol_l.isra.0
-                0x080392c8      0x138 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strtol.o)
- .text.strtol   0x08039400       0x1c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strtol.o)
-                0x08039400                strtol
- .text.memcmp   0x0803941c       0x5c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-memcmp.o)
-                0x0803941c                memcmp
- .text.memset   0x08039478       0x9c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-memset.o)
-                0x08039478                memset
- .text.strcat   0x08039514       0x68 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strcat.o)
-                0x08039514                strcat
- .text.strchr   0x0803957c       0xd0 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strchr.o)
-                0x0803957c                strchr
- .text.strncmp  0x0803964c       0x78 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strncmp.o)
-                0x0803964c                strncmp
- .text.strncpy  0x080396c4       0x68 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strncpy.o)
-                0x080396c4                strncpy
- .text.__errno  0x0803972c        0xc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-errno.o)
-                0x0803972c                __errno
- .text.strcpy   0x08039738       0xbc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strcpy.o)
-                0x08039738                strcpy
+                0x08039280      0x138 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strtol.o)
+ .text.strtol   0x080393b8       0x1c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strtol.o)
+                0x080393b8                strtol
+ .text.memcmp   0x080393d4       0x5c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-memcmp.o)
+                0x080393d4                memcmp
+ .text.memset   0x08039430       0x9c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-memset.o)
+                0x08039430                memset
+ .text.strcat   0x080394cc       0x68 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strcat.o)
+                0x080394cc                strcat
+ .text.strchr   0x08039534       0xd0 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strchr.o)
+                0x08039534                strchr
+ .text.strncmp  0x08039604       0x78 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strncmp.o)
+                0x08039604                strncmp
+ .text.strncpy  0x0803967c       0x68 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strncpy.o)
+                0x0803967c                strncpy
+ .text.__errno  0x080396e4        0xc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-errno.o)
+                0x080396e4                __errno
+ .text.strcpy   0x080396f0       0xbc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strcpy.o)
+                0x080396f0                strcpy
  .text.__popcountsi2
-                0x080397f4       0x28 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a(_popcountsi2.o)
-                0x080397f4                __popcountsi2
+                0x080397ac       0x28 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a(_popcountsi2.o)
+                0x080397ac                __popcountsi2
  .text.__fixsfdi
-                0x0803981c       0x28 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a(_fixsfdi.o)
-                0x0803981c                __fixsfdi
-                0x0803981c                __aeabi_f2lz
+                0x080397d4       0x28 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a(_fixsfdi.o)
+                0x080397d4                __fixsfdi
+                0x080397d4                __aeabi_f2lz
  .text.__fixdfdi
-                0x08039844       0x30 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a(_fixdfdi.o)
-                0x08039844                __fixdfdi
-                0x08039844                __aeabi_d2lz
+                0x080397fc       0x30 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a(_fixdfdi.o)
+                0x080397fc                __fixdfdi
+                0x080397fc                __aeabi_d2lz
  .text.__fixunssfdi
-                0x08039874       0x40 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a(_fixunssfdi.o)
-                0x08039874                __fixunssfdi
-                0x08039874                __aeabi_f2ulz
+                0x0803982c       0x40 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a(_fixunssfdi.o)
+                0x0803982c                __fixunssfdi
+                0x0803982c                __aeabi_f2ulz
  .text.__fixunsdfdi
-                0x080398b4       0x3c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a(_fixunsdfdi.o)
-                0x080398b4                __aeabi_d2ulz
-                0x080398b4                __fixunsdfdi
+                0x0803986c       0x3c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a(_fixunsdfdi.o)
+                0x0803986c                __aeabi_d2ulz
+                0x0803986c                __fixunsdfdi
  .text.__udivmoddi4
-                0x080398f0      0x2f8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
-                0x080398f0                __udivmoddi4
+                0x080398a8      0x2f8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
+                0x080398a8                __udivmoddi4
  *(.rodata)
- .rodata        0x08039be8       0xc8 src/built-in.o
+ .rodata        0x08039ba0       0xc8 src/built-in.o
  *(.rodata*)
  .rodata.DECK_GPIO_IO4
-                0x08039cb0        0x1 src/built-in.o
-                0x08039cb0                DECK_GPIO_IO4
+                0x08039c68        0x1 src/built-in.o
+                0x08039c68                DECK_GPIO_IO4
  .rodata.DECK_GPIO_IO3
-                0x08039cb1        0x1 src/built-in.o
-                0x08039cb1                DECK_GPIO_IO3
+                0x08039c69        0x1 src/built-in.o
+                0x08039c69                DECK_GPIO_IO3
  .rodata.DECK_GPIO_IO2
-                0x08039cb2        0x1 src/built-in.o
-                0x08039cb2                DECK_GPIO_IO2
+                0x08039c6a        0x1 src/built-in.o
+                0x08039c6a                DECK_GPIO_IO2
  .rodata.DECK_GPIO_IO1
-                0x08039cb3        0x1 src/built-in.o
-                0x08039cb3                DECK_GPIO_IO1
+                0x08039c6b        0x1 src/built-in.o
+                0x08039c6b                DECK_GPIO_IO1
  .rodata.DECK_GPIO_TX1
-                0x08039cb4        0x1 src/built-in.o
-                0x08039cb4                DECK_GPIO_TX1
+                0x08039c6c        0x1 src/built-in.o
+                0x08039c6c                DECK_GPIO_TX1
  .rodata.DECK_GPIO_RX1
-                0x08039cb5        0x1 src/built-in.o
-                0x08039cb5                DECK_GPIO_RX1
- *fill*         0x08039cb6        0x2 
+                0x08039c6d        0x1 src/built-in.o
+                0x08039c6d                DECK_GPIO_RX1
+ *fill*         0x08039c6e        0x2 
  .rodata.deckGPIOMapping
-                0x08039cb8       0x9c src/built-in.o
-                0x08039cb8                deckGPIOMapping
+                0x08039c70       0x9c src/built-in.o
+                0x08039c70                deckGPIOMapping
  .rodata.spiExchange.str1.1
-                0x08039d54     0x5dc9 src/built-in.o
+                0x08039d0c     0x5d5b src/built-in.o
                                  0x1c (size before relaxing)
  .rodata.infoDecode.str1.1
-                0x0803fb1d       0xd4 src/built-in.o
+                0x0803fa67       0xd4 src/built-in.o
  .rodata.str1.1
-                0x0803fb1d     0x228f src/built-in.o
- *fill*         0x0803fb1d        0x3 
+                0x0803fa67     0x228f src/built-in.o
+ *fill*         0x0803fa67        0x1 
  .rodata.owBackend
-                0x0803fb20        0xc src/built-in.o
+                0x0803fa68        0xc src/built-in.o
  .rodata.deckctrlBackend
-                0x0803fb2c        0xc src/built-in.o
+                0x0803fa74        0xc src/built-in.o
  .rodata.deckDiscoveryInit.part.0.str1.1
-                0x0803fb38       0x2b src/built-in.o
+                0x0803fa80       0x2b src/built-in.o
  .rodata.printDeckInfo.str1.1
-                0x0803fb38       0x2f src/built-in.o
+                0x0803fa80       0x2f src/built-in.o
  .rodata.deckInfoInit.str1.1
-                0x0803fb38      0x12c src/built-in.o
+                0x0803fa80      0x12c src/built-in.o
  .rodata.dummyDriver
-                0x0803fb38       0x24 src/built-in.o
-                0x0803fb38                dummyDriver
+                0x0803fa80       0x24 src/built-in.o
+                0x0803fa80                dummyDriver
  .rodata.memoryDef
-                0x0803fb5c       0x38 src/built-in.o
+                0x0803faa4       0x38 src/built-in.o
  .rodata.deckInit.str1.1
-                0x0803fb94       0x74 src/built-in.o
+                0x0803fadc       0x74 src/built-in.o
  .rodata.deckTest.str1.1
-                0x0803fb94       0x40 src/built-in.o
+                0x0803fadc       0x40 src/built-in.o
  .rodata.exptestTestAllPins.str1.1
-                0x0803fb94       0x19 src/built-in.o
+                0x0803fadc       0x19 src/built-in.o
  .rodata.exptest_deck
-                0x0803fb94       0x24 src/built-in.o
+                0x0803fadc       0x24 src/built-in.o
  .rodata.expCfBlTestInit.str1.1
-                0x0803fbb8       0x22 src/built-in.o
+                0x0803fb00       0x22 src/built-in.o
  .rodata.expCfBltest_deck
-                0x0803fbb8       0x24 src/built-in.o
+                0x0803fb00       0x24 src/built-in.o
  .rodata.etGpioIn
-                0x0803fbdc       0x54 src/built-in.o
+                0x0803fb24       0x54 src/built-in.o
  .rodata.exptestRRTestAllPins.str1.1
-                0x0803fc30       0x19 src/built-in.o
+                0x0803fb78       0x19 src/built-in.o
  .rodata.exptestRR_deck
-                0x0803fc30       0x24 src/built-in.o
+                0x0803fb78       0x24 src/built-in.o
  .rodata.exptestTestPin.str1.1
-                0x0803fc54       0x1e src/built-in.o
+                0x0803fb9c       0x1e src/built-in.o
  .rodata.exptestbolt_deck
-                0x0803fc54       0x24 src/built-in.o
+                0x0803fb9c       0x24 src/built-in.o
  .rodata.radiotestInit.str1.1
-                0x0803fc78        0xa src/built-in.o
+                0x0803fbc0        0xa src/built-in.o
  .rodata.radiotest_deck
-                0x0803fc78       0x24 src/built-in.o
+                0x0803fbc0       0x24 src/built-in.o
  .rodata.activeMarkerDeckTest.str1.1
-                0x0803fc9c       0x3d src/built-in.o
+                0x0803fbe4       0x3d src/built-in.o
  .rodata.activeMarkerDeckInit.str1.1
-                0x0803fc9c       0x2d src/built-in.o
+                0x0803fbe4       0x2d src/built-in.o
  .rodata.deck_info
-                0x0803fc9c       0x24 src/built-in.o
+                0x0803fbe4       0x24 src/built-in.o
  .rodata.__eventTriggerPayloadDesc__activeMarkerModeChanged__
-                0x0803fcc0        0x8 src/built-in.o
+                0x0803fc08        0x8 src/built-in.o
  .rodata.aideckInit.str1.1
-                0x0803fcc8       0x1d src/built-in.o
+                0x0803fc10       0x1d src/built-in.o
  .rodata.sendFlashBuffer.str1.1
-                0x0803fcc8       0x29 src/built-in.o
+                0x0803fc10       0x29 src/built-in.o
  .rodata.gap8DeckFlasherWrite.str1.1
-                0x0803fcc8       0x86 src/built-in.o
+                0x0803fc10       0x86 src/built-in.o
  .rodata.aideck_deck
-                0x0803fcc8       0x24 src/built-in.o
+                0x0803fc10       0x24 src/built-in.o
  .rodata.gap8MemoryDef
-                0x0803fcec       0x28 src/built-in.o
+                0x0803fc34       0x28 src/built-in.o
  .rodata.espMemoryDef
-                0x0803fd14       0x28 src/built-in.o
+                0x0803fc5c       0x28 src/built-in.o
  .rodata.buzzer_deck
-                0x0803fd3c       0x24 src/built-in.o
+                0x0803fc84       0x24 src/built-in.o
  .rodata.flowdeck2Test.str1.1
-                0x0803fd60       0x38 src/built-in.o
+                0x0803fca8       0x38 src/built-in.o
  .rodata.flowdeck1Init.str1.1
-                0x0803fd60        0xf src/built-in.o
+                0x0803fca8        0xf src/built-in.o
  .rodata.flowdeck2_deck
-                0x0803fd60       0x24 src/built-in.o
+                0x0803fca8       0x24 src/built-in.o
  .rodata.flowdeck1_deck
-                0x0803fd84       0x24 src/built-in.o
+                0x0803fccc       0x24 src/built-in.o
  .rodata.boatEffect.str1.1
-                0x0803fda8        0xc src/built-in.o
+                0x0803fcf0        0xc src/built-in.o
  .rodata.locSrvStatus.str1.1
-                0x0803fda8       0x16 src/built-in.o
+                0x0803fcf0       0x16 src/built-in.o
  .rodata.rssiEffect.str1.1
-                0x0803fda8       0x17 src/built-in.o
+                0x0803fcf0       0x17 src/built-in.o
  .rodata.batteryChargeEffect.str1.1
-                0x0803fda8        0x5 src/built-in.o
+                0x0803fcf0        0x5 src/built-in.o
  .rodata.brightnessEffect.str1.1
-                0x0803fda8        0xb src/built-in.o
+                0x0803fcf0        0xb src/built-in.o
  .rodata.tiltEffect.str1.1
-                0x0803fda8       0x1d src/built-in.o
+                0x0803fcf0       0x1d src/built-in.o
  .rodata.ledring12Init.str1.1
-                0x0803fda8        0xa src/built-in.o
+                0x0803fcf0        0xa src/built-in.o
  .rodata.ledring12_deck
-                0x0803fda8       0x24 src/built-in.o
+                0x0803fcf0       0x24 src/built-in.o
  .rodata.test_pat
-                0x0803fdcc        0x9 src/built-in.o
+                0x0803fd14        0x9 src/built-in.o
  .rodata.colorRing
-                0x0803fdd5       0x24 src/built-in.o
+                0x0803fd1d       0x24 src/built-in.o
  .rodata.blueRing
-                0x0803fdf9       0x24 src/built-in.o
+                0x0803fd41       0x24 src/built-in.o
  .rodata.whiteRing
-                0x0803fe1d       0x24 src/built-in.o
- *fill*         0x0803fe41        0x3 
+                0x0803fd65       0x24 src/built-in.o
+ *fill*         0x0803fd89        0x3 
  .rodata.timingmemDef
-                0x0803fe44       0x10 src/built-in.o
+                0x0803fd8c       0x10 src/built-in.o
  .rodata.ledringmemDef
-                0x0803fe54       0x10 src/built-in.o
+                0x0803fd9c       0x10 src/built-in.o
  .rodata.lighthouseInit.str1.1
-                0x0803fe64        0xc src/built-in.o
+                0x0803fdac        0xc src/built-in.o
  .rodata.lighthouse_deck
-                0x0803fe64       0x24 src/built-in.o
+                0x0803fdac       0x24 src/built-in.o
  .rodata.dwm1000Test.str1.1
-                0x0803fe88       0x27 src/built-in.o
+                0x0803fdd0       0x27 src/built-in.o
  .rodata.dwm1000Init.str1.1
-                0x0803fe88       0x27 src/built-in.o
+                0x0803fdd0       0x27 src/built-in.o
  .rodata.uwbTask.str1.1
-                0x0803fe88       0x3d src/built-in.o
+                0x0803fdd0       0x3d src/built-in.o
  .rodata.dwm1000_deck
-                0x0803fe88       0x24 src/built-in.o
+                0x0803fdd0       0x24 src/built-in.o
  .rodata.memDef
-                0x0803feac       0x50 src/built-in.o
+                0x0803fdf4       0x50 src/built-in.o
  .rodata.onEvent.str1.1
-                0x0803fefc       0x4e src/built-in.o
+                0x0803fe44       0x4e src/built-in.o
  .rodata.twrTagOnEvent.str1.1
-                0x0803fefc       0x2a src/built-in.o
+                0x0803fe44       0x2a src/built-in.o
  .rodata.mrInitSensor.str1.1
-                0x0803fefc       0x34 src/built-in.o
+                0x0803fe44       0x34 src/built-in.o
  .rodata.mrTest.str1.1
-                0x0803fefc       0x19 src/built-in.o
+                0x0803fe44       0x19 src/built-in.o
  .rodata.mrInit.str1.1
-                0x0803fefc        0x3 src/built-in.o
+                0x0803fe44        0x3 src/built-in.o
  .rodata.multiranger_deck
-                0x0803fefc       0x24 src/built-in.o
+                0x0803fe44       0x24 src/built-in.o
  .rodata.oaTest.str1.1
-                0x0803ff20      0x13f src/built-in.o
+                0x0803fe68      0x13f src/built-in.o
  .rodata.oaInit.str1.1
-                0x0803ff20        0x3 src/built-in.o
+                0x0803fe68        0x3 src/built-in.o
  .rodata.oa_deck
-                0x0803ff20       0x24 src/built-in.o
+                0x0803fe68       0x24 src/built-in.o
  .rodata.usdTest.str1.1
-                0x0803ff44       0x28 src/built-in.o
+                0x0803fe8c       0x28 src/built-in.o
  .rodata.usdInit.str1.1
-                0x0803ff44       0x3e src/built-in.o
+                0x0803fe8c       0x3e src/built-in.o
  .rodata.usdWriteData.str1.1
-                0x0803ff44       0x20 src/built-in.o
+                0x0803fe8c       0x20 src/built-in.o
  .rodata.usddeckWriteEventData.str1.1
-                0x0803ff44       0x28 src/built-in.o
+                0x0803fe8c       0x28 src/built-in.o
  .rodata.usdWriteTask.str1.1
-                0x0803ff44       0x7e src/built-in.o
+                0x0803fe8c       0x7e src/built-in.o
  .rodata.usdLogTask.str1.1
-                0x0803ff44      0x135 src/built-in.o
+                0x0803fe8c      0x135 src/built-in.o
  .rodata.usd_deck
-                0x0803ff44       0x24 src/built-in.o
+                0x0803fe8c       0x24 src/built-in.o
  .rodata.zRangerInit.str1.1
-                0x0803ff68        0x8 src/built-in.o
+                0x0803feb0        0x8 src/built-in.o
  .rodata.zranger_deck
-                0x0803ff68       0x24 src/built-in.o
+                0x0803feb0       0x24 src/built-in.o
  .rodata.zRanger2Init.str1.1
-                0x0803ff8c       0x3d src/built-in.o
+                0x0803fed4       0x3d src/built-in.o
  .rodata.zranger2_deck
-                0x0803ff8c       0x24 src/built-in.o
+                0x0803fed4       0x24 src/built-in.o
  .rodata.rpm_deck
-                0x0803ffb0       0x24 src/built-in.o
+                0x0803fef8       0x24 src/built-in.o
  .rodata.ak8963EvaluateSelfTest.str1.1
-                0x0803ffd4       0x3e src/built-in.o
+                0x0803ff1c       0x3e src/built-in.o
  .rodata.ak8963SelfTest.str1.1
-                0x0803ffd4       0x1f src/built-in.o
+                0x0803ff1c       0x1f src/built-in.o
  .rodata.eepromTest.str1.1
-                0x0803ffd4       0x3e src/built-in.o
+                0x0803ff1c       0x3e src/built-in.o
  .rodata.i2cdrvCreateMessage.str1.1
-                0x0803ffd4       0x1e src/built-in.o
+                0x0803ff1c       0x1e src/built-in.o
  .rodata.deckBusDef
-                0x0803ffd4       0x50 src/built-in.o
+                0x0803ff1c       0x50 src/built-in.o
  .rodata.sensorBusDef
-                0x08040024       0x50 src/built-in.o
+                0x0803ff6c       0x50 src/built-in.o
  .rodata.ledSet.str1.1
-                0x08040074       0x27 src/built-in.o
+                0x0803ffbc       0x27 src/built-in.o
  .rodata.led_polarity
-                0x08040074       0x18 src/built-in.o
+                0x0803ffbc       0x18 src/built-in.o
  .rodata.led_pin
-                0x0804008c       0x18 src/built-in.o
+                0x0803ffd4       0x18 src/built-in.o
  .rodata.led_port
-                0x080400a4       0x18 src/built-in.o
+                0x0803ffec       0x18 src/built-in.o
  .rodata.lhblFlashWritePage.str1.1
-                0x080400bc       0x56 src/built-in.o
+                0x08040004       0x56 src/built-in.o
  .rodata.lps25hEvaluateSelfTest.str1.1
-                0x080400bc       0x47 src/built-in.o
+                0x08040004       0x47 src/built-in.o
  .rodata.lps25hSelfTest.str1.1
-                0x080400bc       0x15 src/built-in.o
+                0x08040004       0x15 src/built-in.o
  .rodata.motorsCompensateBatteryVoltage.str1.1
-                0x080400bc       0x2f src/built-in.o
+                0x08040004       0x2f src/built-in.o
  .rodata.motorsInit.str1.1
-                0x080400bc       0x32 src/built-in.o
+                0x08040004       0x32 src/built-in.o
  .rodata.unknownMotorHealthTestSettings
-                0x080400bc        0xa src/built-in.o
-                0x080400bc                unknownMotorHealthTestSettings
+                0x08040004        0xa src/built-in.o
+                0x08040004                unknownMotorHealthTestSettings
  .rodata.brushlessMotorHealthTestSettings
-                0x080400c6        0xa src/built-in.o
-                0x080400c6                brushlessMotorHealthTestSettings
+                0x0804000e        0xa src/built-in.o
+                0x0804000e                brushlessMotorHealthTestSettings
  .rodata.brushedMotorHealthTestSettings
-                0x080400d0        0xa src/built-in.o
-                0x080400d0                brushedMotorHealthTestSettings
+                0x08040018        0xa src/built-in.o
+                0x08040018                brushedMotorHealthTestSettings
  .rodata.testsound
-                0x080400da        0x8 src/built-in.o
-                0x080400da                testsound
- *fill*         0x080400e2        0x2 
+                0x08040022        0x8 src/built-in.o
+                0x08040022                testsound
+ *fill*         0x0804002a        0x2 
  .rodata.MOTORS
-                0x080400e4       0x10 src/built-in.o
-                0x080400e4                MOTORS
+                0x0804002c       0x10 src/built-in.o
+                0x0804002c                MOTORS
  .rodata.MOTORS_PB9_TIM4_CH4_BRUSHED
-                0x080400f4       0x5c src/built-in.o
+                0x0804003c       0x5c src/built-in.o
  .rodata.MOTORS_PA15_TIM2_CH1_BRUSHED
-                0x08040150       0x5c src/built-in.o
+                0x08040098       0x5c src/built-in.o
  .rodata.MOTORS_PB11_TIM2_CH4_BRUSHED
-                0x080401ac       0x5c src/built-in.o
+                0x080400f4       0x5c src/built-in.o
  .rodata.MOTORS_PA1_TIM2_CH2_BRUSHED
-                0x08040208       0x5c src/built-in.o
+                0x08040150       0x5c src/built-in.o
  .rodata.mpu6500EvaluateSelfTest.str1.1
-                0x08040264       0x48 src/built-in.o
+                0x080401ac       0x48 src/built-in.o
  .rodata.mpu6500SelfTest.str1.1
-                0x08040264       0x27 src/built-in.o
+                0x080401ac       0x27 src/built-in.o
  .rodata.mpu6500StTb
-                0x08040264      0x200 src/built-in.o
+                0x080401ac      0x200 src/built-in.o
  .rodata.printHardFault.str1.1
-                0x08040464       0x97 src/built-in.o
+                0x080403ac       0x97 src/built-in.o
  .rodata.MemManage_Handler.str1.1
-                0x08040464        0xa src/built-in.o
+                0x080403ac        0xa src/built-in.o
  .rodata.BusFault_Handler.str1.1
-                0x08040464        0x9 src/built-in.o
+                0x080403ac        0x9 src/built-in.o
  .rodata.UsageFault_Handler.str1.1
-                0x08040464        0xb src/built-in.o
+                0x080403ac        0xb src/built-in.o
  .rodata.pmw3901Init.str1.1
-                0x08040464       0x20 src/built-in.o
+                0x080403ac       0x20 src/built-in.o
  .rodata.uart2Init.str1.1
-                0x08040464       0x24 src/built-in.o
+                0x080403ac       0x24 src/built-in.o
  .rodata.uartslkIsr.str1.1
-                0x08040464       0x24 src/built-in.o
+                0x080403ac       0x24 src/built-in.o
  .rodata.uartSyslinkDumpDebugProbe.str1.1
-                0x08040464       0xc5 src/built-in.o
+                0x080403ac       0xc5 src/built-in.o
  .rodata.vl53l0xInitSensor.str1.1
-                0x08040464       0x3c src/built-in.o
+                0x080403ac       0x3c src/built-in.o
  .rodata.watchdogNormalStartTest.str1.1
-                0x08040464       0x3a src/built-in.o
+                0x080403ac       0x3a src/built-in.o
  .rodata.ws2812Init.str1.1
-                0x08040464       0x21 src/built-in.o
+                0x080403ac       0x21 src/built-in.o
  .rodata.vApplicationMallocFailedHook.str1.1
-                0x08040464       0x1f src/built-in.o
+                0x080403ac       0x1f src/built-in.o
  .rodata.vApplicationStackOverflowHook.str1.1
-                0x08040464       0x21 src/built-in.o
+                0x080403ac       0x21 src/built-in.o
  .rodata.ledseqInit.str1.1
-                0x08040464       0x16 src/built-in.o
+                0x080403ac       0x16 src/built-in.o
  .rodata.owSyslinkTransfer.str1.1
-                0x08040464       0x49 src/built-in.o
+                0x080403ac       0x49 src/built-in.o
  .rodata.owRead.str1.1
-                0x08040464       0x16 src/built-in.o
+                0x080403ac       0x16 src/built-in.o
  .rodata.pmInit.str1.1
-                0x08040464        0x8 src/built-in.o
+                0x080403ac        0x8 src/built-in.o
  .rodata.LiPoTypicalChargeCurve
-                0x08040464       0x28 src/built-in.o
+                0x080403ac       0x28 src/built-in.o
  .rodata.radiolinkSendCRTPPacket.str1.1
-                0x0804048c       0x39 src/built-in.o
+                0x080403d4       0x39 src/built-in.o
  .rodata.radiolinkInit.str1.1
-                0x0804048c       0x13 src/built-in.o
+                0x080403d4       0x13 src/built-in.o
  .rodata.radiolinkSyslinkDispatch.str1.1
-                0x0804048c       0x3a src/built-in.o
+                0x080403d4       0x3a src/built-in.o
  .rodata.sensorsBmi088Bmp3xxInit.str1.1
-                0x0804048c       0xfc src/built-in.o
+                0x080403d4       0xfc src/built-in.o
  .rodata.gyroSelftest.str1.1
-                0x0804048c       0x77 src/built-in.o
+                0x080403d4       0x77 src/built-in.o
  .rodata.sensorsBmi088Bmp3xxInit_I2C.str1.1
-                0x0804048c       0x23 src/built-in.o
+                0x080403d4       0x23 src/built-in.o
  .rodata.sensorsBmi088Bmp3xxTest.str1.1
-                0x0804048c       0x14 src/built-in.o
+                0x080403d4       0x14 src/built-in.o
  .rodata.sensorsBmi088Bmp3xxManufacturingTest.str1.1
-                0x0804048c       0x44 src/built-in.o
+                0x080403d4       0x44 src/built-in.o
  .rodata.sensorsBmi088Bmp3xxSetAccMode.str1.1
-                0x0804048c       0x18 src/built-in.o
+                0x080403d4       0x18 src/built-in.o
  .rodata.sensorsMpu9250Lps25hInit.str1.1
-                0x0804048c       0xbe src/built-in.o
+                0x080403d4       0xbe src/built-in.o
  .rodata.sensorsMpu9250Lps25hTest.str1.1
-                0x0804048c       0x27 src/built-in.o
+                0x080403d4       0x27 src/built-in.o
  .rodata.sensorsMpu9250Lps25hManufacturingTest.str1.1
-                0x0804048c       0x78 src/built-in.o
+                0x080403d4       0x78 src/built-in.o
  .rodata.sensorImplementations
-                0x0804048c       0x68 src/built-in.o
+                0x080403d4       0x68 src/built-in.o
  .rodata.storageReformat.str1.1
-                0x080404f4       0x73 src/built-in.o
+                0x0804043c       0x73 src/built-in.o
  .rodata.storagePrintStats.str1.1
-                0x080404f4       0xbd src/built-in.o
+                0x0804043c       0xbd src/built-in.o
  .rodata.syslinkTask.str1.1
-                0x080404f4      0x10c src/built-in.o
+                0x0804043c      0x10c src/built-in.o
  .rodata.syslinkInit.str1.1
-                0x080404f4       0x15 src/built-in.o
+                0x0804043c       0x15 src/built-in.o
  .rodata.syslinkSendPacket.str1.1
-                0x080404f4       0x34 src/built-in.o
+                0x0804043c       0x34 src/built-in.o
  .rodata.debugHandler.str1.1
-                0x080404f4       0x29 src/built-in.o
+                0x0804043c       0x29 src/built-in.o
  .rodata.USBD_USR_ManufacturerStrDescriptor.str1.1
-                0x080404f4        0xc src/built-in.o
+                0x0804043c        0xc src/built-in.o
  .rodata.USBD_USR_ProductStrDescriptor.str1.1
-                0x080404f4       0x2f src/built-in.o
+                0x0804043c       0x2f src/built-in.o
  .rodata.USBD_USR_ConfigStrDescriptor.str1.1
-                0x080404f4        0xb src/built-in.o
+                0x0804043c        0xb src/built-in.o
  .rodata.USBD_USR_InterfaceStrDescriptor.str1.1
-                0x080404f4       0x21 src/built-in.o
+                0x0804043c       0x21 src/built-in.o
  .rodata.bin2hex
-                0x080404f4       0x10 src/built-in.o
+                0x0804043c       0x10 src/built-in.o
  .rodata.usblinkSendPacket.str1.1
-                0x08040504       0x2f src/built-in.o
+                0x0804044c       0x2f src/built-in.o
  .rodata.usblinkInit.str1.1
-                0x08040504        0x8 src/built-in.o
+                0x0804044c        0x8 src/built-in.o
  .rodata.get_ldnumber.str1.1
-                0x08040504        0x3 src/built-in.o
+                0x0804044c        0x3 src/built-in.o
  .rodata.check_fs.str1.1
-                0x08040504        0x9 src/built-in.o
+                0x0804044c        0x9 src/built-in.o
  .rodata.follow_path.str1.1
-                0x08040504       0x10 src/built-in.o
- .rodata.ExCvt  0x08040504       0x80 src/built-in.o
+                0x0804044c       0x10 src/built-in.o
+ .rodata.ExCvt  0x0804044c       0x80 src/built-in.o
  .rodata.LfnOfs
-                0x08040584        0xd src/built-in.o
- *fill*         0x08040591        0x1 
+                0x080404cc        0xd src/built-in.o
+ *fill*         0x080404d9        0x1 
  .rodata.cvt2.0
-                0x08040592       0xbc src/built-in.o
+                0x080404da       0xbc src/built-in.o
  .rodata.cvt1.1
-                0x0804064e      0x1f2 src/built-in.o
- .rodata.uc850  0x08040840      0x100 src/built-in.o
+                0x08040596      0x1f2 src/built-in.o
+ .rodata.uc850  0x08040788      0x100 src/built-in.o
  .rodata.APBAHBPrescTable
-                0x08040940       0x10 src/built-in.o
+                0x08040888       0x10 src/built-in.o
  .rodata.SetPresetMode.str1.1
-                0x08040950        0xc src/built-in.o
+                0x08040898        0xc src/built-in.o
  .rodata.CSWTCH.73
-                0x08040950       0x10 src/built-in.o
+                0x08040898       0x10 src/built-in.o
  .rodata.commanderInit.str1.1
-                0x08040960       0x3b src/built-in.o
+                0x080408a8       0x3b src/built-in.o
  .rodata.commanderSetSetpoint.str1.1
-                0x08040960       0x15 src/built-in.o
+                0x080408a8       0x15 src/built-in.o
  .rodata.priorityDisable
-                0x08040960        0x4 src/built-in.o
+                0x080408a8        0x4 src/built-in.o
  .rodata.nullSetpoint
-                0x08040964      0x180 src/built-in.o
+                0x080408ac      0x180 src/built-in.o
  .rodata.consolePutchar.str1.1
-                0x08040ae4        0x5 src/built-in.o
+                0x08040a2c        0x5 src/built-in.o
  .rodata.manualDecoder.str1.1
-                0x08040ae4       0x55 src/built-in.o
+                0x08040a2c       0x55 src/built-in.o
  .rodata.hoverDecoder.str1.1
-                0x08040ae4       0x28 src/built-in.o
+                0x08040a2c       0x28 src/built-in.o
  .rodata.zDistanceDecoder.str1.1
-                0x08040ae4       0x2c src/built-in.o
+                0x08040a2c       0x2c src/built-in.o
  .rodata.velocityDecoder.str1.1
-                0x08040ae4       0x2b src/built-in.o
+                0x08040a2c       0x2b src/built-in.o
  .rodata.altHoldDecoder.str1.1
-                0x08040ae4       0x2a src/built-in.o
+                0x08040a2c       0x2a src/built-in.o
  .rodata.cppmEmuDecoder.str1.1
-                0x08040ae4       0x3b src/built-in.o
+                0x08040a2c       0x3b src/built-in.o
  .rodata.fullStateDecoder.str1.1
-                0x08040ae4       0x2c src/built-in.o
+                0x08040a2c       0x2c src/built-in.o
  .rodata.crtpCommanderGenericDecodeSetpoint.str1.1
-                0x08040ae4        0xd src/built-in.o
+                0x08040a2c        0xd src/built-in.o
  .rodata.packetDecoders
-                0x08040ae4       0x30 src/built-in.o
+                0x08040a2c       0x30 src/built-in.o
  .rodata.crtpCommanderHighLevelInit.str1.1
-                0x08040b14        0x6 src/built-in.o
+                0x08040a5c        0x6 src/built-in.o
  .rodata.notifySetpointsStopDecoder.str1.1
-                0x08040b14       0x58 src/built-in.o
+                0x08040a5c       0x58 src/built-in.o
  .rodata.crtpCommanderRpytDecodeSetpoint.str1.1
-                0x08040b14       0x2f src/built-in.o
+                0x08040a5c       0x2f src/built-in.o
  .rodata.locSrvInit.str1.1
-                0x08040b14       0x13 src/built-in.o
+                0x08040a5c       0x13 src/built-in.o
  .rodata.locSrvSendRangeFloat.str1.1
-                0x08040b14       0x55 src/built-in.o
+                0x08040a5c       0x55 src/built-in.o
  .rodata.crtpInit.str1.1
-                0x08040b14       0x10 src/built-in.o
+                0x08040a5c       0x10 src/built-in.o
  .rodata.crtpInitTaskQueue.str1.1
-                0x08040b14       0x31 src/built-in.o
+                0x08040a5c       0x31 src/built-in.o
  .rodata.crtpReceivePacket.str1.1
-                0x08040b14       0x11 src/built-in.o
+                0x08040a5c       0x11 src/built-in.o
  .rodata.crtpSendPacket.str1.1
-                0x08040b14       0x1e src/built-in.o
+                0x08040a5c       0x1e src/built-in.o
  .rodata.crtpSrvTask.str1.1
-                0x08040b14       0x13 src/built-in.o
+                0x08040a5c       0x13 src/built-in.o
  .rodata.crtpserviceInit.str1.1
-                0x08040b14        0x9 src/built-in.o
+                0x08040a5c        0x9 src/built-in.o
  .rodata.espDeckFlasherWrite.str1.1
-                0x08040b14       0xb6 src/built-in.o
+                0x08040a5c       0xb6 src/built-in.o
  .rodata.healthRunTests.str1.1
-                0x08040b14      0x1dd src/built-in.o
+                0x08040a5c      0x1dd src/built-in.o
  .rodata.logRunBlock.str1.1
-                0x08040b14      0x114 src/built-in.o
+                0x08040a5c      0x114 src/built-in.o
  .rodata.logInit.str1.1
-                0x08040b14        0x5 src/built-in.o
+                0x08040a5c        0x5 src/built-in.o
  .rodata.logTask.str1.1
-                0x08040b14       0x49 src/built-in.o
+                0x08040a5c       0x49 src/built-in.o
  .rodata.logGetInt.str1.1
-                0x08040b14       0x17 src/built-in.o
+                0x08040a5c       0x17 src/built-in.o
  .rodata.typeLength
-                0x08040b14       0x14 src/built-in.o
+                0x08040a5c       0x14 src/built-in.o
  .rodata.handleMemTesterWrite.str1.1
-                0x08040b28       0x3a src/built-in.o
+                0x08040a70       0x3a src/built-in.o
  .rodata.memoryRegisterHandler.str1.1
-                0x08040b28       0x72 src/built-in.o
+                0x08040a70       0x72 src/built-in.o
  .rodata.memoryRegisterOwHandler.str1.1
-                0x08040b28       0x12 src/built-in.o
+                0x08040a70       0x12 src/built-in.o
  .rodata.memGetType.str1.1
-                0x08040b28       0x15 src/built-in.o
+                0x08040a70       0x15 src/built-in.o
  .rodata.memGetOwSize.str1.1
-                0x08040b28        0xd src/built-in.o
+                0x08040a70        0xd src/built-in.o
  .rodata.memTesterDef
-                0x08040b28       0x10 src/built-in.o
+                0x08040a70       0x10 src/built-in.o
  .rodata.crtpMemInit.str1.1
-                0x08040b38        0x4 src/built-in.o
+                0x08040a80        0x4 src/built-in.o
  .rodata.mspInit.str1.1
-                0x08040b38       0x21 src/built-in.o
+                0x08040a80       0x21 src/built-in.o
  .rodata.mspProcessByte.str1.1
-                0x08040b38       0xe4 src/built-in.o
+                0x08040a80       0xe4 src/built-in.o
  .rodata.paramLogicInit.str1.1
-                0x08040b38       0x22 src/built-in.o
+                0x08040a80       0x22 src/built-in.o
  .rodata.paramTOCProcess.str1.1
-                0x08040b38       0x43 src/built-in.o
+                0x08040a80       0x43 src/built-in.o
  .rodata.generateStorageKey.str1.1
-                0x08040b38        0x7 src/built-in.o
+                0x08040a80        0x7 src/built-in.o
  .rodata.paramGetInt.str1.1
-                0x08040b38       0x1c src/built-in.o
+                0x08040a80       0x1c src/built-in.o
  .rodata.paramSetInt.str1.1
-                0x08040b38       0x6e src/built-in.o
+                0x08040a80       0x6e src/built-in.o
  .rodata.CSWTCH.139
-                0x08040b38        0x3 src/built-in.o
+                0x08040a80        0x3 src/built-in.o
  .rodata.invalidVarId
-                0x08040b3b        0x4 src/built-in.o
- *fill*         0x08040b3f        0x1 
+                0x08040a83        0x4 src/built-in.o
+ *fill*         0x08040a87        0x1 
  .rodata.dummyZero64
-                0x08040b40        0x8 src/built-in.o
+                0x08040a88        0x8 src/built-in.o
  .rodata.paramInit.str1.1
-                0x08040b48        0x6 src/built-in.o
+                0x08040a90        0x6 src/built-in.o
  .rodata.plan_spiral_from.str1.1
-                0x08040b48       0x7b src/built-in.o
+                0x08040a90       0x7b src/built-in.o
  .rodata.platformserviceInit.str1.1
-                0x08040b48        0xd src/built-in.o
+                0x08040a90        0xd src/built-in.o
  .rodata.powerDistributionInit.str1.1
-                0x08040b48       0xa8 src/built-in.o
+                0x08040a90       0xa8 src/built-in.o
  .rodata.control_points_by_type
-                0x08040b48        0x4 src/built-in.o
- .rodata.facs   0x08040b4c       0x20 src/built-in.o
+                0x08040a90        0x4 src/built-in.o
+ .rodata.facs   0x08040a94       0x20 src/built-in.o
  .rodata.esc4wayProcess.str1.1
-                0x08040b6c        0xa src/built-in.o
+                0x08040ab4        0xa src/built-in.o
  .rodata.soundTimer.str1.1
-                0x08040b6c       0x22 src/built-in.o
+                0x08040ab4       0x22 src/built-in.o
  .rodata.tilt.str1.1
-                0x08040b6c       0x16 src/built-in.o
+                0x08040ab4       0x16 src/built-in.o
  .rodata.soundInit.str1.1
-                0x08040b6c        0xb src/built-in.o
+                0x08040ab4        0xb src/built-in.o
  .rodata.valkyries
-                0x08040b6c      0x148 src/built-in.o
+                0x08040ab4      0x148 src/built-in.o
  .rodata.starwars
-                0x08040cb4      0x148 src/built-in.o
+                0x08040bfc      0x148 src/built-in.o
  .rodata.factory_test
-                0x08040dfc      0x148 src/built-in.o
+                0x08040d44      0x148 src/built-in.o
  .rodata.usb_connect
-                0x08040f44      0x148 src/built-in.o
+                0x08040e8c      0x148 src/built-in.o
  .rodata.usb_disconnect
-                0x0804108c      0x148 src/built-in.o
+                0x08040fd4      0x148 src/built-in.o
  .rodata.lowbatt
-                0x080411d4      0x148 src/built-in.o
+                0x0804111c      0x148 src/built-in.o
  .rodata.chg_done
-                0x0804131c      0x148 src/built-in.o
+                0x08041264      0x148 src/built-in.o
  .rodata.calibrated
-                0x08041464      0x148 src/built-in.o
+                0x080413ac      0x148 src/built-in.o
  .rodata.startup
-                0x080415ac      0x148 src/built-in.o
+                0x080414f4      0x148 src/built-in.o
  .rodata.range_fast
-                0x080416f4      0x148 src/built-in.o
+                0x0804163c      0x148 src/built-in.o
  .rodata.range_slow
-                0x0804183c      0x148 src/built-in.o
+                0x08041784      0x148 src/built-in.o
  .rodata.rateSupervisorTask.str1.1
-                0x08041984       0x81 src/built-in.o
+                0x080418cc       0x81 src/built-in.o
  .rodata.stabilizerTask.str1.1
-                0x08041984       0x56 src/built-in.o
+                0x080418cc       0x56 src/built-in.o
  .rodata.stabilizerInit.str1.1
-                0x08041984        0xb src/built-in.o
+                0x080418cc        0xb src/built-in.o
  .rodata.infoDump.str1.1
-                0x08041984       0x5b src/built-in.o
+                0x080418cc       0x5b src/built-in.o
  .rodata.supervisorUpdate.str1.1
-                0x08041984       0x3f src/built-in.o
+                0x080418cc       0x3f src/built-in.o
  .rodata.conditionNames
-                0x08041984       0x24 src/built-in.o
+                0x080418cc       0x24 src/built-in.o
  .rodata.stateNames
-                0x080419a8       0x2c src/built-in.o
+                0x080418f0       0x2c src/built-in.o
  .rodata.timerHandler.part.0.str1.1
-                0x080419d4       0xa0 src/built-in.o
+                0x0804191c       0xa0 src/built-in.o
  .rodata.sysLoadInit.str1.1
-                0x080419d4       0x21 src/built-in.o
+                0x0804191c       0x21 src/built-in.o
  .rodata.doAssertCallback.str1.1
-                0x080419d4       0x1d src/built-in.o
+                0x0804191c       0x1d src/built-in.o
  .rodata.systemLaunch.str1.1
-                0x080419d4        0x7 src/built-in.o
+                0x0804191c        0x7 src/built-in.o
  .rodata.systemInit.str1.1
-                0x080419d4       0xb8 src/built-in.o
+                0x0804191c       0xb8 src/built-in.o
  .rodata.systemTask.str1.1
-                0x080419d4      0x1bc src/built-in.o
+                0x0804191c      0x1bc src/built-in.o
  .rodata.systemSyslinkReceive.str1.1
-                0x080419d4       0x18 src/built-in.o
+                0x0804191c       0x18 src/built-in.o
  .rodata.passthroughInit.str1.1
-                0x080419d4        0xc src/built-in.o
+                0x0804191c        0xc src/built-in.o
  .rodata.passthroughVcpRxSendFromISR.str1.1
-                0x080419d4       0x70 src/built-in.o
+                0x0804191c       0x70 src/built-in.o
  .rodata.passthroughVcpRxReceive.str1.1
-                0x080419d4        0xd src/built-in.o
+                0x0804191c        0xd src/built-in.o
  .rodata.passthroughTask.str1.1
-                0x080419d4       0x15 src/built-in.o
+                0x0804191c       0x15 src/built-in.o
  .rodata.passthroughVcpTxSend.str1.1
-                0x080419d4       0x28 src/built-in.o
+                0x0804191c       0x28 src/built-in.o
  .rodata.passthroughVcpTxSendBlock.str1.1
-                0x080419d4       0x34 src/built-in.o
+                0x0804191c       0x34 src/built-in.o
  .rodata.arm_sqrt.str1.1
-                0x080419d4       0x3c src/built-in.o
+                0x0804191c       0x3c src/built-in.o
  .rodata.assert_aligned_4_bytes.isra.0.str1.1
-                0x080419d4      0x102 src/built-in.o
+                0x0804191c      0x102 src/built-in.o
  .rodata.kalmanCoreScalarUpdate.str1.1
-                0x080419d4       0x67 src/built-in.o
+                0x0804191c       0x67 src/built-in.o
  .rodata.kalmanCoreUpdateWithDistance.str1.1
-                0x080419d4       0x3c src/built-in.o
+                0x0804191c       0x3c src/built-in.o
  .rodata.mat_mult.str1.1
-                0x080419d4       0x36 src/built-in.o
+                0x0804191c       0x36 src/built-in.o
  .rodata.mat_mult.constprop.0.str1.1
-                0x080419d4       0x1b src/built-in.o
+                0x0804191c       0x1b src/built-in.o
  .rodata.lighthouseCoreLedTimer.str1.1
-                0x080419d4       0x36 src/built-in.o
+                0x0804191c       0x36 src/built-in.o
  .rodata.lighthouseCoreTask.str1.1
-                0x080419d4       0xd4 src/built-in.o
+                0x0804191c       0xd4 src/built-in.o
  .rodata.lighthouseDeckFlasherCheckVersionAndBoot.str1.1
-                0x080419d4      0x178 src/built-in.o
+                0x0804191c      0x178 src/built-in.o
  .rodata.mat_trans.constprop.0.str1.1
-                0x080419d4       0x1b src/built-in.o
+                0x0804191c       0x1b src/built-in.o
  .rodata.bsEstRates
-                0x080419d4       0x10 src/built-in.o
+                0x0804191c       0x10 src/built-in.o
  .rodata.lighthouseStoragePersistData.str1.1
-                0x080419e4       0x1c src/built-in.o
+                0x0804192c       0x1c src/built-in.o
  .rodata.lhPersistDataWorker.str1.1
-                0x080419e4       0x4b src/built-in.o
+                0x0804192c       0x4b src/built-in.o
  .rodata.lighthouseStoragePersistSystemType.str1.1
-                0x080419e4        0xe src/built-in.o
+                0x0804192c        0xe src/built-in.o
  .rodata.lighthouseStorageVerifySetStorageVersion.str1.1
-                0x080419e4       0x3d src/built-in.o
+                0x0804192c       0x3d src/built-in.o
  .rodata.controllerInit.str1.1
-                0x080419e4       0x26 src/built-in.o
+                0x0804192c       0x26 src/built-in.o
  .rodata.controllerFunctions
-                0x080419e4       0x60 src/built-in.o
+                0x0804192c       0x60 src/built-in.o
  .rodata.estimatorKalmanTaskInit.str1.1
-                0x08041a44       0x48 src/built-in.o
+                0x0804198c       0x48 src/built-in.o
  .rodata.estimatorKalmanInit.str1.1
-                0x08041a44       0x33 src/built-in.o
+                0x0804198c       0x33 src/built-in.o
  .rodata.kalmanTask.str1.1
-                0x08041a44       0x61 src/built-in.o
+                0x0804198c       0x61 src/built-in.o
  .rodata.stateEstimatorSwitchTo.str1.1
-                0x08041a44       0x24 src/built-in.o
+                0x0804198c       0x24 src/built-in.o
  .rodata.estimatorFunctions
-                0x08041a44       0x50 src/built-in.o
+                0x0804198c       0x50 src/built-in.o
  .rodata.__eventTriggerPayloadDesc__estSweepAngle__
-                0x08041a94       0x28 src/built-in.o
+                0x080419dc       0x28 src/built-in.o
  .rodata.__eventTriggerPayloadDesc__estYawError__
-                0x08041abc        0x8 src/built-in.o
+                0x08041a04        0x8 src/built-in.o
  .rodata.__eventTriggerPayloadDesc__estDistance__
-                0x08041ac4       0x10 src/built-in.o
+                0x08041a0c       0x10 src/built-in.o
  .rodata.__eventTriggerPayloadDesc__estPosition__
-                0x08041ad4        0x8 src/built-in.o
+                0x08041a1c        0x8 src/built-in.o
  .rodata.__eventTriggerPayloadDesc__estTDOA__
-                0x08041adc       0x18 src/built-in.o
+                0x08041a24       0x18 src/built-in.o
  .rodata.route.str1.1
-                0x08041af4       0x3f src/built-in.o
+                0x08041a3c       0x3f src/built-in.o
  .rodata.router_from_internal.str1.1
-                0x08041af4        0x6 src/built-in.o
+                0x08041a3c        0x6 src/built-in.o
  .rodata.router_from_uart.str1.1
-                0x08041af4        0x6 src/built-in.o
+                0x08041a3c        0x6 src/built-in.o
  .rodata.cpxExternalRouterInit.str1.1
-                0x08041af4       0xa9 src/built-in.o
+                0x08041a3c       0xa9 src/built-in.o
  .rodata.cpxInternalRouterRouteIn.str1.1
-                0x08041af4       0x41 src/built-in.o
+                0x08041a3c       0x41 src/built-in.o
  .rodata.CPX_UART_RX.str1.1
-                0x08041af4       0x45 src/built-in.o
+                0x08041a3c       0x45 src/built-in.o
  .rodata.CPX_UART_TX.str1.1
-                0x08041af4       0x8e src/built-in.o
+                0x08041a3c       0x8e src/built-in.o
  .rodata.cpxUARTTransportSend.str1.1
-                0x08041af4       0x34 src/built-in.o
+                0x08041a3c       0x34 src/built-in.o
  .rodata.cpxUARTTransportInit.str1.1
-                0x08041af4       0x37 src/built-in.o
+                0x08041a3c       0x37 src/built-in.o
  .rodata.cpx.str1.1
-                0x08041af4       0xf5 src/built-in.o
+                0x08041a3c       0xf5 src/built-in.o
  .rodata.cpxCheckVersion.str1.1
-                0x08041af4       0x38 src/built-in.o
+                0x08041a3c       0x38 src/built-in.o
  .rodata.cpxInit.str1.1
-                0x08041af4        0x4 src/built-in.o
+                0x08041a3c        0x4 src/built-in.o
  .rodata.platformGetDeviceTypeString.str1.1
-                0x08041af4        0x7 src/built-in.o
+                0x08041a3c        0x7 src/built-in.o
  .rodata.platformSetLowInterferenceRadioMode.str1.1
-                0x08041af4       0x42 src/built-in.o
+                0x08041a3c       0x42 src/built-in.o
  .rodata.assertFail.str1.1
-                0x08041af4       0x1a src/built-in.o
+                0x08041a3c       0x1a src/built-in.o
  .rodata.printAssertSnapshotData.str1.1
-                0x08041af4       0xcf src/built-in.o
+                0x08041a3c       0xcf src/built-in.o
  .rodata.cfAssertNormalStartTest.str1.1
-                0x08041af4       0x39 src/built-in.o
+                0x08041a3c       0x39 src/built-in.o
  .rodata.configblockInit.str1.1
-                0x08041af4       0x3d src/built-in.o
- .rodata.digit  0x08041af4       0x10 src/built-in.o
+                0x08041a3c       0x3d src/built-in.o
+ .rodata.digit  0x08041a3c       0x10 src/built-in.o
  .rodata.uxTopUsedPriority
-                0x08041b04        0x4 src/built-in.o
-                0x08041b04                uxTopUsedPriority
+                0x08041a4c        0x4 src/built-in.o
+                0x08041a4c                uxTopUsedPriority
  .rodata.appendItemToEnd.constprop.0.str1.1
-                0x08041b08       0x2d src/built-in.o
+                0x08041a50       0x2d src/built-in.o
  .rodata.lighthouseCalibrationMeasurementModelLh1.str1.1
-                0x08041b08       0x3c src/built-in.o
+                0x08041a50       0x3c src/built-in.o
  .rodata.vec_length.str1.1
-                0x08041b08       0x3c src/built-in.o
+                0x08041a50       0x3c src/built-in.o
  .rodata.CYCLE_PERIODS
-                0x08041b08       0x40 src/built-in.o
+                0x08041a50       0x40 src/built-in.o
  .rodata.V_REVISION_1
-                0x08041b48        0x2 src/built-in.o
-                0x08041b48                V_REVISION_1
- *fill*         0x08041b4a        0x2 
+                0x08041a90        0x2 src/built-in.o
+                0x08041a90                V_REVISION_1
+ *fill*         0x08041a92        0x2 
  .rodata.V_REVISION_0
-                0x08041b4c        0x4 src/built-in.o
-                0x08041b4c                V_REVISION_0
+                0x08041a94        0x4 src/built-in.o
+                0x08041a94                V_REVISION_0
  .rodata.V_PRODUCTION_RELEASE
-                0x08041b50        0x1 src/built-in.o
-                0x08041b50                V_PRODUCTION_RELEASE
+                0x08041a98        0x1 src/built-in.o
+                0x08041a98                V_PRODUCTION_RELEASE
  .rodata.V_MODIFIED
-                0x08041b51        0x1 src/built-in.o
-                0x08041b51                V_MODIFIED
- *fill*         0x08041b52        0x2 
+                0x08041a99        0x1 src/built-in.o
+                0x08041a99                V_MODIFIED
+ *fill*         0x08041a9a        0x2 
  .rodata.sinTable_f32
-                0x08041b54      0x804 vendor/built-in.o
-                0x08041b54                sinTable_f32
+                0x08041a9c      0x804 vendor/built-in.o
+                0x08041a9c                sinTable_f32
  .rodata.xEventGroupCreateStatic.str1.1
-                0x08042358       0x55 vendor/built-in.o
+                0x080422a0       0x55 vendor/built-in.o
  .rodata.xEventGroupWaitBits.str1.1
-                0x08042358       0xb0 vendor/built-in.o
+                0x080422a0       0xb0 vendor/built-in.o
  .rodata.xEventGroupClearBits.str1.1
-                0x08042358       0x37 vendor/built-in.o
+                0x080422a0       0x37 vendor/built-in.o
  .rodata.xEventGroupSetBits.str1.1
-                0x08042358       0x35 vendor/built-in.o
+                0x080422a0       0x35 vendor/built-in.o
  .rodata.prvTaskExitError.str1.1
-                0x08042358       0x4a vendor/built-in.o
+                0x080422a0       0x4a vendor/built-in.o
  .rodata.vPortEnterCritical.str1.1
-                0x08042358       0x35 vendor/built-in.o
+                0x080422a0       0x35 vendor/built-in.o
  .rodata.vPortExitCritical.str1.1
-                0x08042358       0x12 vendor/built-in.o
+                0x080422a0       0x12 vendor/built-in.o
  .rodata.xPortStartScheduler.str1.1
-                0x08042358       0x46 vendor/built-in.o
+                0x080422a0       0x46 vendor/built-in.o
  .rodata.vPortValidateInterruptPriority.str1.1
-                0x08042358       0x6c vendor/built-in.o
+                0x080422a0       0x6c vendor/built-in.o
  .rodata.pvPortMalloc.str1.1
-                0x08042358       0xb4 vendor/built-in.o
+                0x080422a0       0xb4 vendor/built-in.o
  .rodata.vPortFree.str1.1
-                0x08042358       0x51 vendor/built-in.o
+                0x080422a0       0x51 vendor/built-in.o
  .rodata.xQueueGenericReset.str1.1
-                0x08042358       0x23 vendor/built-in.o
+                0x080422a0       0x23 vendor/built-in.o
  .rodata.xQueueGenericCreateStatic.str1.1
-                0x08042358       0xc3 vendor/built-in.o
+                0x080422a0       0xc3 vendor/built-in.o
  .rodata.xQueueGenericCreate.str1.1
-                0x08042358       0x4f vendor/built-in.o
+                0x080422a0       0x4f vendor/built-in.o
  .rodata.xQueueGenericSend.str1.1
-                0x08042358       0xed vendor/built-in.o
+                0x080422a0       0xed vendor/built-in.o
  .rodata.xQueueGenericSendFromISR.str1.1
-                0x08042358       0x19 vendor/built-in.o
+                0x080422a0       0x19 vendor/built-in.o
  .rodata.xQueueGiveFromISR.str1.1
-                0x08042358       0x80 vendor/built-in.o
+                0x080422a0       0x80 vendor/built-in.o
  .rodata.xQueueReceive.str1.1
-                0x08042358       0x5f vendor/built-in.o
+                0x080422a0       0x5f vendor/built-in.o
  .rodata.xQueueSemaphoreTake.str1.1
-                0x08042358       0x20 vendor/built-in.o
+                0x080422a0       0x20 vendor/built-in.o
  .rodata.xQueueReceiveFromISR.str1.1
-                0x08042358       0x64 vendor/built-in.o
+                0x080422a0       0x64 vendor/built-in.o
  .rodata.uxQueueMessagesWaiting.str1.1
-                0x08042358        0x7 vendor/built-in.o
+                0x080422a0        0x7 vendor/built-in.o
  .rodata.prvDeleteTCB.str1.1
-                0x08042358       0x61 vendor/built-in.o
+                0x080422a0       0x61 vendor/built-in.o
  .rodata.xTaskCreateStatic.str1.1
-                0x08042358       0x45 vendor/built-in.o
+                0x080422a0       0x45 vendor/built-in.o
  .rodata.vTaskDelete.str1.1
-                0x08042358       0x1a vendor/built-in.o
+                0x080422a0       0x1a vendor/built-in.o
  .rodata.eTaskGetState.str1.1
-                0x08042358        0x6 vendor/built-in.o
+                0x080422a0        0x6 vendor/built-in.o
  .rodata.vTaskResume.str1.1
-                0x08042358        0xe vendor/built-in.o
+                0x080422a0        0xe vendor/built-in.o
  .rodata.vTaskStartScheduler.str1.1
-                0x08042358       0x36 vendor/built-in.o
+                0x080422a0       0x36 vendor/built-in.o
  .rodata.xTaskIncrementTick.str1.1
-                0x08042358       0x2b vendor/built-in.o
+                0x080422a0       0x2b vendor/built-in.o
  .rodata.xTaskResumeAll.str1.1
-                0x08042358       0x15 vendor/built-in.o
+                0x080422a0       0x15 vendor/built-in.o
  .rodata.vTaskDelayUntil.str1.1
-                0x08042358       0x2b vendor/built-in.o
+                0x080422a0       0x2b vendor/built-in.o
  .rodata.vTaskSwitchContext.str1.1
-                0x08042358       0x47 vendor/built-in.o
+                0x080422a0       0x47 vendor/built-in.o
  .rodata.vTaskPlaceOnEventList.str1.1
-                0x08042358        0xc vendor/built-in.o
+                0x080422a0        0xc vendor/built-in.o
  .rodata.vTaskPlaceOnUnorderedEventList.str1.1
-                0x08042358       0x1a vendor/built-in.o
+                0x080422a0       0x1a vendor/built-in.o
  .rodata.xTaskRemoveFromEventList.str1.1
-                0x08042358        0xf vendor/built-in.o
+                0x080422a0        0xf vendor/built-in.o
  .rodata.vTaskRemoveFromUnorderedEventList.str1.1
-                0x08042358       0x20 vendor/built-in.o
+                0x080422a0       0x20 vendor/built-in.o
  .rodata.vTaskSetTimeOutState.str1.1
-                0x08042358        0xa vendor/built-in.o
+                0x080422a0        0xa vendor/built-in.o
  .rodata.xTaskCheckForTimeOut.str1.1
-                0x08042358        0xe vendor/built-in.o
+                0x080422a0        0xe vendor/built-in.o
  .rodata.xTaskPriorityDisinherit.str1.1
-                0x08042358       0x2b vendor/built-in.o
+                0x080422a0       0x2b vendor/built-in.o
  .rodata.vTaskPriorityDisinheritAfterTimeout.str1.1
-                0x08042358       0x16 vendor/built-in.o
+                0x080422a0       0x16 vendor/built-in.o
  .rodata.ulTaskGenericNotifyTake.str1.1
-                0x08042358       0x36 vendor/built-in.o
+                0x080422a0       0x36 vendor/built-in.o
  .rodata.xTaskGenericNotify.str1.1
-                0x08042358       0xa3 vendor/built-in.o
+                0x080422a0       0xa3 vendor/built-in.o
  .rodata.xTaskGenericNotifyStateClear.str1.1
-                0x08042358       0x37 vendor/built-in.o
+                0x080422a0       0x37 vendor/built-in.o
  .rodata.prvCheckForValidListAndQueue.str1.1
-                0x08042358        0x5 vendor/built-in.o
+                0x080422a0        0x5 vendor/built-in.o
  .rodata.xTimerCreateTimerTask.str1.1
-                0x08042358       0x2c vendor/built-in.o
+                0x080422a0       0x2c vendor/built-in.o
  .rodata.xTimerCreate.str1.1
-                0x08042358       0x1c vendor/built-in.o
+                0x080422a0       0x1c vendor/built-in.o
  .rodata.xTimerCreateStatic.str1.1
-                0x08042358       0x29 vendor/built-in.o
+                0x080422a0       0x29 vendor/built-in.o
  .rodata.xTimerGenericCommand.str1.1
-                0x08042358        0x7 vendor/built-in.o
+                0x080422a0        0x7 vendor/built-in.o
  .rodata.prvSwitchTimerLists.str1.1
-                0x08042358        0x8 vendor/built-in.o
+                0x080422a0        0x8 vendor/built-in.o
  .rodata.prvTimerTask.str1.1
-                0x08042358       0x25 vendor/built-in.o
+                0x080422a0       0x25 vendor/built-in.o
  .rodata.prvInitialiseNewStreamBuffer.str1.1
-                0x08042358       0x6b vendor/built-in.o
+                0x080422a0       0x6b vendor/built-in.o
  .rodata.prvWriteBytesToBuffer.str1.1
-                0x08042358       0x83 vendor/built-in.o
+                0x080422a0       0x83 vendor/built-in.o
  .rodata.prvReadBytesFromBuffer.str1.1
-                0x08042358       0x52 vendor/built-in.o
+                0x080422a0       0x52 vendor/built-in.o
  .rodata.xStreamBufferGenericCreate.str1.1
-                0x08042358       0x6f vendor/built-in.o
+                0x080422a0       0x6f vendor/built-in.o
  .rodata.vStreamBufferDelete.str1.1
-                0x08042358        0xf vendor/built-in.o
+                0x080422a0        0xf vendor/built-in.o
  .rodata.xStreamBufferSend.str1.1
-                0x08042358       0x56 vendor/built-in.o
+                0x080422a0       0x56 vendor/built-in.o
  .rodata.xStreamBufferReceive.str1.1
-                0x08042358       0x37 vendor/built-in.o
+                0x080422a0       0x37 vendor/built-in.o
  .rodata.MODE_SHORTDATA_FAST_ACCURACY
-                0x08042358        0x3 vendor/built-in.o
-                0x08042358                MODE_SHORTDATA_FAST_ACCURACY
+                0x080422a0        0x3 vendor/built-in.o
+                0x080422a0                MODE_SHORTDATA_FAST_ACCURACY
  .rodata.MODE_LONGDATA_RANGE_LOWPOWER
-                0x0804235b        0x3 vendor/built-in.o
-                0x0804235b                MODE_LONGDATA_RANGE_LOWPOWER
+                0x080422a3        0x3 vendor/built-in.o
+                0x080422a3                MODE_LONGDATA_RANGE_LOWPOWER
  .rodata.BIAS_900_64
-                0x0804235e       0x12 vendor/built-in.o
+                0x080422a6       0x12 vendor/built-in.o
  .rodata.BIAS_900_16
-                0x08042370       0x12 vendor/built-in.o
+                0x080422b8       0x12 vendor/built-in.o
  .rodata.BIAS_500_64
-                0x08042382       0x12 vendor/built-in.o
+                0x080422ca       0x12 vendor/built-in.o
  .rodata.BIAS_500_16
-                0x08042394       0x12 vendor/built-in.o
+                0x080422dc       0x12 vendor/built-in.o
  .rodata.assert_aligned_4_bytes.isra.0.str1.1
-                0x080423a6       0x36 examples/app_estimator_pendulum/built-in.o
+                0x080422ee       0x36 examples/app_estimator_pendulum/built-in.o
  .rodata.mat_mult.str1.1
-                0x080423a6       0x1b examples/app_estimator_pendulum/built-in.o
+                0x080422ee       0x1b examples/app_estimator_pendulum/built-in.o
  .rodata.estimatorPendulumTaskInit.str1.1
-                0x080423a6       0x92 examples/app_estimator_pendulum/built-in.o
- .rodata.pendulumCoreCorrect.str1.1
-                0x080423a6       0x6d examples/app_estimator_pendulum/built-in.o
+                0x080422ee       0x92 examples/app_estimator_pendulum/built-in.o
+ .rodata.estimatorOutOfTreeInit.str1.1
+                0x080422ee       0x90 examples/app_estimator_pendulum/built-in.o
  .rodata.pendulumTask.str1.1
-                0x080423a6       0xdb examples/app_estimator_pendulum/built-in.o
+                0x080422ee       0x3c examples/app_estimator_pendulum/built-in.o
  .rodata.str1.1
-                0x080423a6       0x71 examples/app_estimator_pendulum/built-in.o
- *fill*         0x080423a6        0x2 
+                0x080422ee       0x7f examples/app_estimator_pendulum/built-in.o
+ *fill*         0x080422ee        0x2 
  .rodata.acosf.str1.4
-                0x080423a8        0x1 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_acos.o)
+                0x080422f0        0x1 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_acos.o)
  .rodata.asinf.str1.4
-                0x080423a9        0x1 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_asin.o)
+                0x080422f1        0x1 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_asin.o)
  .rodata.log10f.str1.4
-                0x080423a9        0x1 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_log10.o)
- *fill*         0x080423a9        0x3 
+                0x080422f1        0x1 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_log10.o)
+ *fill*         0x080422f1        0x3 
  .rodata.atanlo
-                0x080423ac       0x10 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_atan.o)
+                0x080422f4       0x10 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_atan.o)
  .rodata.atanhi
-                0x080423bc       0x10 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_atan.o)
+                0x08042304       0x10 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_atan.o)
  .rodata.CSWTCH.9
-                0x080423cc        0xc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_atan2.o)
+                0x08042314        0xc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_atan2.o)
  .rodata.CSWTCH.8
-                0x080423d8        0xc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_atan2.o)
- .rodata.ln2LO  0x080423e4        0x8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_exp.o)
- .rodata.ln2HI  0x080423ec        0x8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_exp.o)
- .rodata.halF   0x080423f4        0x8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_exp.o)
- .rodata.Zero   0x080423fc        0x8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_fmod.o)
+                0x08042320        0xc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_atan2.o)
+ .rodata.ln2LO  0x0804232c        0x8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_exp.o)
+ .rodata.ln2HI  0x08042334        0x8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_exp.o)
+ .rodata.halF   0x0804233c        0x8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_exp.o)
+ .rodata.Zero   0x08042344        0x8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_fmod.o)
  .rodata.npio2_hw
-                0x08042404       0x80 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_rem_pio2.o)
+                0x0804234c       0x80 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_rem_pio2.o)
  .rodata.two_over_pi
-                0x08042484      0x318 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_rem_pio2.o)
- .rodata.PIo2   0x0804279c       0x2c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_rem_pio2.o)
+                0x080423cc      0x318 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_rem_pio2.o)
+ .rodata.PIo2   0x080426e4       0x2c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_rem_pio2.o)
  .rodata.init_jk
-                0x080427c8        0xc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_rem_pio2.o)
+                0x08042710        0xc /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_rem_pio2.o)
  .rodata._ctype_
-                0x080427d4      0x101 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-ctype_.o)
-                0x080427d4                _ctype_
+                0x0804271c      0x101 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-ctype_.o)
+                0x0804271c                _ctype_
  *(.glue_7)
- .glue_7        0x080428d5        0x0 linker stubs
+ .glue_7        0x0804281d        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x080428d5        0x0 linker stubs
+ .glue_7t       0x0804281d        0x0 linker stubs
  *(.init)
  *(.fini)
  *(.eh_frame)
-                0x080428d8                        . = ALIGN (0x4)
- *fill*         0x080428d5        0x3 
-                0x080428d8                        _param_start = .
+                0x08042820                        . = ALIGN (0x4)
+ *fill*         0x0804281d        0x3 
+                0x08042820                        _param_start = .
  *(.param)
  *(.param.*)
  .param.radiotest
-                0x080428d8       0x64 src/built-in.o
- .param.deck    0x0804293c      0x2f8 src/built-in.o
+                0x08042820       0x64 src/built-in.o
+ .param.deck    0x08042884      0x2f8 src/built-in.o
  .param.activeMarker
-                0x08042c34       0xa0 src/built-in.o
- .param.motion  0x08042cd4       0x64 src/built-in.o
- .param.system  0x08042d38      0x140 src/built-in.o
- .param.ring    0x08042e78       0xf0 src/built-in.o
- .param.loco    0x08042f68       0x3c src/built-in.o
- .param.tdoa2   0x08042fa4       0x3c src/built-in.o
- .param.tdoa3   0x08042fe0       0x3c src/built-in.o
+                0x08042b7c       0xa0 src/built-in.o
+ .param.motion  0x08042c1c       0x64 src/built-in.o
+ .param.system  0x08042c80      0x140 src/built-in.o
+ .param.ring    0x08042dc0       0xf0 src/built-in.o
+ .param.loco    0x08042eb0       0x3c src/built-in.o
+ .param.tdoa2   0x08042eec       0x3c src/built-in.o
+ .param.tdoa3   0x08042f28       0x3c src/built-in.o
  .param.multiranger
-                0x0804301c       0x3c src/built-in.o
- .param.usd     0x08043058       0x50 src/built-in.o
- .param.led     0x080430a8       0x3c src/built-in.o
+                0x08042f64       0x3c src/built-in.o
+ .param.usd     0x08042fa0       0x50 src/built-in.o
+ .param.led     0x08042ff0       0x3c src/built-in.o
  .param.motorPowerSet
-                0x080430e4       0x8c src/built-in.o
- .param.pm      0x08043170       0x50 src/built-in.o
+                0x0804302c       0x8c src/built-in.o
+ .param.pm      0x080430b8       0x50 src/built-in.o
  .param.imu_sensors
-                0x080431c0       0xc8 src/built-in.o
+                0x08043108       0xc8 src/built-in.o
  .param.imu_tests
-                0x08043288       0xa0 src/built-in.o
+                0x080431d0       0xa0 src/built-in.o
  .param.syslink
-                0x08043328       0x3c src/built-in.o
- .param.usec    0x08043364       0x3c src/built-in.o
- .param.colAv   0x080433a0      0x168 src/built-in.o
+                0x08043270       0x3c src/built-in.o
+ .param.usec    0x080432ac       0x3c src/built-in.o
+ .param.colAv   0x080432e8      0x168 src/built-in.o
  .param.commander
-                0x08043508       0x3c src/built-in.o
- .param.cppm    0x08043544       0x8c src/built-in.o
+                0x08043450       0x3c src/built-in.o
+ .param.cppm    0x0804348c       0x8c src/built-in.o
  .param.hlCommander
-                0x080435d0       0x64 src/built-in.o
+                0x08043518       0x64 src/built-in.o
  .param.flightmode
-                0x08043634       0xb4 src/built-in.o
- .param.locSrv  0x080436e8       0xb4 src/built-in.o
+                0x0804357c       0xb4 src/built-in.o
+ .param.locSrv  0x08043630       0xb4 src/built-in.o
  .param.crtpsrv
-                0x0804379c       0x3c src/built-in.o
- .param.health  0x080437d8       0x8c src/built-in.o
- .param.kalman  0x08043864      0x1a4 src/built-in.o
- .param.memTst  0x08043a08       0x3c src/built-in.o
+                0x080436e4       0x3c src/built-in.o
+ .param.health  0x08043720       0x8c src/built-in.o
+ .param.kalman  0x080437ac      0x1a4 src/built-in.o
+ .param.memTst  0x08043950       0x3c src/built-in.o
  .param.powerDist
-                0x08043a44       0x3c src/built-in.o
+                0x0804398c       0x3c src/built-in.o
  .param.sensfusion6
-                0x08043a80       0x64 src/built-in.o
- .param.sound   0x08043ae4       0x64 src/built-in.o
+                0x080439c8       0x64 src/built-in.o
+ .param.sound   0x08043a2c       0x64 src/built-in.o
  .param.stabilizer
-                0x08043b48       0x8c src/built-in.o
+                0x08043a90       0x8c src/built-in.o
  .param.supervisor
-                0x08043bd4       0x78 src/built-in.o
- .param.cpu     0x08043c4c       0x78 src/built-in.o
+                0x08043b1c       0x78 src/built-in.o
+ .param.cpu     0x08043b94       0x78 src/built-in.o
  .param.tdoaEngine
-                0x08043cc4       0x64 src/built-in.o
+                0x08043c0c       0x64 src/built-in.o
  .param.lighthouse
-                0x08043d28      0x140 src/built-in.o
+                0x08043c70      0x140 src/built-in.o
  .param.pid_rate
-                0x08043e68      0x168 src/built-in.o
+                0x08043db0      0x168 src/built-in.o
  .param.pid_attitude
-                0x08043fd0      0x154 src/built-in.o
+                0x08043f18      0x154 src/built-in.o
  .param.ctrlINDI
-                0x08044124      0x190 src/built-in.o
+                0x0804406c      0x190 src/built-in.o
  .param.ctrlMel
-                0x080442b4      0x1a4 src/built-in.o
+                0x080441fc      0x1a4 src/built-in.o
  .param.ctrlAtt
-                0x08044458       0xb4 src/built-in.o
+                0x080443a0       0xb4 src/built-in.o
  .param.posCtrlIndi
-                0x0804450c       0xb4 src/built-in.o
+                0x08044454       0xb4 src/built-in.o
  .param.posCtlPid
-                0x080445c0      0x1a4 src/built-in.o
+                0x08044508      0x1a4 src/built-in.o
  .param.velCtlPid
-                0x08044764      0x118 src/built-in.o
+                0x080446ac      0x118 src/built-in.o
  .param.ctrlLee
-                0x0804487c      0x21c src/built-in.o
+                0x080447c4      0x21c src/built-in.o
  .param.posEstAlt
-                0x08044a98       0x8c src/built-in.o
+                0x080449e0       0x8c src/built-in.o
  .param.firmware
-                0x08044b24       0x64 src/built-in.o
-                0x08044b88                        _param_stop = .
-                0x08044b88                        . = ALIGN (0x4)
-                0x08044b88                        _log_start = .
+                0x08044a6c       0x64 src/built-in.o
+                0x08044ad0                        _param_stop = .
+                0x08044ad0                        . = ALIGN (0x4)
+                0x08044ad0                        _log_start = .
  *(.log)
  *(.log.*)
  .log.activeMarker
-                0x08044b88       0x30 src/built-in.o
- .log.motion    0x08044bb8       0x90 src/built-in.o
- .log.ring      0x08044c48       0x24 src/built-in.o
- .log.loco      0x08044c6c       0x3c src/built-in.o
- .log.ranging   0x08044ca8       0xfc src/built-in.o
- .log.tdoa2     0x08044da4      0x138 src/built-in.o
- .log.twr       0x08044edc       0xd8 src/built-in.o
- .log.oa        0x08044fb4       0x54 src/built-in.o
- .log.usd       0x08045008       0x3c src/built-in.o
- .log.rpm       0x08045044       0x48 src/built-in.o
- .log.motor     0x0804508c       0x90 src/built-in.o
- .log.pm        0x0804511c       0x78 src/built-in.o
- .log.radio     0x08045194       0x48 src/built-in.o
- .log.gyro      0x080451dc       0x9c src/built-in.o
- .log.colAv     0x08045278       0x24 src/built-in.o
- .log.locSrvZ   0x0804529c       0x24 src/built-in.o
- .log.locSrv    0x080452c0       0x6c src/built-in.o
- .log.ext_pos   0x0804532c       0x3c src/built-in.o
- .log.crtp      0x08045368       0x30 src/built-in.o
- .log.extrx     0x08045398       0x84 src/built-in.o
+                0x08044ad0       0x30 src/built-in.o
+ .log.motion    0x08044b00       0x90 src/built-in.o
+ .log.ring      0x08044b90       0x24 src/built-in.o
+ .log.loco      0x08044bb4       0x3c src/built-in.o
+ .log.ranging   0x08044bf0       0xfc src/built-in.o
+ .log.tdoa2     0x08044cec      0x138 src/built-in.o
+ .log.twr       0x08044e24       0xd8 src/built-in.o
+ .log.oa        0x08044efc       0x54 src/built-in.o
+ .log.usd       0x08044f50       0x3c src/built-in.o
+ .log.rpm       0x08044f8c       0x48 src/built-in.o
+ .log.motor     0x08044fd4       0x90 src/built-in.o
+ .log.pm        0x08045064       0x78 src/built-in.o
+ .log.radio     0x080450dc       0x48 src/built-in.o
+ .log.gyro      0x08045124       0x9c src/built-in.o
+ .log.colAv     0x080451c0       0x24 src/built-in.o
+ .log.locSrvZ   0x080451e4       0x24 src/built-in.o
+ .log.locSrv    0x08045208       0x6c src/built-in.o
+ .log.ext_pos   0x08045274       0x3c src/built-in.o
+ .log.crtp      0x080452b0       0x30 src/built-in.o
+ .log.extrx     0x080452e0       0x84 src/built-in.o
  .log.extrx_raw
-                0x0804541c       0x78 src/built-in.o
- .log.health    0x08045494       0xa8 src/built-in.o
- .log.memTst    0x0804553c       0x24 src/built-in.o
- .log.range     0x08045560       0x60 src/built-in.o
+                0x08045364       0x78 src/built-in.o
+ .log.health    0x080453dc       0xa8 src/built-in.o
+ .log.memTst    0x08045484       0x24 src/built-in.o
+ .log.range     0x080454a8       0x60 src/built-in.o
  .log.sensfusion6
-                0x080455c0       0x90 src/built-in.o
+                0x08045508       0x90 src/built-in.o
  .log.stateEstimateZ
-                0x08045650       0xb4 src/built-in.o
+                0x08045598       0xb4 src/built-in.o
  .log.stateEstimate
-                0x08045704       0xd8 src/built-in.o
+                0x0804564c       0xd8 src/built-in.o
  .log.controller
-                0x080457dc       0xf0 src/built-in.o
- .log.mag       0x080458cc       0x3c src/built-in.o
- .log.baro      0x08045908       0x3c src/built-in.o
- .log.acc       0x08045944       0x3c src/built-in.o
+                0x08045724       0xf0 src/built-in.o
+ .log.mag       0x08045814       0x3c src/built-in.o
+ .log.baro      0x08045850       0x3c src/built-in.o
+ .log.acc       0x0804588c       0x3c src/built-in.o
  .log.stabilizer
-                0x08045980       0x60 src/built-in.o
+                0x080458c8       0x60 src/built-in.o
  .log.ctrltargetZ
-                0x080459e0       0x84 src/built-in.o
+                0x08045928       0x84 src/built-in.o
  .log.ctrltarget
-                0x08045a64       0xa8 src/built-in.o
+                0x080459ac       0xa8 src/built-in.o
  .log.supervisor
-                0x08045b0c       0x24 src/built-in.o
- .log.sys       0x08045b30       0x60 src/built-in.o
+                0x08045a54       0x24 src/built-in.o
+ .log.sys       0x08045a78       0x60 src/built-in.o
  .log.tdoaEngine
-                0x08045b90       0x90 src/built-in.o
+                0x08045ad8       0x90 src/built-in.o
  .log.kalman_pred
-                0x08045c20       0x48 src/built-in.o
+                0x08045b68       0x48 src/built-in.o
  .log.lighthouse
-                0x08045c68      0x2a0 src/built-in.o
- .log.pid_rate  0x08045f08       0xa8 src/built-in.o
+                0x08045bb0      0x2a0 src/built-in.o
+ .log.pid_rate  0x08045e50       0xa8 src/built-in.o
  .log.pid_attitude
-                0x08045fb0       0xa8 src/built-in.o
- .log.ctrlINDI  0x08046058      0x168 src/built-in.o
- .log.ctrlMel   0x080461c0       0xc0 src/built-in.o
+                0x08045ef8       0xa8 src/built-in.o
+ .log.ctrlINDI  0x08045fa0      0x168 src/built-in.o
+ .log.ctrlMel   0x08046108       0xc0 src/built-in.o
  .log.posCtrlIndi
-                0x08046280      0x1e0 src/built-in.o
- .log.posCtl    0x08046460      0x1b0 src/built-in.o
- .log.ctrlLee   0x08046610      0x1b0 src/built-in.o
- .log.outlierf  0x080467c0       0x24 src/built-in.o
- .log.kalman    0x080467e4      0x144 src/built-in.o
+                0x080461c8      0x1e0 src/built-in.o
+ .log.posCtl    0x080463a8      0x1b0 src/built-in.o
+ .log.ctrlLee   0x08046558      0x1b0 src/built-in.o
+ .log.outlierf  0x08046708       0x24 src/built-in.o
+ .log.kalman    0x0804672c      0x144 src/built-in.o
  .log.estimator
-                0x08046928       0x30 src/built-in.o
+                0x08046870       0x30 src/built-in.o
  .log.posEstAlt
-                0x08046958       0x3c src/built-in.o
- .log.DTR_P2P   0x08046994       0x30 src/built-in.o
- .log.pendEKF   0x080469c4       0x9c examples/app_estimator_pendulum/built-in.o
-                0x08046a60                        _log_stop = .
-                0x08046a60                        . = ALIGN (0x4)
-                0x08046a60                        _deckDriver_start = .
+                0x080468a0       0x3c src/built-in.o
+ .log.DTR_P2P   0x080468dc       0x30 src/built-in.o
+ .log.pendEKF   0x0804690c       0xb4 examples/app_estimator_pendulum/built-in.o
+                0x080469c0                        _log_stop = .
+                0x080469c0                        . = ALIGN (0x4)
+                0x080469c0                        _deckDriver_start = .
  *(.deckDriver)
  *(.deckDriver.*)
  .deckDriver.exptest_deck
-                0x08046a60        0x4 src/built-in.o
-                0x08046a60                driver_exptest_deck
+                0x080469c0        0x4 src/built-in.o
+                0x080469c0                driver_exptest_deck
  .deckDriver.expCfBltest_deck
-                0x08046a64        0x4 src/built-in.o
-                0x08046a64                driver_expCfBltest_deck
+                0x080469c4        0x4 src/built-in.o
+                0x080469c4                driver_expCfBltest_deck
  .deckDriver.exptestRR_deck
-                0x08046a68        0x4 src/built-in.o
-                0x08046a68                driver_exptestRR_deck
+                0x080469c8        0x4 src/built-in.o
+                0x080469c8                driver_exptestRR_deck
  .deckDriver.exptestbolt_deck
-                0x08046a6c        0x4 src/built-in.o
-                0x08046a6c                driver_exptestbolt_deck
+                0x080469cc        0x4 src/built-in.o
+                0x080469cc                driver_exptestbolt_deck
  .deckDriver.radiotest_deck
-                0x08046a70        0x4 src/built-in.o
-                0x08046a70                driver_radiotest_deck
+                0x080469d0        0x4 src/built-in.o
+                0x080469d0                driver_radiotest_deck
  .deckDriver.deck_info
-                0x08046a74        0x4 src/built-in.o
-                0x08046a74                driver_deck_info
+                0x080469d4        0x4 src/built-in.o
+                0x080469d4                driver_deck_info
  .deckDriver.aideck_deck
-                0x08046a78        0x4 src/built-in.o
-                0x08046a78                driver_aideck_deck
+                0x080469d8        0x4 src/built-in.o
+                0x080469d8                driver_aideck_deck
  .deckDriver.buzzer_deck
-                0x08046a7c        0x4 src/built-in.o
-                0x08046a7c                driver_buzzer_deck
+                0x080469dc        0x4 src/built-in.o
+                0x080469dc                driver_buzzer_deck
  .deckDriver.flowdeck2_deck
-                0x08046a80        0x4 src/built-in.o
-                0x08046a80                driver_flowdeck2_deck
+                0x080469e0        0x4 src/built-in.o
+                0x080469e0                driver_flowdeck2_deck
  .deckDriver.flowdeck1_deck
-                0x08046a84        0x4 src/built-in.o
-                0x08046a84                driver_flowdeck1_deck
+                0x080469e4        0x4 src/built-in.o
+                0x080469e4                driver_flowdeck1_deck
  .deckDriver.ledring12_deck
-                0x08046a88        0x4 src/built-in.o
-                0x08046a88                driver_ledring12_deck
+                0x080469e8        0x4 src/built-in.o
+                0x080469e8                driver_ledring12_deck
  .deckDriver.lighthouse_deck
-                0x08046a8c        0x4 src/built-in.o
-                0x08046a8c                driver_lighthouse_deck
+                0x080469ec        0x4 src/built-in.o
+                0x080469ec                driver_lighthouse_deck
  .deckDriver.dwm1000_deck
-                0x08046a90        0x4 src/built-in.o
-                0x08046a90                driver_dwm1000_deck
+                0x080469f0        0x4 src/built-in.o
+                0x080469f0                driver_dwm1000_deck
  .deckDriver.multiranger_deck
-                0x08046a94        0x4 src/built-in.o
-                0x08046a94                driver_multiranger_deck
+                0x080469f4        0x4 src/built-in.o
+                0x080469f4                driver_multiranger_deck
  .deckDriver.oa_deck
-                0x08046a98        0x4 src/built-in.o
-                0x08046a98                driver_oa_deck
+                0x080469f8        0x4 src/built-in.o
+                0x080469f8                driver_oa_deck
  .deckDriver.usd_deck
-                0x08046a9c        0x4 src/built-in.o
-                0x08046a9c                driver_usd_deck
+                0x080469fc        0x4 src/built-in.o
+                0x080469fc                driver_usd_deck
  .deckDriver.zranger_deck
-                0x08046aa0        0x4 src/built-in.o
-                0x08046aa0                driver_zranger_deck
+                0x08046a00        0x4 src/built-in.o
+                0x08046a00                driver_zranger_deck
  .deckDriver.zranger2_deck
-                0x08046aa4        0x4 src/built-in.o
-                0x08046aa4                driver_zranger2_deck
+                0x08046a04        0x4 src/built-in.o
+                0x08046a04                driver_zranger2_deck
  .deckDriver.rpm_deck
-                0x08046aa8        0x4 src/built-in.o
-                0x08046aa8                driver_rpm_deck
-                0x08046aac                        _deckDriver_stop = .
-                0x08046aac                        . = ALIGN (0x4)
-                0x08046aac                        _deckBackend_start = .
+                0x08046a08        0x4 src/built-in.o
+                0x08046a08                driver_rpm_deck
+                0x08046a0c                        _deckDriver_stop = .
+                0x08046a0c                        . = ALIGN (0x4)
+                0x08046a0c                        _deckBackend_start = .
  *(.deckBackend)
  *(.deckBackend.*)
  .deckBackend.owBackend
-                0x08046aac        0x4 src/built-in.o
-                0x08046aac                backend_owBackend
+                0x08046a0c        0x4 src/built-in.o
+                0x08046a0c                backend_owBackend
  .deckBackend.deckctrlBackend
-                0x08046ab0        0x4 src/built-in.o
-                0x08046ab0                backend_deckctrlBackend
-                0x08046ab4                        _deckBackend_stop = .
-                0x08046ab4                        . = ALIGN (0x4)
-                0x08046ab4                        _eventtrigger_start = .
+                0x08046a10        0x4 src/built-in.o
+                0x08046a10                backend_deckctrlBackend
+                0x08046a14                        _deckBackend_stop = .
+                0x08046a14                        . = ALIGN (0x4)
+                0x08046a14                        _eventtrigger_start = .
  *(.eventtrigger)
  *(.eventtrigger.*)
  .eventtrigger.activeMarkerModeChanged
-                0x08046ab4       0x14 src/built-in.o
+                0x08046a14       0x14 src/built-in.o
  .eventtrigger.estBarometer
-                0x08046ac8       0x14 src/built-in.o
+                0x08046a28       0x14 src/built-in.o
  .eventtrigger.estAcceleration
-                0x08046adc       0x14 src/built-in.o
+                0x08046a3c       0x14 src/built-in.o
  .eventtrigger.estGyroscope
-                0x08046af0       0x14 src/built-in.o
+                0x08046a50       0x14 src/built-in.o
  .eventtrigger.estSweepAngle
-                0x08046b04       0x14 src/built-in.o
+                0x08046a64       0x14 src/built-in.o
  .eventtrigger.estYawError
-                0x08046b18       0x14 src/built-in.o
+                0x08046a78       0x14 src/built-in.o
  .eventtrigger.estFlow
-                0x08046b2c       0x14 src/built-in.o
+                0x08046a8c       0x14 src/built-in.o
  .eventtrigger.estAbsoluteHeight
-                0x08046b40       0x14 src/built-in.o
+                0x08046aa0       0x14 src/built-in.o
  .eventtrigger.estTOF
-                0x08046b54       0x14 src/built-in.o
+                0x08046ab4       0x14 src/built-in.o
  .eventtrigger.estDistance
-                0x08046b68       0x14 src/built-in.o
+                0x08046ac8       0x14 src/built-in.o
  .eventtrigger.estPose
-                0x08046b7c       0x14 src/built-in.o
+                0x08046adc       0x14 src/built-in.o
  .eventtrigger.estPosition
-                0x08046b90       0x14 src/built-in.o
+                0x08046af0       0x14 src/built-in.o
  .eventtrigger.estTDOA
-                0x08046ba4       0x14 src/built-in.o
-                0x08046bb8                        _eventtrigger_stop = .
-                0x08046bb8                        _etext = .
+                0x08046b04       0x14 src/built-in.o
+                0x08046b18                        _eventtrigger_stop = .
+                0x08046b18                        _etext = .
 
-.vfp11_veneer   0x08046bb8        0x0
- .vfp11_veneer  0x08046bb8        0x0 linker stubs
+.vfp11_veneer   0x08046b18        0x0
+ .vfp11_veneer  0x08046b18        0x0 linker stubs
 
-.v4_bx          0x08046bb8        0x0
- .v4_bx         0x08046bb8        0x0 linker stubs
+.v4_bx          0x08046b18        0x0
+ .v4_bx         0x08046b18        0x0 linker stubs
 
-.iplt           0x08046bb8        0x0
- .iplt          0x08046bb8        0x0 src/built-in.o
+.iplt           0x08046b18        0x0
+ .iplt          0x08046b18        0x0 src/built-in.o
 
-.libc           0x08046bb8        0x8
-                0x08046bb8                        . = ALIGN (0x4)
+.libc           0x08046b18        0x8
+                0x08046b18                        . = ALIGN (0x4)
  *(.ARM.exidx*)
- .ARM.exidx     0x08046bb8        0x8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strcmp.o)
- .ARM.exidx     0x08046bc0        0x0 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-memcpy.o)
+ .ARM.exidx     0x08046b18        0x8 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strcmp.o)
+ .ARM.exidx     0x08046b20        0x0 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-memcpy.o)
                                   0x8 (size before relaxing)
- .ARM.exidx     0x08046bc0        0x0 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strlen.o)
+ .ARM.exidx     0x08046b20        0x0 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-strlen.o)
                                   0x8 (size before relaxing)
  .ARM.exidx.text.__udivmoddi4
-                0x08046bc0        0x0 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
+                0x08046b20        0x0 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a(_udivmoddi4.o)
                                   0x8 (size before relaxing)
-                0x08046bc0                        . = ALIGN (0x4)
-                0x08046bc0                        _elibc = .
+                0x08046b20                        . = ALIGN (0x4)
+                0x08046b20                        _elibc = .
 
-.rel.dyn        0x08046bc0        0x0
- .rel.iplt      0x08046bc0        0x0 src/built-in.o
+.rel.dyn        0x08046b20        0x0
+ .rel.iplt      0x08046b20        0x0 src/built-in.o
 
 .flashpatch     0x00000000        0x0
                 0x00000000                        . = ALIGN (0x4)
@@ -11945,7 +11939,7 @@ LOAD /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  *(.endflash)
                 0x00000000                        . = ALIGN (0x4)
 
-.data           0x20000000     0x1f90 load address 0x08046bc0
+.data           0x20000000     0x1f90 load address 0x08046b20
                 0x20000000                        . = ALIGN (0x4)
                 0x20000000                        _sdata = .
  *(.data)
@@ -12457,29 +12451,22 @@ LOAD /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
                 0x20001ccc                V_SLOCAL_REVISION
  .data.uxCriticalNesting
                 0x20001cd0        0x4 vendor/built-in.o
- .data.tmpNN7m.0
-                0x20001cd4        0x8 examples/app_estimator_pendulum/built-in.o
- .data.tmpNN6m.1
-                0x20001cdc        0x8 examples/app_estimator_pendulum/built-in.o
+ .data.LCPm.0   0x20001cd4        0x8 examples/app_estimator_pendulum/built-in.o
+ .data.CPm.1    0x20001cdc        0x8 examples/app_estimator_pendulum/built-in.o
  .data.Lm.2     0x20001ce4        0x8 examples/app_estimator_pendulum/built-in.o
- .data.tmpNN5m.3
-                0x20001cec        0x8 examples/app_estimator_pendulum/built-in.o
- .data.tmpNN4m.4
-                0x20001cf4        0x8 examples/app_estimator_pendulum/built-in.o
+ .data.Sinvm.3  0x20001cec        0x8 examples/app_estimator_pendulum/built-in.o
+ .data.Sm.4     0x20001cf4        0x8 examples/app_estimator_pendulum/built-in.o
  .data.Rm.5     0x20001cfc        0x8 examples/app_estimator_pendulum/built-in.o
- .data.tmpNN3m.6
-                0x20001d04        0x8 examples/app_estimator_pendulum/built-in.o
- .data.tmpNN2m.7
-                0x20001d0c        0x8 examples/app_estimator_pendulum/built-in.o
- .data.tmpNN1m.8
-                0x20001d14        0x8 examples/app_estimator_pendulum/built-in.o
+ .data.CPCTm.6  0x20001d04        0x8 examples/app_estimator_pendulum/built-in.o
+ .data.PCTm.7   0x20001d0c        0x8 examples/app_estimator_pendulum/built-in.o
+ .data.CTm.8    0x20001d14        0x8 examples/app_estimator_pendulum/built-in.o
  .data.Cm.9     0x20001d1c        0x8 examples/app_estimator_pendulum/built-in.o
  .data.Qm.10    0x20001d24        0x8 examples/app_estimator_pendulum/built-in.o
  .data.BTm.11   0x20001d2c        0x8 examples/app_estimator_pendulum/built-in.o
  .data.Bm.12    0x20001d34        0x8 examples/app_estimator_pendulum/built-in.o
- .data.tmpNN2m.13
+ .data.tmpPred2m.13
                 0x20001d3c        0x8 examples/app_estimator_pendulum/built-in.o
- .data.tmpNN1m.14
+ .data.tmpPred1m.14
                 0x20001d44        0x8 examples/app_estimator_pendulum/built-in.o
  .data.Am.15    0x20001d4c        0x8 examples/app_estimator_pendulum/built-in.o
  .data.pendulumCoreParams
@@ -12494,12 +12481,12 @@ LOAD /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  *(.RAMtext)
                 0x20001f90                        . = ALIGN (0x4)
                 0x20001f90                        _edata = .
-                0x08046bc0                        _sidata = LOADADDR (.data)
+                0x08046b20                        _sidata = LOADADDR (.data)
 
-.igot.plt       0x20001f90        0x0 load address 0x08048b50
+.igot.plt       0x20001f90        0x0 load address 0x08048ab0
  .igot.plt      0x20001f90        0x0 src/built-in.o
 
-.bss            0x20001f90    0x12e20 load address 0x08048b50
+.bss            0x20001f90    0x12e0c load address 0x08048ab0
                 0x20001f90                        . = ALIGN (0x4)
                 0x20001f90                        _sbss = .
  *(.bss)
@@ -13900,42 +13887,33 @@ LOAD /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
                 0x20014b78       0x14 vendor/built-in.o
  .bss.xActiveTimerList1
                 0x20014b8c       0x14 vendor/built-in.o
- .bss.dbg.16    0x20014ba0        0x4 examples/app_estimator_pendulum/built-in.o
  .bss.helperConstants
-                0x20014ba4       0x34 examples/app_estimator_pendulum/built-in.o
- .bss.thetaDotLog
-                0x20014bd8        0x4 examples/app_estimator_pendulum/built-in.o
- .bss.thetaLog  0x20014bdc        0x4 examples/app_estimator_pendulum/built-in.o
- .bss.dbg       0x20014be0        0x4 examples/app_estimator_pendulum/built-in.o
+                0x20014ba0       0x34 examples/app_estimator_pendulum/built-in.o
+ .bss.flex2     0x20014bd4        0x4 examples/app_estimator_pendulum/built-in.o
+ .bss.flex1     0x20014bd8        0x4 examples/app_estimator_pendulum/built-in.o
  .bss.Fr_latest
-                0x20014be4        0x4 examples/app_estimator_pendulum/built-in.o
+                0x20014bdc        0x4 examples/app_estimator_pendulum/built-in.o
  .bss.Fl_latest
-                0x20014be8        0x4 examples/app_estimator_pendulum/built-in.o
- .bss.acc_z_filtered
-                0x20014bec        0x4 examples/app_estimator_pendulum/built-in.o
- .bss.acc_y_filtered
-                0x20014bf0        0x4 examples/app_estimator_pendulum/built-in.o
- .bss.acc_x_filtered
-                0x20014bf4        0x4 examples/app_estimator_pendulum/built-in.o
+                0x20014be0        0x4 examples/app_estimator_pendulum/built-in.o
  .bss.gyroLatest
-                0x20014bf8        0xc examples/app_estimator_pendulum/built-in.o
+                0x20014be4        0xc examples/app_estimator_pendulum/built-in.o
  .bss.accLatest
-                0x20014c04        0xc examples/app_estimator_pendulum/built-in.o
- .bss.isInit    0x20014c10        0x1 examples/app_estimator_pendulum/built-in.o
- *fill*         0x20014c11        0x3 
- .bss.pendulumEstimatorState
-                0x20014c14        0xc examples/app_estimator_pendulum/built-in.o
+                0x20014bf0        0xc examples/app_estimator_pendulum/built-in.o
+ .bss.isInit    0x20014bfc        0x1 examples/app_estimator_pendulum/built-in.o
+ *fill*         0x20014bfd        0x3 
  .bss.dataMutexBufferEP
-                0x20014c20       0x50 examples/app_estimator_pendulum/built-in.o
+                0x20014c00       0x50 examples/app_estimator_pendulum/built-in.o
  .bss.dataMutexEP
-                0x20014c70        0x4 examples/app_estimator_pendulum/built-in.o
+                0x20014c50        0x4 examples/app_estimator_pendulum/built-in.o
  .bss.runTaskSemaphoreEP
-                0x20014c74        0x4 examples/app_estimator_pendulum/built-in.o
- .bss.__sf      0x20014c78      0x138 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-findfp.o)
-                0x20014c78                __sf
+                0x20014c54        0x4 examples/app_estimator_pendulum/built-in.o
+ .bss.pendulumEstimatorState
+                0x20014c58        0xc examples/app_estimator_pendulum/built-in.o
+ .bss.__sf      0x20014c64      0x138 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(libc_a-findfp.o)
+                0x20014c64                __sf
  *(COMMON)
-                0x20014db0                        . = ALIGN (0x4)
-                0x20014db0                        _ebss = .
+                0x20014d9c                        . = ALIGN (0x4)
+                0x20014d9c                        _ebss = .
 
 .ccmbss         0x10000000     0xfbac
                 0x10000000                        . = ALIGN (0x4)
@@ -13950,35 +13928,35 @@ LOAD /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
                 0x1000fbac                        . = ALIGN (0x4)
                 0x1000fbac                        _eccmbss = .
 
-.ccmdata        0x1000fbac        0x0 load address 0x08048b50
+.ccmdata        0x1000fbac        0x0 load address 0x08048ab0
                 0x1000fbac                        . = ALIGN (0x4)
                 0x1000fbac                        _sccmdata = .
  *(.ccmdata)
  *(.ccmdata*)
                 0x1000fbac                        . = ALIGN (0x4)
                 0x1000fbac                        _eccmdata = .
-                0x08048b50                        _siccmdata = LOADADDR (.ccmdata)
+                0x08048ab0                        _siccmdata = LOADADDR (.ccmdata)
 
-.nzds           0x20014db0       0x28
-                0x20014db0                        . = ALIGN (0x4)
-                0x20014db0                        _snzds = .
+.nzds           0x20014d9c       0x28
+                0x20014d9c                        . = ALIGN (0x4)
+                0x20014d9c                        _snzds = .
  *(.nzds)
- .nzds          0x20014db0       0x28 src/built-in.o
-                0x20014db0                snapshot
+ .nzds          0x20014d9c       0x28 src/built-in.o
+                0x20014d9c                snapshot
  *(.nzds.*)
  *(COMMON)
-                0x20014dd8                        . = ALIGN (0x4)
-                0x20014dd8                        _enzds = .
+                0x20014dc4                        . = ALIGN (0x4)
+                0x20014dc4                        _enzds = .
                 [!provide]                        PROVIDE (end = _enzds)
                 [!provide]                        PROVIDE (_end = _enzds)
 
-._usrstack      0x20014dd8      0x100
-                0x20014dd8                        . = ALIGN (0x4)
-                0x20014dd8                        _susrstack = .
-                0x20014ed8                        . = (. + _Minimum_Stack_Size)
- *fill*         0x20014dd8      0x100 
-                0x20014ed8                        . = ALIGN (0x4)
-                0x20014ed8                        _eusrstack = .
+._usrstack      0x20014dc4      0x100
+                0x20014dc4                        . = ALIGN (0x4)
+                0x20014dc4                        _susrstack = .
+                0x20014ec4                        . = (. + _Minimum_Stack_Size)
+ *fill*         0x20014dc4      0x100 
+                0x20014ec4                        . = ALIGN (0x4)
+                0x20014ec4                        _eusrstack = .
 
 .b1text
  *(.b1text)
@@ -14004,8 +13982,8 @@ LOAD /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  *(.eb3text)
  *(.eb3rodata)
  *(.eb3rodata*)
-                0x20014ed8                        __exidx_start = .
-                0x20014ed8                        __exidx_end = .
+                0x20014ec4                        __exidx_start = .
+                0x20014ec4                        __exidx_end = .
 
 /DISCARD/
  libc.a(*)
@@ -14144,73 +14122,73 @@ LOAD /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000   0x1352cc
+.debug_info     0x00000000   0x13523e
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000    0xf2218 src/built-in.o
  .debug_info    0x000f2218    0x413d6 vendor/built-in.o
- .debug_info    0x001335ee     0x1cde examples/app_estimator_pendulum/built-in.o
+ .debug_info    0x001335ee     0x1c50 examples/app_estimator_pendulum/built-in.o
 
-.debug_abbrev   0x00000000    0x43f20
+.debug_abbrev   0x00000000    0x43edf
  *(.debug_abbrev)
  .debug_abbrev  0x00000000    0x2e439 src/built-in.o
  .debug_abbrev  0x0002e439    0x15507 vendor/built-in.o
- .debug_abbrev  0x00043940      0x5e0 examples/app_estimator_pendulum/built-in.o
+ .debug_abbrev  0x00043940      0x59f examples/app_estimator_pendulum/built-in.o
 
-.debug_line     0x00000000   0x10fc48
+.debug_line     0x00000000   0x10fc37
  *(.debug_line)
  .debug_line    0x00000000    0xb2245 src/built-in.o
  .debug_line    0x000b2245    0x5c4c8 vendor/built-in.o
- .debug_line    0x0010e70d     0x153b examples/app_estimator_pendulum/built-in.o
+ .debug_line    0x0010e70d     0x152a examples/app_estimator_pendulum/built-in.o
 
-.debug_frame    0x00000000    0x1a2d4
+.debug_frame    0x00000000    0x1a300
  *(.debug_frame)
  .debug_frame   0x00000000    0x14128 src/built-in.o
  .debug_frame   0x00014128     0x5680 vendor/built-in.o
- .debug_frame   0x000197a8      0x270 examples/app_estimator_pendulum/built-in.o
- .debug_frame   0x00019a18       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-s_fpclassify.o)
- .debug_frame   0x00019a38       0x48 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_acos.o)
- .debug_frame   0x00019a80       0x48 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_asin.o)
- .debug_frame   0x00019ac8       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_atan2.o)
- .debug_frame   0x00019ae8       0x44 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_exp.o)
- .debug_frame   0x00019b2c       0x44 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_fmod.o)
- .debug_frame   0x00019b70       0x48 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_log10.o)
- .debug_frame   0x00019bb8       0x44 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_pow.o)
- .debug_frame   0x00019bfc       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_finite.o)
- .debug_frame   0x00019c1c       0x38 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_cbrt.o)
- .debug_frame   0x00019c54       0x2c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_atan.o)
- .debug_frame   0x00019c80       0x34 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_cos.o)
- .debug_frame   0x00019cb4       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fabs.o)
- .debug_frame   0x00019cd4       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_nan.o)
- .debug_frame   0x00019cf4       0x34 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_sin.o)
- .debug_frame   0x00019d28       0x30 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_tan.o)
- .debug_frame   0x00019d58       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_cos.o)
- .debug_frame   0x00019d78       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_sin.o)
- .debug_frame   0x00019d98       0x28 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_tan.o)
- .debug_frame   0x00019dc0       0x6c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_acos.o)
- .debug_frame   0x00019e2c       0x70 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_asin.o)
- .debug_frame   0x00019e9c       0x44 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_atan2.o)
- .debug_frame   0x00019ee0       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_exp.o)
- .debug_frame   0x00019f00       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_sqrt.o)
- .debug_frame   0x00019f20       0x3c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_fmod.o)
- .debug_frame   0x00019f5c       0x48 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-s_fmax.o)
- .debug_frame   0x00019fa4       0x4c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fmax.o)
- .debug_frame   0x00019ff0       0x4c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fmin.o)
- .debug_frame   0x0001a03c       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fpclassify.o)
- .debug_frame   0x0001a05c       0x58 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_log10.o)
- .debug_frame   0x0001a0b4       0xa0 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_pow.o)
- .debug_frame   0x0001a154       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_floor.o)
- .debug_frame   0x0001a174       0x3c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_rem_pio2.o)
- .debug_frame   0x0001a1b0       0x88 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-math_errf.o)
- .debug_frame   0x0001a238       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_scalbn.o)
- .debug_frame   0x0001a258       0x5c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_rem_pio2.o)
- .debug_frame   0x0001a2b4       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_log.o)
+ .debug_frame   0x000197a8      0x29c examples/app_estimator_pendulum/built-in.o
+ .debug_frame   0x00019a44       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-s_fpclassify.o)
+ .debug_frame   0x00019a64       0x48 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_acos.o)
+ .debug_frame   0x00019aac       0x48 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_asin.o)
+ .debug_frame   0x00019af4       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_atan2.o)
+ .debug_frame   0x00019b14       0x44 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_exp.o)
+ .debug_frame   0x00019b58       0x44 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_fmod.o)
+ .debug_frame   0x00019b9c       0x48 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_log10.o)
+ .debug_frame   0x00019be4       0x44 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-wf_pow.o)
+ .debug_frame   0x00019c28       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_finite.o)
+ .debug_frame   0x00019c48       0x38 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_cbrt.o)
+ .debug_frame   0x00019c80       0x2c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_atan.o)
+ .debug_frame   0x00019cac       0x34 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_cos.o)
+ .debug_frame   0x00019ce0       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fabs.o)
+ .debug_frame   0x00019d00       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_nan.o)
+ .debug_frame   0x00019d20       0x34 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_sin.o)
+ .debug_frame   0x00019d54       0x30 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_tan.o)
+ .debug_frame   0x00019d84       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_cos.o)
+ .debug_frame   0x00019da4       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_sin.o)
+ .debug_frame   0x00019dc4       0x28 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_tan.o)
+ .debug_frame   0x00019dec       0x6c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_acos.o)
+ .debug_frame   0x00019e58       0x70 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_asin.o)
+ .debug_frame   0x00019ec8       0x44 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_atan2.o)
+ .debug_frame   0x00019f0c       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_exp.o)
+ .debug_frame   0x00019f2c       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_sqrt.o)
+ .debug_frame   0x00019f4c       0x3c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_fmod.o)
+ .debug_frame   0x00019f88       0x48 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-s_fmax.o)
+ .debug_frame   0x00019fd0       0x4c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fmax.o)
+ .debug_frame   0x0001a01c       0x4c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fmin.o)
+ .debug_frame   0x0001a068       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_fpclassify.o)
+ .debug_frame   0x0001a088       0x58 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_log10.o)
+ .debug_frame   0x0001a0e0       0xa0 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_pow.o)
+ .debug_frame   0x0001a180       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_floor.o)
+ .debug_frame   0x0001a1a0       0x3c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_rem_pio2.o)
+ .debug_frame   0x0001a1dc       0x88 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-math_errf.o)
+ .debug_frame   0x0001a264       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-sf_scalbn.o)
+ .debug_frame   0x0001a284       0x5c /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-kf_rem_pio2.o)
+ .debug_frame   0x0001a2e0       0x20 /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libm.a(libm_a-ef_log.o)
 
-.debug_str      0x00000000    0xf13c5
+.debug_str      0x00000000    0xf13c3
  *(.debug_str)
- .debug_str     0x00000000    0xf13c5 src/built-in.o
+ .debug_str     0x00000000    0xf13c3 src/built-in.o
                             0x3e23df8 (size before relaxing)
- .debug_str     0x000f13c5   0xa659ef vendor/built-in.o
- .debug_str     0x000f13c5    0x73167 examples/app_estimator_pendulum/built-in.o
+ .debug_str     0x000f13c3   0xa659ef vendor/built-in.o
+ .debug_str     0x000f13c3    0x7063c examples/app_estimator_pendulum/built-in.o
 
 .debug_loc
  *(.debug_loc)
@@ -14236,15 +14214,15 @@ LOAD /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
 LOAD /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.3.1/thumb/v7e-m+fp/hard/libgcc.a
 
 .debug_loclists
-                0x00000000    0x2baa4
+                0x00000000    0x2ba3e
  .debug_loclists
                 0x00000000    0x1ccf8 src/built-in.o
  .debug_loclists
                 0x0001ccf8     0xe9ba vendor/built-in.o
  .debug_loclists
-                0x0002b6b2      0x3f2 examples/app_estimator_pendulum/built-in.o
+                0x0002b6b2      0x38c examples/app_estimator_pendulum/built-in.o
 
-.debug_macro    0x00000000    0x6b36b
+.debug_macro    0x00000000    0x6b31e
  .debug_macro   0x00000000    0x2d018 src/built-in.o
  .debug_macro   0x0002d018      0xb68 src/built-in.o
  .debug_macro   0x0002db80       0x22 src/built-in.o
@@ -14531,17 +14509,17 @@ LOAD /Applications/ArmGNUToolchain/14.3.rel1/arm-none-eabi/bin/../lib/gcc/arm-no
  .debug_macro   0x0006aca0       0xc7 vendor/built-in.o
  .debug_macro   0x0006ad67       0xcd vendor/built-in.o
  .debug_macro   0x0006ae34       0x10 vendor/built-in.o
- .debug_macro   0x0006ae44      0x4ff examples/app_estimator_pendulum/built-in.o
- .debug_macro   0x0006b343       0x28 examples/app_estimator_pendulum/built-in.o
+ .debug_macro   0x0006ae44      0x4b2 examples/app_estimator_pendulum/built-in.o
+ .debug_macro   0x0006b2f6       0x28 examples/app_estimator_pendulum/built-in.o
 
 .debug_rnglists
-                0x00000000     0xcebb
+                0x00000000     0xcecc
  .debug_rnglists
                 0x00000000     0x99b4 src/built-in.o
  .debug_rnglists
                 0x000099b4     0x3453 vendor/built-in.o
  .debug_rnglists
-                0x0000ce07       0xb4 examples/app_estimator_pendulum/built-in.o
+                0x0000ce07       0xc5 examples/app_estimator_pendulum/built-in.o
 
 Cross Reference Table
 
@@ -18123,6 +18101,7 @@ supervisorGetStateName                            src/built-in.o
 supervisorIsArmed                                 src/built-in.o
 supervisorIsCrashed                               src/built-in.o
 supervisorIsFlying                                src/built-in.o
+                                                  examples/app_estimator_pendulum/built-in.o
 supervisorIsLandingTimeout                        src/built-in.o
 supervisorIsLocked                                src/built-in.o
 supervisorIsPreflightTimeout                      src/built-in.o
