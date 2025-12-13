@@ -85,18 +85,12 @@ static float flex2;
 // debugging
 //static int dbg = 0;
 
+// Helper: wrap angle to [-pi, pi]
 #ifndef M_PI_F
 #define M_PI_F 3.14159265f
 #endif
 
-// Phidot filter
-//#define PHI_D_ALPHA 0.2f
-//static float phi_d_filtered;
-
-
 // Helper: wrap angle to [-pi, pi]
-
-
 static float wrapPi(float angle) {
   while (angle > M_PI_F) {
     angle -= 2.0f * M_PI_F;
@@ -107,14 +101,9 @@ static float wrapPi(float angle) {
   return angle;
 }
 
-
-/*
-// Optional: normalized version in [-1, 1], where 1 ~ +π rad, -1 ~ -π rad
-static float normalizeTheta(float angle) {
-  float wrapped = wrapPi(angle);
-  return wrapped / M_PI_F;
-}
-*/
+// Values we actually log (wrapped + offset-corrected)
+static float thetaLog = 0.0f;
+static float thetaDotLog = 0.0f;
 
 // Estimator data and parameter declarations
 NO_DMA_CCM_SAFE_ZERO_INIT static pendulumCoreData_t pendulumCoreData;
@@ -244,8 +233,7 @@ void estimatorOutOfTreeInit() {
           + 40.0f*mb*mq*ms ); // G_block used only in yexp(2)
   helperConstants.expdenom =
       2.0f*(mb + mq + ms)*(12.0f*mb*mq + 4.0f*mb*ms + 4.0f*mq*ms + ms*ms);
-  
-  #if 1
+  #if 0
   DEBUG_PRINT(
     "HELPER CONSTANTS "
     "a1=%.6f b1=%.6f b2=%.6f c1=%.6f c2=%.6f p1=%.9f p2=%.9f cp2=%.6f cp=%.6f vp2=%.6f vpt=%.6f gb=%.6f ed=%.6f\n",
@@ -351,37 +339,21 @@ void pendulumCorePredict(pendulumCoreData_t* this,
   NO_DMA_CCM_SAFE_ZERO_INIT static float Q[STATE_DIM][STATE_DIM];
   static __attribute__((aligned(4))) arm_matrix_instance_f32 Qm = { STATE_DIM, STATE_DIM, (float *)Q};
 
-  // Temp matrices for the covariance updates
-  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpPred1[STATE_DIM * STATE_DIM];
-  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpPred1m = { STATE_DIM, STATE_DIM, tmpPred1};
+  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpNN1d[STATE_DIM * STATE_DIM];
+  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpNN1m = { STATE_DIM, STATE_DIM, tmpNN1d};
 
   NO_DMA_CCM_SAFE_ZERO_INIT static float tmpPred2[STATE_DIM * STATE_DIM];
   static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpPred2m = { STATE_DIM, STATE_DIM, tmpPred2};
 
-  // ====== DYNAMICS LINEARIZATION ======
-
-  // Get local copy of state variables
-  //float theta = this->S[THETA];
-  float theta = this->S[THETA];
+  float theta   = this->S[THETA];
   float theta_d = this->S[THETA_DOT];
 
   // Take phi and phi_d as parameters from underlying Kalman filter
   float R[3][3];
   estimatorKalmanGetEstimatedRot((float*)R);
-  float phi = atan2f(R[2][1], R[2][2]); // roll [rad]
-  float phi_d = gyro->x * DEG_TO_RAD; // deg/s to rad/s!!!
+  float phi   = atan2f(R[2][1], R[2][2]); // roll [rad]
+  float phi_d = gyro->x;
 
-  #if 0
-  float temp_phi_d = gyro->x * DEG_TO_RAD; // deg/s to rad/s!!!
-  // filter phi_d
-  #if 1
-  phi_d_filtered = (PHI_D_ALPHA * temp_phi_d) + ((1.0f - PHI_D_ALPHA) * phi_d_filtered);
-  temp_phi_d = phi_d_filtered;
-  #endif
-  float phi_d = temp_phi_d;
-  #endif 
-
-  // Store for correction step
   this->phi_hold  = phi;
   this->phi_d_hold = phi_d;
 
@@ -410,40 +382,18 @@ void pendulumCorePredict(pendulumCoreData_t* this,
   this->C[1][0] = C[1][0];
   this->C[1][1] = C[1][1];
 
-  // ====== COVARIANCE UPDATE ======
+  mat_mult(&Am, &this->Pm, &tmpNN1m);
+  mat_trans(&Am, &tmpNN2m);
+  mat_mult(&tmpNN1m, &tmpNN2m, &this->Pm);
 
-  mat_mult(&Am, &this->Pm, &tmpPred1m); // A P
-  mat_trans(&Am, &tmpPred2m); // A'
-  mat_mult(&tmpPred1m, &tmpPred2m, &this->Pm); // A P A'
-
-  // Calculate Q = B * B' * 0.0001
-  mat_trans(&Bm, &BTm);                 // B'
-  mat_mult(&Bm, &BTm, &Qm);             // B * B'
-  mat_scale(&Qm, pendulumCoreParams.gamma, &Qm); // Scale by gamma = 0.00001
-  #if 0
-  if (++dbg % 200 == 0) {
-    DEBUG_PRINT(
-      "Q ENTRIES "
-      "Q1=%.6f Q2=%.6f Q3=%.6f Q4=%.6f\n",
-      (double)(Q[0][0]),
-      (double)(Q[0][1]),
-      (double)(Q[1][0]),
-      (double)(Q[1][1]) // is 625*gamma with some spikes to 927*gamma
-    );
-  }
-  #endif
-  // Debug test: Overwrite Q 
-  #if 1
-  Q[0][0] = 0.0f * pendulumCoreParams.gamma;
-  Q[0][1] = 0.0f;
-  Q[1][0] = 0.0f;
-  Q[1][1] = 625.0f * pendulumCoreParams.gamma;
-  #endif
-
-  // Add process noise: P = P + Q
+  mat_trans(&Bm, &BTm);
+  mat_mult(&Bm, &BTm, &Qm);
+  mat_scale(&Qm, pendulumCoreParams.gamma, &Qm);
   arm_mat_add_f32(&this->Pm, &Qm, &this->Pm);
 
-  // ====== PREDICTION STEP ======
+  //static int dbg = 0;
+
+  float theta_prev = this->S[THETA];
 
   this->S[THETA] += dt * this->S[THETA_DOT];
   this->S[THETA] = wrapPi(this->S[THETA]);
@@ -503,9 +453,8 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   // Grab local C from data
   memcpy(C, this->C, sizeof(C));
 
-  // Temporary matrices for math
-  NO_DMA_CCM_SAFE_ZERO_INIT static float CT[STATE_DIM * STATE_DIM];
-  static __attribute__((aligned(4))) arm_matrix_instance_f32 CTm = { STATE_DIM, STATE_DIM, CT};
+  NO_DMA_CCM_SAFE_ZERO_INIT static float tmpNN1d[STATE_DIM * STATE_DIM];
+  static __attribute__((aligned(4))) arm_matrix_instance_f32 tmpNN1m = { STATE_DIM, STATE_DIM, tmpNN1d};
 
   NO_DMA_CCM_SAFE_ZERO_INIT static float PCT[STATE_DIM * STATE_DIM];
   static __attribute__((aligned(4))) arm_matrix_instance_f32 PCTm = { STATE_DIM, STATE_DIM, PCT};
@@ -534,21 +483,18 @@ void pendulumCoreCorrect(pendulumCoreData_t* this,
   RmData[1][0] = 0.0f;
   RmData[1][1] = 1.0f * pendulumCoreParams.beta;
 
-  // ====== GAIN UPDATE ======
+  //DEBUG_PRINT("3");
+  mat_trans(&Cm, &tmpNN1m);       // C'
+  mat_mult(&this->Pm, &tmpNN1m, &tmpNN2m);   // P C'
+  mat_mult(&Cm, &tmpNN2m, &tmpNN3m);         // C P C'
+  arm_mat_add_f32(&Rm, &tmpNN3m, &tmpNN4m);  // R + C P C'
+  mat_inv(&tmpNN4m, &tmpNN5m);               // (R + C P C')^-1
+  mat_mult(&tmpNN2m, &tmpNN5m, &Lm);         // L = P C' (R + C P C')^-1
 
-  // Calculate the Kalman gain and perform the state update
-  mat_trans(&Cm, &CTm);       // C'
-  mat_mult(&this->Pm, &CTm, &PCTm);   // P C'
-  mat_mult(&Cm, &PCTm, &CPCTm);         // C P C'
-  arm_mat_add_f32(&Rm, &CPCTm, &Sm);  // R + C P C'
-  mat_inv(&Sm, &Sinvm);               // (R + C P C')^-1
-  mat_mult(&PCTm, &Sinvm, &Lm);         // L = P C' (R + C P C')^-1
-
-  // ====== COVARIANCE UPDATE ======
-
-  mat_mult(&Cm, &this->Pm, &CPm);        // C P
-  mat_mult(&Lm, &CPm, &LCPm);         // L C P
-  arm_mat_sub_f32(&this->Pm, &LCPm, &this->Pm); // P - L C P
+  //DEBUG_PRINT("4");
+  mat_mult(&Cm, &this->Pm, &tmpNN6m);        // C P
+  mat_mult(&Lm, &tmpNN6m, &tmpNN7m);         // L C P
+  arm_mat_sub_f32(&this->Pm, &tmpNN7m, &this->Pm); // P - L C P
 
   // ====== CALCULATE EXPECTED MEASUREMENT ====== 
 
@@ -619,9 +565,7 @@ static void pendulumTask(void* parameters) {
 
   uint32_t nowMs = T2M(xTaskGetTickCount());
   uint32_t nextPredictionMs = nowMs;
-
-  // Debug variable
-  //static uint32_t dbg = 0;
+  static uint32_t dbg = 0;
 
   while (true) {
     xSemaphoreTake(runTaskSemaphoreEP, portMAX_DELAY);
@@ -630,44 +574,22 @@ static void pendulumTask(void* parameters) {
     // Everything is inside this if-statement to run at PREDICT_RATE_PEND
     if (nowMs >= nextPredictionMs) {
 
-      // ---- 1) Read ALL 4 motor PWM values as 8bit (from 16bit)----
-      uint8_t pwm1_raw = (uint8_t) (motorsGetRatio(MOTOR_M1)>>8);
-      uint8_t pwm2_raw = (uint8_t) (motorsGetRatio(MOTOR_M2)>>8);
-      uint8_t pwm3_raw = (uint8_t) (motorsGetRatio(MOTOR_M3)>>8);
-      uint8_t pwm4_raw = (uint8_t) (motorsGetRatio(MOTOR_M4)>>8);
-      float pwm1 = (float)pwm1_raw; // avoid overflow errors with a uint8_t in next calculation
-      float pwm2 = (float)pwm2_raw;
-      float pwm3 = (float)pwm3_raw;
-      float pwm4 = (float)pwm4_raw;
+      // ---- 1) Read ALL 4 motor PWMs ----
+      uint8_t pwm1 = (uint8_t) (motorsGetRatio(MOTOR_M1)>>8);
+      uint8_t pwm2 = (uint8_t) (motorsGetRatio(MOTOR_M2)>>8);
+      uint8_t pwm3 = (uint8_t) (motorsGetRatio(MOTOR_M3)>>8);
+      uint8_t pwm4 = (uint8_t) (motorsGetRatio(MOTOR_M4)>>8);
 
-      // ---- 2) Convert PWM to Thrust in N from gram force ----
-      // https://www.bitcraze.io/documentation/repository/crazyflie-firmware/master/functional-areas/pwm-to-thrust/
-      // their test setup is for total thrust - we need to divide by 4
-      float f1 = (0.000409f * pwm1 * pwm1 + 0.1405f * pwm1 - 0.099f) * 0.00980665f / 4;
-      float f2 = (0.000409f * pwm2 * pwm2 + 0.1405f * pwm2 - 0.099f) * 0.00980665f / 4;
-      float f3 = (0.000409f * pwm3 * pwm3 + 0.1405f * pwm3 - 0.099f) * 0.00980665f / 4;
-      float f4 = (0.000409f * pwm4 * pwm4 + 0.1405f * pwm4 - 0.099f) * 0.00980665f / 4;
+      // ---- 2) PWM -> thrust [N] ----
+      float f1 = (0.000409f * pwm1 * pwm1 + 0.1405f * pwm1 - 0.099f) * 0.00980665f;
+      float f2 = (0.000409f * pwm2 * pwm2 + 0.1405f * pwm2 - 0.099f) * 0.00980665f;
+      float f3 = (0.000409f * pwm3 * pwm3 + 0.1405f * pwm3 - 0.099f) * 0.00980665f;
+      float f4 = (0.000409f * pwm4 * pwm4 + 0.1405f * pwm4 - 0.099f) * 0.00980665f;
 
-      // each f SHOULD be around or less than 0.20 N
-      Fl_latest = f1 + f2; // N 
-      Fr_latest = f3 + f4; // N
+      float Fl_latest = f1 + f2;
+      float Fr_latest = f3 + f4;
 
-      #if 0
-      if (++dbg % 200 == 0) {
-        DEBUG_PRINT(
-          "Forces "
-          "f1=%.6f f2=%.6f f3=%.6f f4=%.6f Fl=%.6f Fr=%.6f\n",
-          (double)f1,
-          (double)f2,
-          (double)f3,
-          (double)f4,
-          (double)Fl_latest,
-          (double)Fr_latest
-        );
-      }
-      #endif
-
-      // ---- 3) Grab gyro from Kalman filter via custom accessor function ----
+      // ---- 3) Read IMU directly (gyro + acc) ----
       estimatorKalmanGetGyroLatest(&gyroLatest); // added to estimator_kalman.c
 
       // ---- 4) PREDICT STEP ----
@@ -699,17 +621,12 @@ static void pendulumTask(void* parameters) {
       // convert from reading in g to m/s^2
       accLatest.x = tempAccel.x * pendulumCoreParams.g;
       accLatest.y = tempAccel.y * pendulumCoreParams.g;
-      accLatest.z = tempAccel.z * pendulumCoreParams.g;
-
+      tempAccel.z = tempAccel.z * pendulumCoreParams.g;
+      // convert from pure reading to coordinate acceleration
+      accLatest.z = tempAccel.z - pendulumCoreParams.g;
       
-      if (!supervisorIsFlying() || (fabsf(Fl_latest - Fr_latest) < 0.01f && fabsf(pendulumCoreData.phi_d_hold) < 0.2f)) {
-      pendulumCoreData.S[THETA_DOT] = 0.0f;
-      //pendulumCoreData.S[THETA] = 0.0f;
-      }
-
-      
-      // ---- 6) CORRECT STEP ----
-      pendulumCoreCorrect(&pendulumCoreData, &pendulumCoreParams, &accLatest, Fl_latest, Fr_latest, nowMs);
+      // CORRECT STEP
+      pendulumCoreCorrect(&pendulumCoreData, &pendulumCoreParams, &gyroLatest, &accLatest, Fl_latest, Fr_latest, nowMs);
 
       // --- Previous debugging: Simple theta update just so it moves ----
       // xSemaphoreTake(dataMutexEP, portMAX_DELAY);
@@ -718,20 +635,12 @@ static void pendulumTask(void* parameters) {
       // pendulumEstimatorState.timestamp = nowMs;
       // xSemaphoreGive(dataMutexEP);
 
-      // ---- 7) Export theta in "ball down = 0" frame, wrapped to [-pi, pi] ----
-      /*
+            // ---- 4) Export theta in "ball down = 0" frame, wrapped to [-pi, pi] ----
       float theta_internal = pendulumCoreData.S[THETA];
       // Shift by the initialTheta (≈ pi) so that ball-down is 0 in the exported frame
       float theta_rel = theta_internal - pendulumCoreParams.initialTheta; // formerly pi
       theta_rel = wrapPi(theta_rel);
-      */
 
-      //float theta_internal = pendulumCoreData.S[THETA];
-      //float theta_norm = theta_internal / M_PI_F;  // or normalizeTheta(theta_internal);
-      //theta_rel = pendulumCoreData.S[THETA]/M_PI_F;
-
-
-      // ---- 8) Update public/log-facing copies ----
       xSemaphoreTake(dataMutexEP, portMAX_DELAY);
       pendulumEstimatorState.theta     = pendulumCoreData.S[THETA]; // / M_PI_F;//theta_rel;
       pendulumEstimatorState.theta_dot = pendulumCoreData.S[THETA_DOT];
